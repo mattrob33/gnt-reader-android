@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SBLGNT Reader</string>
+	<string name="speed_read_update">Improve reading fluency and speed. SpeedRead forces you to read like you do in English: one word at a time.\n\nLaunch SpeedRead by tapping the fast-forward arrow in the menu bar.\n\nTIP: Read the same passage repeatedly with SpeedRead and see how much easier it becomes to follow!</string>
+	<string-array name="books">  
+		<item>Matthew</item>  
+		<item>Mark</item>  
+		<item>Luke</item>  
+		<item>John</item>  
+		<item>Acts</item>  
+		<item>Romans</item>  
+		<item>1 Corinthians</item>  
+		<item>2 Corinthians</item>  
+		<item>Galatians</item>  
+		<item>Ephesians</item>  
+		<item>Philippians</item>  
+		<item>Colossians</item>  
+		<item>1 Thessalonians</item>  
+		<item>2 Thessalonians</item>  
+		<item>1 Timothy</item>  
+		<item>2 Timothy</item>  
+		<item>Titus</item>  
+		<item>Philemon</item>  
+		<item>Hebrews</item>  
+		<item>James</item>  
+		<item>1 Peter</item>  
+		<item>2 Peter</item>  
+		<item>1 John</item>  
+		<item>2 John</item>  
+		<item>3 John</item>  
+		<item>Jude</item>  
+		<item>Revelation</item>  
+	</string-array>
+	
+	<string-array name="abrvs">  
+		<item>mat</item>  
+		<item>mrk</item>  
+		<item>luk</item>  
+		<item>joh</item>  
+		<item>act</item>  
+		<item>rom</item>  
+		<item>1co</item>  
+		<item>2co</item>  
+		<item>gal</item>  
+		<item>eph</item>  
+		<item>phi</item>  
+		<item>col</item>  
+		<item>1th</item>  
+		<item>2th</item>  
+		<item>1ti</item>  
+		<item>2ti</item>  
+		<item>tit</item>  
+		<item>phe</item>  
+		<item>heb</item>  
+		<item>jam</item>  
+		<item>1pe</item>  
+		<item>2pe</item>  
+		<item>1jo</item>  
+		<item>2jo</item>  
+		<item>3jo</item>  
+		<item>jud</item>  
+		<item>rev</item>  
+	</string-array>
+	
+	<string-array name="expert_levels">
+        <item>Beginner (50+)</item>
+        <item>Novice (30+)</item>
+        <item>Intermediate (20+)</item>
+        <item>Advanced (15+)</item>
+        <item>Expert (10+)</item>
+		<item>Mastery (5+)</item>
+    </string-array>
+</resources>

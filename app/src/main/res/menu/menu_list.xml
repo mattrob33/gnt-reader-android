@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_recent"
+		android:icon="@android:drawable/ic_menu_recent_history"
+		android:showAsAction="always"
+		android:visible="false"
+		android:title="Most recent" />
+	<item
+		android:id="@+id/menu_recent_list"
+		android:icon="@android:drawable/ic_menu_recent_history"
+		android:showAsAction="always"
+		android:visible="false">
+		<menu>
+			<item
+				android:id="@+id/menu_recent1"
+				android:title="Recent 1" />
+			<item
+				android:id="@+id/menu_recent2"
+				android:title="Recent 2" />
+			<item
+				android:id="@+id/menu_recent3"
+				android:title="Recent 3"
+				android:visible="false" />
+			<item
+				android:id="@+id/menu_recent4"
+				android:title="Recent 4"
+				android:visible="false" />
+		</menu>
+	</item>
+	<item android:id="@+id/menu_plans"
+		android:visible="false"
+		android:showAsAction="never"
+		android:title="Plans"
+	/>
+	<item android:id="@+id/menu_preferences"
+		android:showAsAction="never"
+		android:title="Preferences"
+		/>
+	<item android:id="@+id/menu_about"
+		android:icon="@android:drawable/ic_menu_info_details"
+		android:showAsAction="never"
+		android:title="About"
+		/>
+</menu>

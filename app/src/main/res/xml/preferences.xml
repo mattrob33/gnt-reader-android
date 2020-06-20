@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<PreferenceCategory android:title="Display">
+		<com.mattrobertson.greek.reader.ui.SeekBarPreference
+			android:key="fontSizeSeek"
+			android:title="Font size"
+			android:summary="Select the font size to use for verses and definitions."
+			android:max="22"
+			android:defaultValue="12">
+		</com.mattrobertson.greek.reader.ui.SeekBarPreference>
+		<CheckBoxPreference
+			android:title="Show verse numbers"
+			android:defaultValue="true"
+			android:summary="Show verse reference numbers?"
+			android:key="showVerseNumbers" />
+		<CheckBoxPreference
+			android:title="Verses on new lines"
+			android:defaultValue="false"
+			android:summary="Show each verse on a new line?"
+			android:key="showVersesNewLines" />
+		<CheckBoxPreference
+			android:title="Night Mode"
+			android:defaultValue="false"
+			android:summary="Light text on dark background"
+			android:key="nightmode" />
+		<CheckBoxPreference
+			android:title="Audio Button"
+			android:defaultValue="true"
+			android:summary="Show button to play/pause audio"
+			android:key="audio" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Navigation">
+	<CheckBoxPreference
+		android:title="Quickstart recent"
+		android:defaultValue="false"
+		android:summary="Automatically open most recent chapter upon clicking Recent button? (if box is not checked, a list of recent chapters will be shown instead)"
+		android:key="quickstart" />
+	<CheckBoxPreference
+		android:title="Alternate chapter selector"
+		android:defaultValue="false"
+		android:summary="Use list-style chapter selector (only recommended if grid does not display correctly)"
+		android:key="altchap" />
+	</PreferenceCategory>
+</PreferenceScreen>

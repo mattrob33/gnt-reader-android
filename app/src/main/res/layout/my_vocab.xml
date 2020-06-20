@@ -1,0 +1,25 @@
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/container"
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ListView
+		android:id="@+id/lvMyVocab"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		/>
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabWizard"
+		android:src="@drawable/ic_flash"
+		app:backgroundTint="@color/primary"
+		app:fabSize="normal"
+		android:layout_marginBottom="24dp"
+		android:layout_marginRight="24dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_anchor="@id/lvMyVocab"
+		app:layout_anchorGravity="bottom|end"
+		android:layout_gravity="bottom|end"
+		/>
+</FrameLayout>

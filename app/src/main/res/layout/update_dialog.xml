@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="20dp"
+		android:background="#FFFFFF"
+		android:orientation="vertical" >
+			<Button
+				android:id="@+id/btnClose"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@android:color/white"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentRight="true"
+				android:padding="20dp"
+				android:clickable="true"
+				android:text="x"
+				android:textSize="28sp"
+				android:textColor="#000000"
+				android:textStyle="bold" />
+		<TextView
+			android:id="@+id/tvUpdateTitle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="10dp"
+			android:layout_above="@+id/tvUpdateDetails"
+			android:text="Update!"
+			android:textColor="@android:color/black"
+			android:layout_centerHorizontal="true"
+			android:textSize="20sp"
+		/>
+		<TextView
+			android:id="@+id/tvUpdateDetails"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:layout_centerInParent="true"
+			android:text="Update details"
+			android:textColor="@android:color/black"
+			android:textSize="14sp"
+			/>
+	<Button
+		android:id="@+id/btnTry"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="#3E80B4"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_margin="40dp"
+		android:paddingLeft="20dp"
+		android:paddingRight="20dp"
+		android:paddingTop="10dp"
+		android:paddingBottom="10dp"
+		android:clickable="true"
+		android:text="Try It"
+		android:textSize="20sp"
+		android:textColor="#EEEEEE"
+		/>
+</RelativeLayout>

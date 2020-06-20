@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:layout_margin="40dp"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/tvWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#3E80B4"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:text="X"
+			android:textSize="16sp"
+            android:textColor="#5DBCD2"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="2dp"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:text="||"
+			android:textSize="16sp"
+            android:textColor="#5DBCD2"
+            android:textStyle="bold" />
+    </LinearLayout>
+	<TextView
+        android:id="@+id/tvWpm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+		android:layout_gravity="center"
+        android:text="wpm"
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
+	/>
+	<SeekBar
+		android:id="@+id/seekWpm"
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+		android:max="270"
+	/>
+</LinearLayout>
