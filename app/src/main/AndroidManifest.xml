@@ -23,10 +23,6 @@
             </intent-filter>
         </activity>
 		<activity
-            android:name=".SearchActivity"
-            android:label="Greek New Testament Reader" >
-        </activity>
-		<activity
             android:name=".ChapterPickerActivity"
             android:label="Chapter"
 			android:parentActivityName=".BooksActivity">

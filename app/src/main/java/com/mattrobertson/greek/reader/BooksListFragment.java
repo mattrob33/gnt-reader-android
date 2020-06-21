@@ -1,12 +1,18 @@
 package com.mattrobertson.greek.reader;
 
-import android.content.*;
-import android.os.*;
-import android.preference.*;
-import androidx.core.app.*;
-import android.view.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
@@ -31,15 +37,15 @@ public class BooksListFragment extends Fragment {
 		boolean hasShownVocabUpdate = prefs.getBoolean("hasShownVocabUpdate",false);
 		
 		if ( ! hasShownVocabUpdate) {
-			final LinearLayout updateView = (LinearLayout)(getActivity().findViewById(R.id.updateView));
+			final LinearLayout updateView = getActivity().findViewById(R.id.updateView);
 			updateView.setVisibility(View.VISIBLE);
 			
-			Button btnDismiss = (Button)(getActivity().findViewById(R.id.btnDismiss));
+			Button btnDismiss = getActivity().findViewById(R.id.btnDismiss);
 			btnDismiss.setOnClickListener(new Button.OnClickListener() {
 				@Override
 				public void onClick(View p1)
 				{
-					prefs.edit().putBoolean("hasShownVocabUpdate",true).commit();
+					prefs.edit().putBoolean("hasShownVocabUpdate",true).apply();
 					updateView.setVisibility(View.GONE);
 				}
 			});
@@ -50,20 +56,19 @@ public class BooksListFragment extends Fragment {
 
 		arrBooks = getResources().getStringArray(R.array.books);    
 
-		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrBooks);
+		adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, arrBooks);
 
 		// Assign the adapter to the lv
-		ListView lvBooks = (ListView)(getActivity().findViewById(R.id.lvBooks));
+		ListView lvBooks = getActivity().findViewById(R.id.lvBooks);
 		lvBooks.setAdapter(adapter);
 		lvBooks.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				int book = position;
-
 				Intent i;
 
 				// If single chapter book, just launch the text
 				if (book != 17 && book != 23 && book != 24 && book != 25) {
-					if (prefs.getBoolean("altchap",false) == false)
+					if (!prefs.getBoolean("altchap",false))
 						i = new Intent(getActivity(),ChapterPickerActivity.class);
 					else
 						i = new Intent(getActivity(),ChapterPickerAlt.class);

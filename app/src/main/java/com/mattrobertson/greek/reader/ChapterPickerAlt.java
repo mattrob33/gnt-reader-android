@@ -1,17 +1,13 @@
 package com.mattrobertson.greek.reader;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.view.*;
-import android.view.View.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
-import java.util.*;
-
-import android.view.View.OnClickListener;
-import com.mattrobertson.greek.reader.ui.*;
-import android.preference.*;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class ChapterPickerAlt extends Activity 
 {
@@ -45,9 +41,7 @@ public class ChapterPickerAlt extends Activity
 		{20,29,22,11,14,17,17,13,21,11,19,17,18,20,8,21,18,24,21,15,27,21}};
 	
 	String[] arrChaps;
-	
 	int book;
-	
 	int numChapters = 1;
 
     @Override
@@ -70,20 +64,19 @@ public class ChapterPickerAlt extends Activity
 		for (int i=0; i < numChapters; i++)
 			arrChaps[i] = i+1+"";
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrChaps);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrChaps);
 
         // Assign the adapter to the lv
-		ListView lvChaps = (ListView)findViewById(R.id.lvChapters);
+		ListView lvChaps = findViewById(R.id.lvChapters);
 		lvChaps.setAdapter(adapter);
 		lvChaps.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					int chap = position + 1;
-
-					Intent i = new Intent(ChapterPickerAlt.this,ReaderActivity.class);
-					i.putExtra("book",book);
-					i.putExtra("chapter", chap);
-					startActivity(i);
-				}
-			});
+				int chap = position + 1;
+				Intent i = new Intent(ChapterPickerAlt.this,ReaderActivity.class);
+				i.putExtra("book",book);
+				i.putExtra("chapter", chap);
+				startActivity(i);
+			}
+		});
     }
 }
