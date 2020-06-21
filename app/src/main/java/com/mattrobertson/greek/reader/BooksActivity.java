@@ -1,24 +1,25 @@
 package com.mattrobertson.greek.reader;
 
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.preference.*;
-import androidx.core.app.*;
-import androidx.core.view.*;
-import android.view.*;
-
+import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.mattrobertson.greek.reader.dialog.NotificationDialog;
+import com.mattrobertson.greek.reader.interfaces.UpdateDialogInterface;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import com.mattrobertson.greek.reader.interfaces.*;
-import android.net.*;
-import com.mattrobertson.greek.reader.dialog.*;
 
 public class BooksActivity extends FragmentActivity
  {
@@ -52,7 +53,7 @@ public class BooksActivity extends FragmentActivity
 		
 		// ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
         mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = findViewById(R.id.pager);
         mViewPager.setAdapter(mCustomPagerAdapter);
 		mViewPager.setOnPageChangeListener(
             new ViewPager.SimpleOnPageChangeListener() {
@@ -106,7 +107,7 @@ public class BooksActivity extends FragmentActivity
 				}
 			}, UpdateDialogInterface.DOWNLOAD_HEBREW_APP);
 			
-			prefs.edit().putBoolean("hasShownAppsAd",true).commit();
+			prefs.edit().putBoolean("hasShownAppsAd",true).apply();
 			
 			notificationDialog.setTitle("More Apps");
 			//notificationDialog.setDetails("Now available for free on the Google Play Store.");
@@ -114,7 +115,7 @@ public class BooksActivity extends FragmentActivity
 		}
 		
 		if (firstLaunch) {
-			prefs.edit().putBoolean("hasLaunched",true).commit();
+			prefs.edit().putBoolean("hasLaunched",true).apply();
 		}
 	}
 	
@@ -170,21 +171,10 @@ public class BooksActivity extends FragmentActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean focusedReader = false;
-
-		Intent i;
-
-		if (focusedReader)
-			i = new Intent(BooksActivity.this,FocusedReaderActivity.class);
-		else
-			i = new Intent(BooksActivity.this,ReaderActivity.class);
+		Intent i = new Intent(BooksActivity.this,ReaderActivity.class);
 
 		switch (item.getItemId()) {
 			case R.id.menu_recent:
-				i.putExtra("book", b1);
-				i.putExtra("chapter", c1);
-				startActivity(i);
-				return true;
 			case R.id.menu_recent1:
 				i.putExtra("book", b1);
 				i.putExtra("chapter", c1);
@@ -232,7 +222,8 @@ class CustomPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int i) {
+    @NonNull
+	public Fragment getItem(int i) {
 		if (i == 0)
 			return booksFragment;
 		else if (i == 1)

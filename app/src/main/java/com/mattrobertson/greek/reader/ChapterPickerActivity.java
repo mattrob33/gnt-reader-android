@@ -1,12 +1,16 @@
 package com.mattrobertson.greek.reader;
 
-import android.app.*;
-import android.content.*;
-import android.graphics.*;
-import android.os.*;
-import android.util.*;
-import android.view.*;
-import android.widget.*;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class ChapterPickerActivity extends Activity
 {
@@ -55,18 +59,13 @@ public class ChapterPickerActivity extends Activity
 
 		numChapters = verses[book].length;
 
-		LinearLayout cpContainer = (LinearLayout)findViewById(R.id.cp_container);
+		LinearLayout cpContainer = findViewById(R.id.cp_container);
 		
 		Display display = getWindowManager().getDefaultDisplay();
 		
 		Point size = new Point();
 		display.getSize(size);
 		int wScreen = size.x - 40;
-		
-/*
-		// *** TEMP TEST HACK -- DELETE THIS!!!
-		wScreen = 600;
-*/
 
 		int wTarget = 180;
 		int numSq = wScreen / wTarget; // # of squares per row
@@ -107,20 +106,12 @@ public class ChapterPickerActivity extends Activity
 						@Override
 						public void onClick(View v)
 						{
-							boolean focusedReader = false;
-							
-							Intent i;
-							
-							if (focusedReader)
-								i = new Intent(ChapterPickerActivity.this,FocusedReaderActivity.class);
-							else
-								i = new Intent(ChapterPickerActivity.this,ReaderActivity.class);
-								
-							i.putExtra("book",book);
-							i.putExtra("chapter", chap);
-							startActivity(i);
-						}
-					});
+					Intent i = new Intent(ChapterPickerActivity.this,ReaderActivity.class);
+					i.putExtra("book",book);
+					i.putExtra("chapter", chap);
+					startActivity(i);
+					}
+				});
 				
 				ch++;
 				if (ch > numChapters)
