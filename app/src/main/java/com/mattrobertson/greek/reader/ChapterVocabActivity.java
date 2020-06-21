@@ -11,6 +11,7 @@ import android.preference.*;
 import androidx.core.widget.*;
 import androidx.appcompat.widget.*;
 
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -52,7 +53,7 @@ public class ChapterVocabActivity extends Activity
 		tvText = (TextView)findViewById(R.id.tvChapterVocabText);
 
 		scrollerMain = (ScrollView)findViewById(R.id.chapterVocabScroll);
-		
+
 		greekFont = Typeface.createFromAsset(getAssets(), "fonts/sblgreek.ttf");
 		tvText.setTypeface(greekFont);
 
@@ -68,7 +69,7 @@ public class ChapterVocabActivity extends Activity
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("Preparing...");
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		
+
 		try
 		{
 			dbHelper = new DataBaseHelper(this);
@@ -77,7 +78,7 @@ public class ChapterVocabActivity extends Activity
 		{
 			//msg("Database error: " + e.getMessage());
 		}
-		
+
 		book = getIntent().getIntExtra("book",5);
 		chapter = getIntent().getIntExtra("chapter",5);
 
@@ -123,7 +124,8 @@ public class ChapterVocabActivity extends Activity
 			return s.hasNext() ? s.next() : "";
 		}
 		catch (Exception e) {
-			//msg(e.getMessage());
+			Log.e("sblgnt", "Failed reading from file.");
+			Log.e("sblgnt", e.getMessage());
 		}
 
 		return "";
@@ -272,7 +274,8 @@ public class ChapterVocabActivity extends Activity
 				strRawGreekText = readFromFile();
 			}
 			catch (Exception e) {
-				//msg(e.getMessage());
+				Log.e("sblgnt", "Failed reading Greek text from file for chapter vocab");
+				Log.e("sblgnt", e.getMessage());
 			}
 
             return "";

@@ -1,36 +1,61 @@
 package com.mattrobertson.greek.reader;
 
-import android.animation.*;
-import android.app.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.graphics.*;
-import android.graphics.drawable.*;
-import android.os.*;
-import android.preference.*;
-
-import androidx.core.widget.*;
-import androidx.appcompat.widget.*;
-import android.text.*;
-import android.text.method.*;
-import android.text.style.*;
-import android.view.*;
-import android.widget.*;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.SuperscriptSpan;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mattrobertson.greek.reader.interfaces.*;
-import com.mattrobertson.greek.reader.objects.*;
-import com.mattrobertson.greek.reader.ui.*;
-import java.io.*;
-import java.util.*;
+import com.mattrobertson.greek.reader.dialog.UpdateDialog;
+import com.mattrobertson.greek.reader.dialog.WordRunnerDialog;
+import com.mattrobertson.greek.reader.interfaces.AudioPrepared;
+import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
+import com.mattrobertson.greek.reader.interfaces.UpdateDialogInterface;
+import com.mattrobertson.greek.reader.interfaces.WordRunnerDialogInterface;
+import com.mattrobertson.greek.reader.objects.AudioPlayer;
+import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan;
+import com.mattrobertson.greek.reader.objects.DataBaseHelper;
+import com.mattrobertson.greek.reader.objects.Word;
+import com.mattrobertson.greek.reader.objects.WordSpan;
+import com.mattrobertson.greek.reader.ui.SwipeActivity;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-
-import com.mattrobertson.greek.reader.dialog.*;
-
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 
 public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInterface, UpdateDialogInterface, GreekTextProcessorInterface, AudioPrepared
 {
@@ -38,12 +63,11 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 	CoordinatorLayout container;
 	Toolbar toolbar;
-	//CardView cvDef, cvConc;
 	NestedScrollView scrollerMain;
 	TextView tvText, tvLex, tvDef, tvConcordance, tvConcTitle;
 	FloatingActionButton fabMediaPlay, fabMediaRestart;
 
-	String strRawGreekText = "", defWord ="";
+	String strRawGreekText = "";
 
 	ArrayList<Word> words;
 	ArrayList<WordSpan> wordSpans;
@@ -60,9 +84,9 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	int fontSize;
 	
 	DataBaseHelper dbHelper;
-	
+
 	Toast mToast;
-	
+
 	public boolean selectMode = false;
 	public boolean nightMode = false;
 	
@@ -76,7 +100,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	
 	UpdateDialog updateDialog;
 	
-	private BottomSheetBehavior mBottomSheetBehavior;
+	private BottomSheetBehavior<?> mBottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -88,23 +112,24 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 							 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.reader);
 
-		toolbar = (Toolbar)findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null)
+			actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		audio = new AudioPlayer(this,this);
 
-		container = (CoordinatorLayout)findViewById(R.id.mainContainer);
-		//cvDef = (CardView)findViewById(R.id.defCard);
-		//cvConc = (CardView)findViewById(R.id.concordCard);
+		container = findViewById(R.id.mainContainer);
 		
-		tvLex = (TextView)findViewById(R.id.tvLex);
-		tvDef = (TextView)findViewById(R.id.tvDef);
-		tvConcordance = (TextView)findViewById(R.id.tvConcordance);
-		tvConcTitle = (TextView)findViewById(R.id.tvConcordTitle);
-		tvText = (TextView)findViewById(R.id.tvText);
-		fabMediaPlay = (FloatingActionButton)findViewById(R.id.fabMediaPlay);
-		fabMediaRestart = (FloatingActionButton)findViewById(R.id.fabMediaRestart);
+		tvLex = findViewById(R.id.tvLex);
+		tvDef = findViewById(R.id.tvDef);
+		tvConcordance = findViewById(R.id.tvConcordance);
+		tvConcTitle = findViewById(R.id.tvConcordTitle);
+		tvText = findViewById(R.id.tvText);
+		fabMediaPlay = findViewById(R.id.fabMediaPlay);
+		fabMediaRestart = findViewById(R.id.fabMediaRestart);
 		
 		tvText.setHighlightColor(Color.TRANSPARENT);
 		
@@ -112,13 +137,13 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			@Override
 			public void onClick(View p1)
 			{
-				if (audio.getState() == audio.PLAYING) {
+				if (audio.getState() == AudioPlayer.PLAYING) {
 					audio.pause();
 				}
 				else {
 					boolean result = audio.playChapter(book,chapter);
 					
-					if (result == false)
+					if (!result)
 						msg("Could not play audio. Please check your network connection.");
 				}
 				
@@ -136,7 +161,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			}
 		});
 
-		scrollerMain = (NestedScrollView)findViewById(R.id.scroller);
+		scrollerMain = findViewById(R.id.scroller);
 		scrollerMain.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 			@Override
 			public void onScrollChange(NestedScrollView v, int newX, int newY, int oldX, int oldY)
@@ -152,7 +177,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			}
 		});
 		
-		NestedScrollView bottomSheet = (NestedScrollView)findViewById( R.id.bottomSheet);
+		NestedScrollView bottomSheet = findViewById( R.id.bottomSheet);
 		mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 		mBottomSheetBehavior.setPeekHeight(400);
 		mBottomSheetBehavior.setHideable(true);
@@ -182,7 +207,9 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 		updateDialog = new UpdateDialog(this,this, UpdateDialogInterface.FEATURE_CHAPTER_VOCAB);
-		updateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(150,10,10,10)));
+		Window window = updateDialog.getWindow();
+		if (window != null)
+			window.setBackgroundDrawable(new ColorDrawable(Color.argb(150,10,10,10)));
 		updateDialog.setTitle("New Feature: Chapter Vocabulary!");
 		updateDialog.setDetails("View all vocabulary for the chapter, grouped by number of occurrences. Access through the menu.");
 
@@ -208,79 +235,62 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		}
 		
 		selectMode = false;
-		
-		mToast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
 
 		nightMode = prefs.getBoolean("nightmode",false);
 		showVerseNumbers = prefs.getBoolean("showVerseNumbers",true);
 		showVersesNewLines = prefs.getBoolean("showVersesNewLines",false);
 
-		// New launch
-		if (savedInstanceState == null) {
-			String q = getIntent().getStringExtra(SearchManager.QUERY);
+		String q = getIntent().getStringExtra(SearchManager.QUERY);
 
-			if ( q != null) { // arrived from Voice Search
-				String[] qParts = q.split(" ");
+		if ( q != null) { // arrived from Voice Search
+			String[] qParts = q.split(" ");
 
-				if (qParts.length != 2 && qParts.length != 3) { // invalid search; go to Matt 1
-					book = 0;
-					chapter = 1;
-				}
-				else {
-					book = 0;
-					chapter = 1;
+			if (qParts.length != 2 && qParts.length != 3) { // invalid search; go to Matt 1
+				book = 0;
+				chapter = 1;
+			}
+			else {
+				book = 0;
+				chapter = 1;
 
-					String qTitle = "", qChap = "";
+				String qTitle = qParts.length == 2 ? qParts[0] : qParts[0] + " " + qParts[1];
+				String qChap = qParts.length == 2 ? qParts[1] : qParts[2];
 
-					qTitle = qParts.length == 2 ? qParts[0] : qParts[0] + " " + qParts[1];
-					qChap = qParts.length == 2 ? qParts[1] : qParts[2];
+				qTitle = qTitle.replace("First","1");
+				qTitle = qTitle.replace("1st","1");
+				qTitle = qTitle.replace("Second","2");
+				qTitle = qTitle.replace("2nd","2");
+				qTitle = qTitle.replace("Third","3");
+				qTitle = qTitle.replace("3rd","3");
 
-					qTitle = qTitle.replace("First","1");
-					qTitle = qTitle.replace("1st","1");
-					qTitle = qTitle.replace("Second","2");
-					qTitle = qTitle.replace("2nd","2");
-					qTitle = qTitle.replace("Third","3");
-					qTitle = qTitle.replace("3rd","3");
+				String[] arrBooks = getResources().getStringArray(R.array.books);
+				boolean matched = false;
 
-					String[] arrBooks = getResources().getStringArray(R.array.books);
-					boolean matched = false;
-
-					for (int i = 0; i < arrBooks.length; i ++) {
-						if (qTitle.equalsIgnoreCase(arrBooks[i])) {
-							;book = i;
-							matched = true;
-							break;
-						}
-					}
-
-					if (matched == false)
-						chapter = 1;
-
-					try {
-						chapter = Integer.parseInt(qChap);
-					}
-					catch (NumberFormatException e) {
-						chapter = 1;
+				for (int i = 0; i < arrBooks.length; i ++) {
+					if (qTitle.equalsIgnoreCase(arrBooks[i])) {
+						book = i;
+						matched = true;
+						break;
 					}
 				}
-			}
-			else { // arrived from chapter picker
-				book = getIntent().getIntExtra("book",5);
-				chapter = getIntent().getIntExtra("chapter",5);
-			}
 
-			doNewBook();
-		}
-		else { // screen orientation change
-			strRawGreekText = savedInstanceState.getString("morphText");
-			book = savedInstanceState.getInt("book",5);
-			chapter = savedInstanceState.getInt("chapter",5);
-			selectedWordId = savedInstanceState.getInt("selectedWordId",-1);
-			defWord = savedInstanceState.getString("defWord");
+				if (!matched)
+					chapter = 1;
 
-			AsyncGreekTextProcessor async = new AsyncGreekTextProcessor();
-			async.execute();
+				try {
+					chapter = Integer.parseInt(qChap);
+				}
+				catch (NumberFormatException e) {
+					chapter = 1;
+				}
+			}
 		}
+		else { // arrived from chapter picker
+			book = getIntent().getIntExtra("book",5);
+			chapter = getIntent().getIntExtra("chapter",5);
+		}
+
+		doNewBook();
 
 		// NIGHT MODE
 		if (nightMode) {
@@ -309,27 +319,11 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		
 		if ( ! prefs.getBoolean("hasShownChapterVocabUpdate",false)) {
 			updateDialog.show();
-			
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean("hasShownChapterVocabUpdate",true);
-			editor.commit();
+			prefs.edit().putBoolean("hasShownChapterVocabUpdate",true).apply();
 		}
 	
 	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		// Save the current state
-		savedInstanceState.putString("morphText",strRawGreekText);
-		savedInstanceState.putInt("book",book);
-		savedInstanceState.putInt("chapter",chapter);
-		savedInstanceState.putInt("scroll",scrollerMain.getScrollY());
-		savedInstanceState.putString("defWord",defWord);
-		savedInstanceState.putInt("selectedWordId",selectedWordId);
 
-		super.onSaveInstanceState(savedInstanceState);
-	}
-	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -370,10 +364,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 					// Show Help on the first time
 					if ( ! prefs.getBoolean("hasShownSelectMode",false)) {
 						Toast.makeText(this,"Select text to copy!",Toast.LENGTH_LONG).show();
-
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putBoolean("hasShownSelectMode",true);
-						editor.commit();
+						prefs.edit().putBoolean("hasShownSelectMode",true).apply();
 					}
 				}
 				else {
@@ -443,11 +434,8 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		}
 	}
 	
-	@Override
-	protected void onSwipeUp(){}
-	
-	@Override
-	protected void onSwipeDown(){}
+	@Override protected void onSwipeUp(){}
+	@Override protected void onSwipeDown(){}
 
 	private String readFromFile() {
 		try {
@@ -500,11 +488,11 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		
 		String[] arrLine;
 		
-		words = new ArrayList<Word>();
-		wordSpans = new ArrayList<WordSpan>();
+		words = new ArrayList<>();
+		wordSpans = new ArrayList<>();
 
 		String x,r,l,p;
-		String str = "";
+		String str;
 		Word word;
 
 		int totalLength = 0, lastVerse = 0;
@@ -513,8 +501,8 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		WordSpan curSpan;
 
 
-		for (int n=0; n<arrWords.length; n++) {
-			str = arrWords[n];
+		for (String arrWord : arrWords) {
+			str = arrWord;
 			arrLine = str.split(" ");
 
 			r = arrLine.length > 0 ? arrLine[0] : "";
@@ -525,27 +513,27 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			if (r.length() < 6)
 				continue;
 
-			int curChap = Integer.parseInt(r.substring(2,4));
+			int curChap = Integer.parseInt(r.substring(2, 4));
 			int curVerse = Integer.parseInt(r.substring(4));
 
 			if (curChap < chapter)
 				continue;
-				
+
 			if (curChap > chapter)
 				break;
-	
-			word = new Word(words.size(),x,r,l,p);
+
+			word = new Word(words.size(), x, r, l, p);
 
 			index = words.size();
-			
+
 			words.add(word);
-			
-			boolean isUppercase = word.toString().substring(0,1).toUpperCase().equals(word.toString().substring(0,1));
-			
+
+			boolean isUppercase = word.toString().substring(0, 1).toUpperCase().equals(word.toString().substring(0, 1));
+
 			// Paragraph divisions
 			if (words.size() > 1) {
-				String lastWord = words.get(index-1).toString().trim();
-				
+				String lastWord = words.get(index - 1).toString().trim();
+
 				if (lastWord.contains(".") && isUppercase) {
 					spannableStringBuilder.append("\n\t\t\t\t\t");
 					totalLength += 6;
@@ -555,16 +543,16 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				spannableStringBuilder.append("\t\t\t\t\t");
 				totalLength += 5;
 			}
-			
+
 			// Verse numbers
 			if (curVerse > lastVerse) {
 				if (showVersesNewLines) {
 					spannableStringBuilder.append("\n");
 					totalLength += 1;
 				}
-				
+
 				if (showVerseNumbers) {
-					String strVerse = ""+curVerse+"";
+					String strVerse = "" + curVerse + "";
 					spannableStringBuilder.append(strVerse);
 					spannableStringBuilder.setSpan(new SuperscriptSpan(), totalLength, totalLength + strVerse.length(), Spanned.SPAN_COMPOSING);
 					spannableStringBuilder.setSpan(new RelativeSizeSpan(0.65f), totalLength, totalLength + strVerse.length(), Spanned.SPAN_COMPOSING);
@@ -575,15 +563,15 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				lastVerse = curVerse;
 			}
 
-			spannableStringBuilder.append(x + " ");
+			spannableStringBuilder.append(x).append(" ");
 
 			final int _index = index;
 
-			curSpan = new WordSpan(index,greekFont,index==selectedWordId,nightMode) {
+			curSpan = new WordSpan(index, greekFont, index == selectedWordId, nightMode) {
 				@Override
 				public void onClick(View view) {
-					
-					handleWordClick(_index,this);
+
+					handleWordClick(_index);
 					setMarking(true);
 					tvText.refreshDrawableState();
 					tvText.forceLayout();
@@ -601,7 +589,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		return spannableStringBuilder;
 	}
 
-	public void handleWordClick(int id, WordSpan w) {
+	public void handleWordClick(int id) {
 		// Ignore if in text selext mode
 		if (selectMode) return;
 		
@@ -611,7 +599,6 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		// mark last click set false
 		if (selectedWordId > -1) {
 			wordSpans.get(selectedWordId).setMarking(false);
-			//tvText.invalidate();
 		}
 
 		selectedWordId = id;
@@ -632,7 +619,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 		Cursor c = db.rawQuery("SELECT * FROM words WHERE lemma='"+lex+"'",null);
 		
-		if (c.moveToFirst() == false){
+		if (!c.moveToFirst()){
 			// Temp hack to find missing words
 			Cursor c2 = db.rawQuery("SELECT * FROM glosses WHERE gk='"+lex+"'",null);
 			
@@ -642,6 +629,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 				showDef(lex, freq, gloss, parsing);
 			}
+			c2.close();
 		}
 		else {
 			int freq = c.getInt(c.getColumnIndex("freq"));
@@ -652,6 +640,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 			showDef(lex, freq, strDef, parsing);
 		}
+		c.close();
 	}
 	
 	public void lookupConcordance(String lex) {
@@ -670,7 +659,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		
 		int size = c.getCount();
 		
-		String strLine = "";
+		String strLine;
 		int totalLength = 0;
 		
 		ConcordanceWordSpan span;
@@ -710,7 +699,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				
 				ClickableSpan spanMore = new ClickableSpan() {
 					@Override
-					public void onClick(View v) {
+					public void onClick(@NonNull View v) {
 						Intent i = new Intent(ReaderActivity.this,ConcordanceActivity.class);
 						i.putExtra("lex",lexF);
 						startActivity(i);
@@ -729,11 +718,16 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				break;
 			}
 		}
+
+		c.close();
 		
 		showConcordance(sb);
 	}
 
 	public void msg(String s) {
+		if (mToast == null)
+			mToast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
+
 		mToast.setText(s);
 		mToast.show();
 	}
@@ -774,19 +768,19 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	}
 	
 	public void refreshAudioUI() {
-		if (audio.getState() == audio.PLAYING) {
+		if (audio.getState() == AudioPlayer.PLAYING) {
 			fabMediaPlay.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_pause));
 			fabMediaRestart.setVisibility(View.VISIBLE);
 			fabMediaRestart.animate().translationX((int)(-1 * (fabMediaRestart.getWidth()*1.5)));
 		}
-		else if (audio.getState() == audio.PREPARING) {
+		else if (audio.getState() == AudioPlayer.PREPARING) {
 			fabMediaPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_loading));
 			fabMediaPlay.animate().rotationBy(-360)
 			.setListener(new AnimatorListenerAdapter() {
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						super.onAnimationEnd(animation);
-						if (audio.getState() == audio.PREPARING)
+						if (audio.getState() == AudioPlayer.PREPARING)
 							fabMediaPlay.animate().rotationBy(-360);
 						else {
 							fabMediaPlay.animate().cancel();
@@ -803,7 +797,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						super.onAnimationEnd(animation);
-						if (audio.getState() == audio.PAUSED)
+						if (audio.getState() == AudioPlayer.PAUSED)
 							fabMediaRestart.setVisibility(View.INVISIBLE);
 					}
 				});
@@ -826,14 +820,14 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		c4 = prefs.getInt("recentChapter4",-1);
 		
 		if (book == b1 && chapter == c1) {
-			return; // alrwady the most recent
+			return; // already the most recent
 		}
 		else if (book == b2 && chapter == c2) {
 			editor.putInt("recentBook2",b1);
 			editor.putInt("recentChapter2",c1);
 			editor.putInt("recentBook1",book);
 			editor.putInt("recentChapter1",chapter);
-			editor.commit();
+			editor.apply();
 		}
 		else if (book == b3 && chapter == c3) {
 			editor.putInt("recentBook3",b2);
@@ -842,7 +836,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			editor.putInt("recentChapter2",c1);
 			editor.putInt("recentBook1",book);
 			editor.putInt("recentChapter1",chapter);
-			editor.commit();
+			editor.apply();
 		}
 		else if (book == b4 && chapter == c4) {
 			editor.putInt("recentBook4",b3);
@@ -853,7 +847,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			editor.putInt("recentChapter2",c1);
 			editor.putInt("recentBook1",book);
 			editor.putInt("recentChapter1",chapter);
-			editor.commit();
+			editor.apply();
 		}
 		else {
 			if (b3 > -1 && c3 > -1) {
