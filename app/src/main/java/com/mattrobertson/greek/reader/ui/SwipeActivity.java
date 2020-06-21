@@ -1,12 +1,11 @@
 package com.mattrobertson.greek.reader.ui;
 
-import android.app.*;
 import android.os.*;
 import android.view.*;
 import android.view.GestureDetector.*;
-import android.support.v7.app.*;
+import androidx.appcompat.app.*;
 
-public abstract class SwipeActivity extends ActionBarActivity
+public abstract class SwipeActivity extends AppCompatActivity
  {
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;

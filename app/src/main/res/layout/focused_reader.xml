@@ -1,25 +1,25 @@
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainContainerFR"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-	<android.support.design.widget.AppBarLayout
+	<com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
         <!-- Toolbar is the actual app bar with text and the action items --> 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways" />
-    </android.support.design.widget.AppBarLayout>
-	<android.support.v4.widget.NestedScrollView
+    </com.google.android.material.appbar.AppBarLayout>
+	<androidx.core.widget.NestedScrollView
 		android:id="@+id/scrollerFR"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -40,9 +40,9 @@
 			android:lineSpacingExtra="8dp"
 			android:focusable="false"
 		/>
-	</android.support.v4.widget.NestedScrollView>
+	</androidx.core.widget.NestedScrollView>
 	
-	<android.support.v4.widget.NestedScrollView
+	<androidx.core.widget.NestedScrollView
 		android:id="@+id/bottomSheet"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 			android:layout_marginRight="0dp"
 			android:padding="0dp"
 		>
-			<android.support.v7.widget.CardView
+			<androidx.cardview.widget.CardView
 				xmlns:card_view="http://schemas.android.com/apk/res-auto"
 				android:id="@+id/defCard"
 				android:layout_width="match_parent"
@@ -115,8 +115,8 @@
 						android:gravity="top"
 					/>
 				</LinearLayout>
-			</android.support.v7.widget.CardView>
-			<android.support.v7.widget.CardView
+			</androidx.cardview.widget.CardView>
+			<androidx.cardview.widget.CardView
 				xmlns:card_view="http://schemas.android.com/apk/res-auto"
 				android:id="@+id/concordCard"
 				android:layout_width="match_parent"
@@ -167,7 +167,7 @@
 						android:gravity="top"
 					/>
 				</LinearLayout>
-			</android.support.v7.widget.CardView>
+			</androidx.cardview.widget.CardView>
 		</LinearLayout>
-	</android.support.v4.widget.NestedScrollView>
-</android.support.design.widget.CoordinatorLayout>
+	</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

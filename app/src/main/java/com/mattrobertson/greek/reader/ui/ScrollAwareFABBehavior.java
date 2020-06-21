@@ -1,10 +1,14 @@
 package com.mattrobertson.greek.reader.ui;
 
 import android.content.*;
-import android.support.design.widget.*;
-import android.support.v4.view.*;
+
+import androidx.core.view.*;
 import android.util.*;
 import android.view.*;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior
  {

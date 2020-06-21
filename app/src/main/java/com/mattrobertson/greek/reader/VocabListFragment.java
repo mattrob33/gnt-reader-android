@@ -5,16 +5,15 @@ import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
 import android.os.*;
-import android.preference.*;
-import android.support.v4.app.*;
+
+import androidx.core.app.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
-import com.daimajia.swipe.*;
-import com.mattrobertson.greek.reader.objects.*;
-import com.mattrobertson.greek.reader.AppConstants;
 
-import android.support.v4.app.Fragment;
+import com.mattrobertson.greek.reader.objects.*;
+
+import androidx.fragment.app.Fragment;
 
 public class VocabListFragment extends Fragment {
 

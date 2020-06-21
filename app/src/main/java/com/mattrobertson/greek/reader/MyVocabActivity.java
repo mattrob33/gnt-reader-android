@@ -5,20 +5,21 @@ import android.database.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
-import android.support.design.widget.*;
-import android.support.v7.app.*;
+
+import androidx.appcompat.app.*;
 import android.view.*;
 import android.view.WindowManager.*;
 import android.widget.*;
 import com.daimajia.swipe.*;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mattrobertson.greek.reader.dialog.*;
 import com.mattrobertson.greek.reader.interfaces.*;
 import com.mattrobertson.greek.reader.objects.*;
-import com.mattrobertson.greek.reader.AppConstants;
+
 import java.io.*;
 import java.util.*;
 
-public class MyVocabActivity extends ActionBarActivity implements VocabWizardDialogInterface
+public class MyVocabActivity extends AppCompatActivity implements VocabWizardDialogInterface
 {
 	ListView lvWords;
 	FloatingActionButton fabWizard;

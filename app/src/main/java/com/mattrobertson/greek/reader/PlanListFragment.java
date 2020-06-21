@@ -3,10 +3,12 @@ package com.mattrobertson.greek.reader;
 import android.content.*;
 import android.os.*;
 import android.preference.*;
-import android.support.v4.app.*;
+import androidx.core.app.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
+
+import androidx.fragment.app.Fragment;
 
 public class PlanListFragment extends Fragment {
 	String[] arrPlans; // = {"New Testament: 1 Year (Wallace)", "New Testament: 1 Month (Wallace)", "Gospels: 3 Months"};

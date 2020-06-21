@@ -9,7 +9,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		/>
-	<android.support.design.widget.FloatingActionButton
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/fabWizard"
 		android:src="@drawable/ic_flash"
 		app:backgroundTint="@color/primary"

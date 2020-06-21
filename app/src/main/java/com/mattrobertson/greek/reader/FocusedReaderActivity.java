@@ -1,6 +1,5 @@
 package com.mattrobertson.greek.reader;
 
-import android.animation.*;
 import android.app.*;
 import android.content.*;
 import android.database.*;
@@ -9,23 +8,27 @@ import android.graphics.*;
 import android.graphics.drawable.*;
 import android.os.*;
 import android.preference.*;
-import android.support.design.widget.*;
-import android.support.v4.widget.*;
-import android.support.v7.widget.*;
+
+import androidx.core.widget.*;
+import androidx.appcompat.widget.*;
 import android.text.*;
 import android.text.method.*;
 import android.text.style.*;
 import android.view.*;
 import android.widget.*;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mattrobertson.greek.reader.interfaces.*;
 import com.mattrobertson.greek.reader.objects.*;
 import com.mattrobertson.greek.reader.ui.*;
 import java.io.*;
 import java.util.*;
 
-import android.support.v7.widget.Toolbar;
-import android.transition.*;
+import androidx.appcompat.widget.Toolbar;
+
 import com.mattrobertson.greek.reader.dialog.*;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 public class FocusedReaderActivity extends SwipeActivity implements UpdateDialogInterface, GreekTextProcessorInterface
 {

@@ -5,13 +5,17 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.preference.*;
-import android.support.v4.app.*;
-import android.support.v4.view.*;
+import androidx.core.app.*;
+import androidx.core.view.*;
 import android.view.*;
 
 import android.app.FragmentTransaction;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.mattrobertson.greek.reader.interfaces.*;
 import android.net.*;
 import com.mattrobertson.greek.reader.dialog.*;
