@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_navigation"
     app:startDestination="@+id/navigation_read">
 
     <fragment
         android:id="@+id/navigation_read"
-        android:name="com.mattrobertson.greek.reader.BooksListFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.bookpicker.BookPickerFragment"
         android:label="@string/read"
+        tools:layout="@layout/book_picker_fragment"
         />
 
     <fragment
         android:id="@+id/navigation_plans"
-        android:name="com.mattrobertson.greek.reader.PlanListFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.plans.PlanPickerFragment"
         android:label="@string/plans"
+        tools:layout="@layout/plans_fragment"
         />
 
     <fragment
         android:id="@+id/navigation_vocab"
-        android:name="com.mattrobertson.greek.reader.VocabListFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.vocab.VocabListFragment"
         android:label="@string/vocab"
+        tools:layout="@layout/vocab_list_fragment"
         />
 
     <fragment

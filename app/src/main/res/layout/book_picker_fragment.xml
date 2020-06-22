@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.bookpicker.BookPickerFragment">
+    android:orientation="vertical">
 
-    <TextView
+    <ListView
+        android:id="@+id/lvBooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        />
 
-</FrameLayout>
+</LinearLayout>
