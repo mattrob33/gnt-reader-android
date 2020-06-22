@@ -8,7 +8,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 
-public class TextViewFixTouchConsume extends TextView
+public class TextViewFixTouchConsume extends androidx.appcompat.widget.AppCompatTextView
  {
 
     boolean dontConsumeNonUrlClicks = true;

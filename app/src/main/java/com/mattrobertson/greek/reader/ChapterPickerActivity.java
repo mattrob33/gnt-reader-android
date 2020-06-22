@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -84,7 +85,7 @@ public class ChapterPickerActivity extends Activity
 		}
 
 		int rem = wScreen % wTarget; // total remaining space on each row
-		int remPer = rem / numSq; // reamining pixels per square, per row
+		int remPer = rem / numSq; // remaining pixels per square, per row
 		int wActual = wTarget + remPer;
 		int numRows = (numChapters+numSq-1)/numSq; // # of rows needed
 		
@@ -118,14 +119,13 @@ public class ChapterPickerActivity extends Activity
 					break;
 			}
 		}
-
-		//Toast.makeText(this,wActual+", "+numSq,Toast.LENGTH_LONG).show();
     }
 	
-	class ChapterButton extends Button {
+	class ChapterButton extends androidx.appcompat.widget.AppCompatButton {
 		public ChapterButton(Context c, int sidePx) {
 			super(c);
 			setLayoutParams(new LinearLayout.LayoutParams(sidePx,sidePx));
+			setGravity(Gravity.CENTER);
 			setBackground(getResources().getDrawable(R.drawable.chapter_button));
 			setTextColor(Color.WHITE);
 		}

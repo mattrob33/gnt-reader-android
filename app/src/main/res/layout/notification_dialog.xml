@@ -28,13 +28,14 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="100dp"
 		android:layout_marginBottom="20dp"
-		android:layout_above="@+id/tvNotificationDetails"
+		android:layout_above="@+id/notificationDetails"
 		android:text=""
 		android:textColor="@android:color/black"
 		android:layout_centerHorizontal="true"
 		android:textSize="20sp"
 	/>
 	<LinearLayout
+		android:id="@+id/notificationDetails"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/tvNotificationTitle"

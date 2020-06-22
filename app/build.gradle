@@ -7,11 +7,11 @@ android {
     defaultConfig {
         applicationId "com.mattrobertson.greek.reader"
 
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
 
-        versionCode 19
-        versionName "7.0"
+        versionCode 20
+        versionName "7.1"
     }
     buildTypes {
         release {
