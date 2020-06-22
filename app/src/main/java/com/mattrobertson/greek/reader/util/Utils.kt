@@ -1,5 +1,10 @@
 package com.mattrobertson.greek.reader.util
 
+import android.content.Context
+import android.util.DisplayMetrics
+import kotlin.math.round
+
+
 val verses = arrayOf(
         intArrayOf(25, 23, 17, 25, 48, 34, 29, 34, 38, 42, 30, 50, 58, 36, 39, 28, 27, 35, 30, 34, 46, 46, 39, 51, 46, 75, 66, 20),
         intArrayOf(45, 28, 35, 41, 43, 56, 37, 38, 50, 52, 33, 44, 37, 72, 47, 20),
@@ -36,4 +41,14 @@ fun numChaptersInBook(book: Int): Int {
 
 fun numVersesInChapter(book: Int, chapter: Int): Int {
     return verses[book][chapter]
+}
+
+fun dpToPx(context: Context, dp: Int): Int {
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    return round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
+}
+
+fun pxToDp(context: Context, px: Int): Int {
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    return round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
 }
