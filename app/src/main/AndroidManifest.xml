@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.CoreActivity"
-            android:theme="@style/BaseTheme">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,10 +24,6 @@
         </activity>
         <activity
             android:name=".ChapterPickerActivity"
-            android:label="Chapter"
-            android:parentActivityName=".BooksActivity"></activity>
-        <activity
-            android:name=".ChapterPickerAlt"
             android:label="Chapter"
             android:parentActivityName=".BooksActivity"></activity>
         <activity
