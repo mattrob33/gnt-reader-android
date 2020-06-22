@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<resources>
-		<string-array name="fontSizes">
-			<item>Extra small</item>
-			<item>Small</item>
-			<item>Medium</item>
-			<item>Large</item>
-			<item>Extra large</item>
-		</string-array>
+<resources>
+    <string-array name="fontSizes">
+        <item>Extra small</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Extra large</item>
+    </string-array>
 
-		<string-array name="fontSizeVals">
-			<item>1</item>
-			<item>2</item>
-			<item>3</item>
-			<item>4</item>
-			<item>5</item>
-		</string-array>
-	</resources>
+    <string-array name="fontSizeVals">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+</resources>
