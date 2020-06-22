@@ -41,8 +41,8 @@ public class BooksActivity extends FragmentActivity
         setContentView(R.layout.top_level_picker);
 		
 		final ActionBar actionBar = getActionBar();
-		
-		booksFragment = new BooksListFragment();
+
+//		booksFragment = new BooksPickerFragment();
 		planFragment = new PlanListFragment();
 		vocabFragment = new VocabListFragment();
 		
