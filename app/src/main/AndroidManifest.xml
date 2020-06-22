@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mattrobertson.greek.reader" >
+    package="com.mattrobertson.greek.reader">
 
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -12,73 +12,68 @@
 		android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".BooksActivity"
-            android:label="Greek New Testament Reader" >
+            android:name=".presentation.CoreActivity"
+            android:theme="@style/BaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity
+        <activity
+            android:name=".BooksActivity"
+            android:label="Greek New Testament Reader">
+        </activity>
+        <activity
             android:name=".ChapterPickerActivity"
             android:label="Chapter"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".ChapterPickerAlt"
             android:label="Chapter"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".PlanSplashActivity"
             android:label="Plan"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".PlanReaderActivity"
             android:label="Plan"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".PlanCompletedActivity"
             android:label="Plan Completed!"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".ReaderActivity"
             android:label="@string/app_name"
-			android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-			android:parentActivityName=".BooksActivity">
-			<intent-filter>
-				<action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
-				<category android:name="android.intent.category.DEFAULT" />
+            android:parentActivityName=".BooksActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-		<activity
+        <activity
             android:name=".ChapterVocabActivity"
             android:label="Vocab"
-			android:parentActivityName=".ReaderActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".ReaderActivity"></activity>
+        <activity
             android:name=".MyVocabActivity"
             android:label="My Vocab"
-			android:theme="@style/Theme.AppCompat.Light"
-			android:parentActivityName=".ReaderActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".ReaderActivity"
+            android:theme="@style/Theme.AppCompat.Light"></activity>
+        <activity
             android:name=".ConcordanceActivity"
             android:label="Concordance"
-			android:parentActivityName=".ReaderActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".ReaderActivity"></activity>
+        <activity
             android:name=".AboutActivity"
             android:label="About"
-			android:parentActivityName=".BooksActivity">
-        </activity>
-		<activity
+            android:parentActivityName=".BooksActivity"></activity>
+        <activity
             android:name=".AppPrefsActivity"
-            android:label="Preferences">
-        </activity>
+            android:label="Preferences"></activity>
     </application>
 
 </manifest>
