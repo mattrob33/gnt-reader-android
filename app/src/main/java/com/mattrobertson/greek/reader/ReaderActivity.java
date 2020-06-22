@@ -181,7 +181,13 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 		mBottomSheetBehavior.setPeekHeight(400);
 		mBottomSheetBehavior.setHideable(true);
-		mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+		getWindow().getDecorView().post(new Runnable() {
+			@Override
+			public void run() {
+				mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN); // Doesn't hide if not in runnable
+			}
+		});
 
 		greekFont = Typeface.createFromAsset(getAssets(), "fonts/sblgreek.ttf");
 		tvText.setTypeface(greekFont);
@@ -590,7 +596,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	}
 
 	public void handleWordClick(int id) {
-		// Ignore if in text selext mode
+		// Ignore if in text select mode
 		if (selectMode) return;
 		
 		String lex = words.get(id).getLex();
