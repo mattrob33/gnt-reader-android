@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.ReaderActivity
+import com.mattrobertson.greek.reader.util.dpToPx
 import com.mattrobertson.greek.reader.util.numChaptersInBook
 import kotlinx.android.synthetic.main.chapter_picker.*
 
@@ -44,7 +45,7 @@ class ChapterPickerFragment : Fragment() {
         display.getSize(size)
         val wScreen = size.x - 40
 
-        var wTarget = 180
+        var wTarget = dpToPx(requireContext(), 60)
         var numSq = wScreen / wTarget // # of squares per row
 
 
