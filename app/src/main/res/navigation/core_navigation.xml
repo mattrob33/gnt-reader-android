@@ -7,12 +7,17 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.mattrobertson.greek.reader.presentation.home.HomeFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.HomeFragment"
         tools:layout="@layout/home_fragment">
 
         <action
             android:id="@+id/home_to_chapter_picker"
             app:destination="@id/navigation_chapter_picker"
+            />
+
+        <action
+            android:id="@+id/home_to_plan_splah"
+            app:destination="@id/navigation_plan_splash"
             />
 
     </fragment>
@@ -24,6 +29,19 @@
 
         <argument
             android:name="book"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_plan_splash"
+        android:name="com.mattrobertson.greek.reader.presentation.plans.PlanSplashFragment"
+        tools:layout="@layout/plan_splash">
+
+        <argument
+            android:name="plan"
             app:argType="integer"
             android:defaultValue="0"
             />

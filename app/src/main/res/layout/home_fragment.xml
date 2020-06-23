@@ -6,7 +6,7 @@
     android:id="@+id/home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.home.HomeFragment">
+    tools:context=".presentation.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/home_toolbar"

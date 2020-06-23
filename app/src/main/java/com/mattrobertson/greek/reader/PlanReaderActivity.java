@@ -75,15 +75,11 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 		
 		curPlan = getIntent().getIntExtra("plan",0);
 		curDay = prefs.getInt("plan-"+curPlan+"-day",0);
-/*
-		// DEBUGGING OMLY!!!!
-		curDay = AppConstants.READING_PLANS[curPlan].length - 1;
-*/
-		
+
 		if (curDay >= AppConstants.READING_PLANS[curPlan].length)
 			curDay = 0;
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+//		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		tvText = (TextView)findViewById(R.id.tvText);
 		tvText.setHighlightColor(Color.TRANSPARENT);

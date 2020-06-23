@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.ReaderActivity
-import com.mattrobertson.greek.reader.presentation.home.HomeFragmentDirections
+import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
 import com.mattrobertson.greek.reader.util.isSingleChapterBook
 import kotlinx.android.synthetic.main.book_picker_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.*
