@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.vocab.VocabListFragment">
-
-    <TextView
+    android:orientation="vertical">
+    <ListView
+        android:id="@+id/lvWords"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
-
-</FrameLayout>
+        />
+    <TextView
+        android:id="@+id/emptyListItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="No vocab added yet.\n\nAdd words while reading by\ntouching a word, or use the\nVocab Wizard found in 'My Vocab'\nin the menu!" >
+    </TextView>
+</LinearLayout>

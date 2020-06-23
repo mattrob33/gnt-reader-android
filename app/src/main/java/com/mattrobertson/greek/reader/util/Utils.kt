@@ -2,6 +2,7 @@ package com.mattrobertson.greek.reader.util
 
 import android.content.Context
 import android.util.DisplayMetrics
+import com.mattrobertson.greek.reader.AppConstants
 import kotlin.math.round
 
 
@@ -45,6 +46,10 @@ fun numChaptersInBook(book: Int): Int {
 
 fun numVersesInChapter(book: Int, chapter: Int): Int {
     return verses[book][chapter]
+}
+
+fun getBookTitle(bookNum: Int): String {
+    return AppConstants.bookTitles[bookNum]
 }
 
 

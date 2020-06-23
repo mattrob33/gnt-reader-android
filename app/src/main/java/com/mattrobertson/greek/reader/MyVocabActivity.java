@@ -7,6 +7,8 @@ import android.graphics.*;
 import android.os.*;
 
 import androidx.appcompat.app.*;
+
+import android.util.Log;
 import android.view.*;
 import android.view.WindowManager.*;
 import android.widget.*;
@@ -42,9 +44,7 @@ public class MyVocabActivity extends AppCompatActivity implements VocabWizardDia
     {
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_vocab);
-		
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		book = getIntent().getIntExtra("book",5);
 		chapter = getIntent().getIntExtra("chapter",5);
 		
@@ -180,7 +180,7 @@ public class MyVocabActivity extends AppCompatActivity implements VocabWizardDia
 			return s.hasNext() ? s.next() : "";
 		}
 		catch (Exception e) {
-			//msg(e.getMessage());
+			Log.e("sblgnt", e.getMessage());
 		}
 
 		return "";
