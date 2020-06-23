@@ -69,6 +69,10 @@
         <activity
             android:name=".AppPrefsActivity"
             android:label="Preferences"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
