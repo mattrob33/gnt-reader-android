@@ -35,6 +35,10 @@ val verses = arrayOf(
         intArrayOf(20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 17, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21)
 )
 
+fun isSingleChapterBook(book: Int): Boolean {
+    return numChaptersInBook(book) == 1
+}
+
 fun numChaptersInBook(book: Int): Int {
     return verses[book].size
 }
@@ -42,6 +46,10 @@ fun numChaptersInBook(book: Int): Int {
 fun numVersesInChapter(book: Int, chapter: Int): Int {
     return verses[book][chapter]
 }
+
+
+
+// UI Utils
 
 fun dpToPx(context: Context, dp: Int): Int {
     val displayMetrics: DisplayMetrics = context.resources.displayMetrics
