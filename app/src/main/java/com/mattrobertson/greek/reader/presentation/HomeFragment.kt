@@ -31,6 +31,12 @@ class HomeFragment : Fragment() {
                         HomeFragmentDirections.homeToSettings()
                 )
             }
+
+            R.id.menu_item_about -> {
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                        HomeFragmentDirections.homeToAbout()
+                )
+            }
         }
         return true
     }
