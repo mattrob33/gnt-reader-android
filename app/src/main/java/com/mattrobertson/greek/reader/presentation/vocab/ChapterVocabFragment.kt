@@ -2,22 +2,25 @@ package com.mattrobertson.greek.reader.presentation.vocab
 
 import android.content.Context
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CursorAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.daimajia.swipe.SwipeLayout
+import com.mattrobertson.greek.reader.MyVocabActivity
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.dialog.VocabWizardDialog
+import com.mattrobertson.greek.reader.interfaces.VocabWizardDialogInterface
 import kotlinx.android.synthetic.main.chapter_vocab_fragment.*
 
-class ChapterVocabFragment : Fragment() {
+class ChapterVocabFragment : Fragment(), VocabWizardDialogInterface {
 
     private val args: ChapterVocabFragmentArgs by navArgs()
 
@@ -36,11 +39,41 @@ class ChapterVocabFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         refreshAdapter()
+
+        val wizard = VocabWizardDialog(requireActivity(), this)
+        wizard.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            setGravity(Gravity.CENTER)
+        }
+        fabWizard.setOnClickListener {
+            wizard.show()
+        }
+
+        subscribeUI()
+    }
+
+    private fun subscribeUI() {
+        viewModel.cursorVersion.observe(viewLifecycleOwner) {
+            refreshAdapter()
+            chapter_vocab_progress_bar.visibility = View.INVISIBLE
+        }
     }
 
     private fun refreshAdapter() {
         val adapter = VocabSwipeAdapter(requireContext(), viewModel.getCursor())
         lvMyVocab.adapter = adapter
+    }
+
+    override fun onVocabWizardGo(level: Int) {
+        if (level == VocabWizardDialogInterface.DELETE_ALL) {
+            viewModel.deleteAllVocabForChapter()
+            refreshAdapter()
+        }
+        else {
+            chapter_vocab_progress_bar.visibility = View.VISIBLE
+            viewModel.autoBuildWordList(level)
+        }
     }
 
     inner class VocabSwipeAdapter(context: Context, c: Cursor?) : CursorAdapter(context, c) {
