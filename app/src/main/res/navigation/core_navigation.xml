@@ -25,6 +25,11 @@
             app:destination="@id/navigation_settings"
             />
 
+        <action
+            android:id="@+id/home_to_about"
+            app:destination="@id/navigation_about"
+            />
+
     </fragment>
 
     <fragment
@@ -56,6 +61,11 @@
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.mattrobertson.greek.reader.presentation.SettingsFragment"
+        />
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.mattrobertson.greek.reader.presentation.AboutFragment"
         />
 
 </navigation>

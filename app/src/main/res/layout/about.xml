@@ -1,13 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/linAbout"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		<TextView
-			android:id="@+id/tvAbout"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:padding="10dp"
-			android:textColor="#000000"
-			android:textSize="18sp"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/root_about"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/about_toolbar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:title="@string/about"
 		/>
-</LinearLayout>
+
+	<TextView
+		android:id="@+id/tvAbout"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:padding="10dp"
+		android:textSize="18sp"
+		app:layout_constraintTop_toBottomOf="@id/about_toolbar"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
