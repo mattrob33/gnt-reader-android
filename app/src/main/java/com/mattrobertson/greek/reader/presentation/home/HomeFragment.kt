@@ -12,12 +12,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
@@ -25,7 +20,16 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val navController = findNavController(requireActivity(), R.id.nav_host_fragment)
-        nav_view.setupWithNavController(navController)
+        bottom_nav_view.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            home_toolbar_title.text = when (destination.id) {
+                R.id.navigation_home -> "SBLGNT Reader"
+                R.id.navigation_plans -> "Plans"
+                R.id.navigation_vocab -> "Vocab"
+                else -> "SBLGNT Reader"
+            }
+        }
     }
 
 }
