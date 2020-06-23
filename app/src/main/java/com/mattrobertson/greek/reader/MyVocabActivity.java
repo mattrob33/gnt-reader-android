@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mattrobertson.greek.reader.dialog.*;
 import com.mattrobertson.greek.reader.interfaces.*;
 import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.*;
 import java.util.*;
@@ -43,7 +44,7 @@ public class MyVocabActivity extends AppCompatActivity implements VocabWizardDia
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.my_vocab);
+		setContentView(R.layout.chapter_vocab_fragment);
 
 		book = getIntent().getIntExtra("book",5);
 		chapter = getIntent().getIntExtra("chapter",5);

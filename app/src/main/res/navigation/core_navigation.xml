@@ -11,22 +11,27 @@
         tools:layout="@layout/home_fragment">
 
         <action
-            android:id="@+id/home_to_chapter_picker"
+            android:id="@+id/to_chapter_picker"
             app:destination="@id/navigation_chapter_picker"
             />
 
         <action
-            android:id="@+id/home_to_plan_splah"
+            android:id="@+id/to_plan_splash"
             app:destination="@id/navigation_plan_splash"
             />
 
         <action
-            android:id="@+id/home_to_settings"
+            android:id="@+id/to_chapter_vocab"
+            app:destination="@id/navigation_chapter_vocab"
+            />
+
+        <action
+            android:id="@+id/to_settings"
             app:destination="@id/navigation_settings"
             />
 
         <action
-            android:id="@+id/home_to_about"
+            android:id="@+id/to_about"
             app:destination="@id/navigation_about"
             />
 
@@ -55,6 +60,23 @@
             app:argType="integer"
             android:defaultValue="0"
             />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_chapter_vocab"
+        android:name="com.mattrobertson.greek.reader.presentation.vocab.ChapterVocabFragment"
+        tools:layout="@layout/chapter_vocab">
+
+        <argument
+            android:name="book"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="chapter"
+            android:defaultValue="1"
+            app:argType="integer" />
 
     </fragment>
 

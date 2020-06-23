@@ -46,6 +46,7 @@ import com.mattrobertson.greek.reader.objects.DataBaseHelper;
 import com.mattrobertson.greek.reader.objects.Word;
 import com.mattrobertson.greek.reader.objects.WordSpan;
 import com.mattrobertson.greek.reader.ui.SwipeActivity;
+import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.InputStream;
 import java.util.ArrayList;
