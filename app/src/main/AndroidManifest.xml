@@ -55,12 +55,6 @@
             />
 
         <activity
-            android:name=".MyVocabActivity"
-            android:label="My Vocab"
-            android:parentActivityName=".ReaderActivity"
-            android:theme="@style/Theme.AppCompat.Light"
-            />
-        <activity
             android:name=".ConcordanceActivity"
             android:label="Concordance"
             android:parentActivityName=".ReaderActivity"

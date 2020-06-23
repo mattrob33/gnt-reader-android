@@ -344,10 +344,10 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		
 		switch (item.getItemId()) {
 			case R.id.menu_my_vocab:
-				i = new Intent(this,MyVocabActivity.class);
-				i.putExtra("book",book);
-				i.putExtra("chapter",chapter);
-				startActivity(i);
+//				i = new Intent(this,MyVocabActivity.class);
+//				i.putExtra("book",book);
+//				i.putExtra("chapter",chapter);
+//				startActivity(i);
 				return true;
 			case R.id.menu_chapter_vocab:
 				i = new Intent(this,ChapterVocabActivity.class);
