@@ -6,6 +6,7 @@ import android.preference.*;
 import android.view.*;
 import android.widget.*;
 
+import com.mattrobertson.greek.reader.presentation.CoreActivity;
 import com.mattrobertson.greek.reader.util.AppConstants;
 
 public class PlanCompletedActivity extends Activity
@@ -45,7 +46,7 @@ public class PlanCompletedActivity extends Activity
 				public void onClick(View v)
 				{
 					finish();
-					Intent i = new Intent(PlanCompletedActivity.this,BooksActivity.class);
+					Intent i = new Intent(PlanCompletedActivity.this, CoreActivity.class);
 					startActivity(i);
 				}
 			});
