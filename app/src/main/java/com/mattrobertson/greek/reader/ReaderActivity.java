@@ -298,16 +298,6 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		}
 
 		doNewBook();
-
-		// NIGHT MODE
-		if (nightMode) {
-			container.setBackgroundColor(Color.BLACK);
-			tvText.setTextColor(Color.parseColor("#CCCCCC"));
-		}
-		else {
-			container.setBackgroundColor(Color.WHITE);
-			tvText.setTextColor(Color.BLACK);
-		}
     }
 
 	// Returning from the user changing the settings? If so, recreate the layout

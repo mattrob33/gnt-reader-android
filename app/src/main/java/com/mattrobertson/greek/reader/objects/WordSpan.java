@@ -22,18 +22,12 @@ public class WordSpan extends ClickableSpan
 
 	@Override
 	public void updateDrawState(TextPaint ds) {
-		ds.setColor(color);
 		ds.setUnderlineText(false);
 
 		if (marking)
 			ds.setTypeface(Typeface.create(font,Typeface.BOLD));
 
-		if (nightMode)
-			ds.setColor(Color.parseColor("#CCCCCC"));
-
 		tp = ds;
-
-
 	}
 
 	@Override
