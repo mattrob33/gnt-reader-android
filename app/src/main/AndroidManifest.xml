@@ -23,20 +23,13 @@
         </activity>
 
         <activity
-            android:name=".BooksActivity"
-            android:label="Greek New Testament Reader"
-            />
-
-        <activity
             android:name=".PlanReaderActivity"
             android:label="Plan"
-            android:parentActivityName=".BooksActivity"
             />
 
         <activity
             android:name=".PlanCompletedActivity"
             android:label="Plan Completed!"
-            android:parentActivityName=".BooksActivity"
             />
 
         <activity
