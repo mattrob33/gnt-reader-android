@@ -20,6 +20,11 @@
             app:destination="@id/navigation_plan_splash"
             />
 
+        <action
+            android:id="@+id/home_to_settings"
+            app:destination="@id/navigation_settings"
+            />
+
     </fragment>
 
     <fragment
@@ -47,5 +52,10 @@
             />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.mattrobertson.greek.reader.presentation.SettingsFragment"
+        />
 
 </navigation>
