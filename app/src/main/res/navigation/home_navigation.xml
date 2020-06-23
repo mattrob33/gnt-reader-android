@@ -16,7 +16,7 @@
         android:id="@+id/navigation_plans"
         android:name="com.mattrobertson.greek.reader.presentation.plans.PlanPickerFragment"
         android:label="@string/plans"
-        tools:layout="@layout/plans_fragment"
+        tools:layout="@layout/plan_picker_fragment"
         />
 
     <fragment

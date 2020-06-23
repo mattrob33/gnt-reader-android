@@ -43,7 +43,7 @@ public class BooksActivity extends FragmentActivity
 		final ActionBar actionBar = getActionBar();
 
 //		booksFragment = new BooksPickerFragment();
-		planFragment = new PlanListFragment();
+//		planFragment = new PlanListFragment();
 		vocabFragment = new VocabListFragment();
 		
 		arrBooks = getResources().getStringArray(R.array.books);

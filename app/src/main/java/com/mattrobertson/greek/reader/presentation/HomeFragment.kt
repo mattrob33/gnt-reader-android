@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation.home
+package com.mattrobertson.greek.reader.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
