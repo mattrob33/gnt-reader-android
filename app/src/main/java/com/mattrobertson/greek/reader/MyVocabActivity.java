@@ -59,13 +59,7 @@ public class MyVocabActivity extends AppCompatActivity implements VocabWizardDia
 		
 		lvWords = (ListView)findViewById(R.id.lvMyVocab);
 		fabWizard = (FloatingActionButton)findViewById(R.id.fabWizard);
-		fabWizard.setOnClickListener(new FloatingActionButton.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				wizard.show();
-			}
-		});
+		fabWizard.setOnClickListener(v -> wizard.show());
 		
 		greekFont = Typeface.createFromAsset(getAssets(), "fonts/sblgreek.ttf");
 		
