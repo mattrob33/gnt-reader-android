@@ -8,14 +8,12 @@ import android.graphics.*;
 import android.os.*;
 import android.preference.*;
 
-import androidx.core.widget.*;
-import androidx.appcompat.widget.*;
-
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
 import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.*;
 import java.util.*;

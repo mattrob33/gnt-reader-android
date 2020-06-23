@@ -6,7 +6,7 @@ import android.view.*;
 import android.widget.*;
 import com.mattrobertson.greek.reader.R;
 import com.mattrobertson.greek.reader.interfaces.*;
-import com.mattrobertson.greek.reader.AppConstants;
+import com.mattrobertson.greek.reader.util.AppConstants;
 import android.content.*;
 import android.preference.*;
 
@@ -22,7 +22,6 @@ public class VocabWizardDialog extends Dialog
 
 	public VocabWizardDialog(Activity a, VocabWizardDialogInterface i) {
 		super(a,android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-		//super(a,android.R.style.Theme_Light_NoTitleBar);
 		
 		this.c = a;
 		this.i = i;

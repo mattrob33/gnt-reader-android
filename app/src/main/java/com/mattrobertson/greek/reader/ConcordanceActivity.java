@@ -9,6 +9,8 @@ import android.text.*;
 import android.view.*;
 import android.widget.*;
 import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.util.AppConstants;
+
 import java.io.*;
 import android.text.method.*;
 import android.text.style.*;

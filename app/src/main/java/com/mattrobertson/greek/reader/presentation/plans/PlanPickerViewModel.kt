@@ -3,7 +3,7 @@ package com.mattrobertson.greek.reader.presentation.plans
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
-import com.mattrobertson.greek.reader.AppConstants
+import com.mattrobertson.greek.reader.util.AppConstants
 
 class PlanPickerViewModel(applicationContext: Context) : ViewModel() {
 

@@ -2,7 +2,6 @@ package com.mattrobertson.greek.reader.util
 
 import android.content.Context
 import android.util.DisplayMetrics
-import com.mattrobertson.greek.reader.AppConstants
 import kotlin.math.round
 
 

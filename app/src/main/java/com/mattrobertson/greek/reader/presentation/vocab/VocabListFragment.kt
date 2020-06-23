@@ -11,12 +11,14 @@ import android.widget.CursorAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.MyVocabActivity
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.android.synthetic.main.vocab_list_fragment.*
 
-class VocabListFragment : Fragment() {
+class VocabListFragment: Fragment() {
 
     private val viewModelFactory: VocabListViewModelFactory by lazy {
         VocabListViewModelFactory(requireContext().applicationContext)
@@ -40,11 +42,10 @@ class VocabListFragment : Fragment() {
         lvWords.adapter = adapter
         lvWords.setOnItemClickListener { _, _, _, id ->
             val (book, chapter) = viewModel.getBookAndChapter(id)
-            Intent(activity, MyVocabActivity::class.java).apply {
-                putExtra("book", book)
-                putExtra("chapter", chapter)
-                startActivity(this)
-            }
+
+            requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                    HomeFragmentDirections.toChapterVocab(book, chapter)
+            )
         }
     }
 
