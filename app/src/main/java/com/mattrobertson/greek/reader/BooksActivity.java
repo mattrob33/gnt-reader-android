@@ -197,8 +197,8 @@ public class BooksActivity extends FragmentActivity
 				mViewPager.setCurrentItem(1);
 				return true;
 			case R.id.menu_preferences:
-				i = new Intent(BooksActivity.this,AppPrefsActivity.class);
-				startActivity(i);
+//				i = new Intent(BooksActivity.this,AppPrefsActivity.class);
+//				startActivity(i);
 				return true;
 			case R.id.menu_about:
 //				i = new Intent(BooksActivity.this,AboutActivity.class);

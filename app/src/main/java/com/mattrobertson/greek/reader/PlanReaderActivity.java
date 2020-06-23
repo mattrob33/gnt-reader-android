@@ -277,8 +277,8 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_prefs:
-				Intent i = new Intent(this,AppPrefsActivity.class);
-				startActivity(i);
+//				Intent i = new Intent(this,AppPrefsActivity.class);
+//				startActivity(i);
 				return true;
 				// Respond to the action bar's Up/Home button
 			case android.R.id.home:

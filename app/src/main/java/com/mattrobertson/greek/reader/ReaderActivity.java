@@ -346,8 +346,8 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				startActivity(i);
 				return true;
 			case R.id.menu_prefs:
-				i = new Intent(this,AppPrefsActivity.class);
-				startActivity(i);
+//				i = new Intent(this,AppPrefsActivity.class);
+//				startActivity(i);
 				return true;
 			case R.id.menu_toggle_mode:
 				selectMode = ! selectMode;
