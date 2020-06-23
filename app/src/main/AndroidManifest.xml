@@ -60,10 +60,6 @@
             android:label="Concordance"
             android:parentActivityName=".ReaderActivity"
             />
-        <activity
-            android:name=".AppPrefsActivity"
-            android:label="Preferences"
-            />
 
         <meta-data
             android:name="preloaded_fonts"

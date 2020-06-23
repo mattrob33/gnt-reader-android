@@ -99,8 +99,8 @@ public class ChapterVocabActivity extends Activity
 		
 		switch (item.getItemId()) {
 			case R.id.menu_preferences:
-				i = new Intent(this,AppPrefsActivity.class);
-				startActivity(i);
+//				i = new Intent(this,AppPrefsActivity.class);
+//				startActivity(i);
 				return true;
 			case R.id.menu_about:
 //				i = new Intent(this,AboutActivity.class);
