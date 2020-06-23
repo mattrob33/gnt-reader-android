@@ -5,9 +5,10 @@ import android.content.*;
 import android.database.sqlite.*;
 import android.os.*;
 import android.text.*;
-import android.util.*;
-import com.mattrobertson.greek.reader.*;
+
 import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.util.AppConstants;
+
 import java.io.*;
 import java.util.*;
 

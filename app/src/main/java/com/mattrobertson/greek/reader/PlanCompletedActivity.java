@@ -1,12 +1,12 @@
 package com.mattrobertson.greek.reader;
 import android.app.*;
 import android.content.*;
-import android.graphics.*;
 import android.os.*;
 import android.preference.*;
 import android.view.*;
 import android.widget.*;
-import java.util.*;
+
+import com.mattrobertson.greek.reader.util.AppConstants;
 
 public class PlanCompletedActivity extends Activity
 {

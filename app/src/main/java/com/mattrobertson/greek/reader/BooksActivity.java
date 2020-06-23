@@ -42,10 +42,6 @@ public class BooksActivity extends FragmentActivity
 		
 		final ActionBar actionBar = getActionBar();
 
-//		booksFragment = new BooksPickerFragment();
-//		planFragment = new PlanListFragment();
-		vocabFragment = new VocabListFragment();
-		
 		arrBooks = getResources().getStringArray(R.array.books);
 
 		// Specify that tabs should be displayed in the action bar.

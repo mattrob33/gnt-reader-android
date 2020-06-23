@@ -28,13 +28,13 @@ class HomeFragment : Fragment() {
         when (item.itemId) {
             R.id.menu_item_settings -> {
                 requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        HomeFragmentDirections.homeToSettings()
+                        HomeFragmentDirections.toSettings()
                 )
             }
 
             R.id.menu_item_about -> {
                 requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        HomeFragmentDirections.homeToAbout()
+                        HomeFragmentDirections.toAbout()
                 )
             }
         }

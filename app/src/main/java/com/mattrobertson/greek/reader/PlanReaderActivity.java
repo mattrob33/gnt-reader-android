@@ -5,22 +5,18 @@ import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
 import android.graphics.*;
-import android.graphics.drawable.*;
 import android.os.*;
 import android.preference.*;
 import android.text.*;
-import android.text.method.*;
 import android.text.style.*;
 import android.view.*;
 import android.widget.*;
 import com.mattrobertson.greek.reader.interfaces.*;
-import com.mattrobertson.greek.reader.ui.*;
+
 import java.io.*;
 import java.util.*;
 import com.mattrobertson.greek.reader.objects.*;
-import android.view.GestureDetector.*;
-import android.view.View.*;
-import android.animation.*;
+import com.mattrobertson.greek.reader.util.AppConstants;
 
 public class PlanReaderActivity extends Activity implements GreekTextProcessorInterface
 {

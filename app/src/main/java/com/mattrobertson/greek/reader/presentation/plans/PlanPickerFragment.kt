@@ -47,7 +47,7 @@ class PlanPickerFragment: Fragment() {
         }
         else {
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                HomeFragmentDirections.homeToPlanSplah(plan)
+                HomeFragmentDirections.toPlanSplash(plan)
             )
         }
     }

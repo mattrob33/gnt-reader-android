@@ -1,7 +1,7 @@
 package com.mattrobertson.greek.reader.presentation.plans
 
 import androidx.lifecycle.ViewModel
-import com.mattrobertson.greek.reader.AppConstants
+import com.mattrobertson.greek.reader.util.AppConstants
 import java.lang.StringBuilder
 
 class PlanSplashViewModel(private val plan: Int): ViewModel() {

@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.mattrobertson.greek.reader.AppConstants
 import com.mattrobertson.greek.reader.PlanReaderActivity
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.util.dpToPx
