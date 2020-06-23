@@ -2,7 +2,6 @@ package com.mattrobertson.greek.reader.presentation.vocab
 
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
@@ -14,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.daimajia.swipe.SwipeLayout
-import com.mattrobertson.greek.reader.MyVocabActivity
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.dialog.VocabWizardDialog
 import com.mattrobertson.greek.reader.interfaces.VocabWizardDialogInterface
