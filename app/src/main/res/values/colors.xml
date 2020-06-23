@@ -7,4 +7,7 @@
 	<item name="primary" type="color">#1565C0</item>
 	<item name="primary_dark" type="color">#0D47A1</item>
 	<item name="accent" type="color">#2962FF</item>
+
+	<color name="bottom_nav_icon_color_selected">@color/primary</color>
+	<color name="bottom_nav_icon_color_not_selected">#666666</color>
 </resources>

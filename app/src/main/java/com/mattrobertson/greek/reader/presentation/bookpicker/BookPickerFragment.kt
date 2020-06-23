@@ -9,17 +9,12 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.ReaderActivity
 import com.mattrobertson.greek.reader.presentation.home.HomeFragmentDirections
 import kotlinx.android.synthetic.main.book_picker_fragment.*
 
 class BookPickerFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = BookPickerFragment()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.book_picker_fragment, container, false)
@@ -42,13 +37,9 @@ class BookPickerFragment : Fragment() {
                 }
             }
             else {
-                val action = HomeFragmentDirections.homeToChapterPicker(book)
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(action)
-//                Intent(activity, ChapterPickerActivity::class.java).apply {
-//                    putExtra("book", book)
-//                    putExtra("title", arrBooks[book])
-//                    startActivity(this)
-//                }
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                        HomeFragmentDirections.homeToChapterPicker(book)
+                )
             }
         }
     }

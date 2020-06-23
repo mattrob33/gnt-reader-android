@@ -26,10 +26,4 @@
         tools:layout="@layout/vocab_list_fragment"
         />
 
-    <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.mattrobertson.greek.reader.presentation.SettingsFragment"
-        android:label="@string/settings"
-        />
-
 </navigation>

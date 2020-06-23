@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- inherit from the material theme -->
-	<style name="AppTheme" parent="BaseTheme">
-		<item name="android:statusBarColor">?colorSurface</item>
+	<style name="BaseTheme_v21" parent="BaseTheme">
+		<item name="android:statusBarColor">?android:colorBackground</item>
 	</style>
+
+	<style name="AppTheme" parent="BaseTheme_v21" />
 	
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:colorPrimary">@color/primary</item>
