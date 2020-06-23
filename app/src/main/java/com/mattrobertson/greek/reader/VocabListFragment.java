@@ -17,17 +17,13 @@ import androidx.fragment.app.Fragment;
 
 public class VocabListFragment extends Fragment {
 
-	String[] arrBooks;
-	SharedPreferences prefs;
-	
 	ListView lvWords;
 	DataBaseHelper dbHelper;
 	VocabAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-        return inflater.inflate(R.layout.vocab_fragment, container, false);
+		return inflater.inflate(R.layout.vocab_list_fragment, container, false);
     }
 
 	@Override
@@ -38,7 +34,7 @@ public class VocabListFragment extends Fragment {
 		// Assign the adapter to the lv
 		lvWords = (ListView)(getActivity().findViewById(R.id.lvWords));
 		lvWords.setEmptyView(getActivity().findViewById(R.id.emptyListItem));
-		
+
 		try
 		{
 			dbHelper = new DataBaseHelper(getActivity());
@@ -61,8 +57,6 @@ public class VocabListFragment extends Fragment {
 		lvWords.setAdapter(adapter);
 		lvWords.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//Toast.makeText(getActivity(),""+id,Toast.LENGTH_SHORT).show();
-				
 				dbHelper.opendatabase();
 				String query = "SELECT book,chapter FROM vocab WHERE rowid="+id;
 				SQLiteDatabase db = dbHelper.getReadableDatabase();
