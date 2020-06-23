@@ -16,9 +16,4 @@
         android:icon="@drawable/ic_vocab"
         android:title="@string/vocab" />
 
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/settings" />
-
 </menu>
