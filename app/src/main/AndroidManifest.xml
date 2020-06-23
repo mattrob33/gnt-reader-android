@@ -66,11 +66,6 @@
             android:parentActivityName=".ReaderActivity"
             />
         <activity
-            android:name=".AboutActivity"
-            android:label="About"
-            android:parentActivityName=".BooksActivity"
-            />
-        <activity
             android:name=".AppPrefsActivity"
             android:label="Preferences"
             />

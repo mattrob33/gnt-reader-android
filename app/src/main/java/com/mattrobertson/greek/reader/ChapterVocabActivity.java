@@ -105,8 +105,8 @@ public class ChapterVocabActivity extends Activity
 				startActivity(i);
 				return true;
 			case R.id.menu_about:
-				i = new Intent(this,AboutActivity.class);
-				startActivity(i);
+//				i = new Intent(this,AboutActivity.class);
+//				startActivity(i);
 				return true;
 				// Respond to the action bar's Up/Home button
 			case android.R.id.home:

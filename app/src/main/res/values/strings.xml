@@ -6,7 +6,9 @@
     <string name="read">Read</string>
     <string name="plans">Plans</string>
     <string name="vocab">Vocab</string>
+
     <string name="settings">Settings</string>
+    <string name="about">About</string>
 
     <string name="speed_read_update">Improve reading fluency and speed. SpeedRead forces you to read like you do in English: one word at a time.\n\nLaunch SpeedRead by tapping the fast-forward arrow in the menu bar.\n\nTIP: Read the same passage repeatedly with SpeedRead and see how much easier it becomes to follow!</string>
 
