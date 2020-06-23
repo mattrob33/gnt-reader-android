@@ -8,6 +8,7 @@ class PlanSplashViewModel(private val plan: Int): ViewModel() {
 
     val planTitle: String = AppConstants.READING_PLAN_TITLES[plan]
     val planDesc: String = AppConstants.READING_PLAN_DESCS[plan]
+    val numDays: Int = AppConstants.READING_PLANS[plan].size
 
     fun getPreviewForDay(day: Int): String {
         val books = AppConstants.READING_PLANS[plan][day][0]

@@ -51,7 +51,7 @@ class PlanSplashFragment: Fragment() {
         val params = LinearLayout.LayoutParams(btnWidth, btnWidth)
         params.setMargins(0, 0, dpToPx(requireContext(), 2), 0)
 
-        for (i in AppConstants.READING_PLANS[plan].indices) {
+        for (i in 0 until viewModel.numDays) {
             btn = Button(requireContext())
             btn.text = (i + 1).toString()
             btn.tag = i.toString()
