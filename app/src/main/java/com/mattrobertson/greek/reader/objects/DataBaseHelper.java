@@ -18,8 +18,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	
 	SharedPreferences prefs;
 	
-	int curVersion=7, installedVersion=0;
-	
+	int curVersion=8, installedVersion=0;
+
     /*private String DB_PATH = "/data/data/"
 	 + mycontext.getApplicationContext().getPackageName()
 	 + "/databases/";*/
