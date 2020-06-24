@@ -1,3 +1,10 @@
 /build
 /local.properties
 /sblgnt.keystore
+/app/build/
+/app/release/
+/sblgnt-upload.keystore
+/upload_certificate.pem
+/.gradle/
+/.idea/
+/gradle/wrapper/
