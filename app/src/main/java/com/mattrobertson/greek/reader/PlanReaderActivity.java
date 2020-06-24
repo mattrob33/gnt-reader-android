@@ -199,29 +199,15 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 		showVerseNumbers = prefs.getBoolean("showVerseNumbers",true);
 		showVersesNewLines = prefs.getBoolean("showVersesNewLines",false);
 
-		// New launch
-		if (savedInstanceState == null) {
-			// [day][book,chap][subsequent book/chap]
-			curDayBooks = AppConstants.READING_PLANS[curPlan][curDay][0];
-			curDayChapters = AppConstants.READING_PLANS[curPlan][curDay][1];
-			
-			book = curDayBooks[0];
-			chapter = curDayChapters[0];
-			
-			designCompleteButton();
+		curDayBooks = AppConstants.READING_PLANS[curPlan][curDay][0];
+		curDayChapters = AppConstants.READING_PLANS[curPlan][curDay][1];
 
-			doNewBook();
-		}
-		else { // screen orientation change
-			strRawGreekText = savedInstanceState.getString("morphText");
-			book = savedInstanceState.getInt("book",5);
-			chapter = savedInstanceState.getInt("chapter",5);
-			selectedWordId = savedInstanceState.getInt("selectedWordId",-1);
-			defWord = savedInstanceState.getString("defWord");
+		book = curDayBooks[0];
+		chapter = curDayChapters[0];
 
-			AsyncGreekTextProcessor async = new AsyncGreekTextProcessor();
-			async.execute();
-		}
+		designCompleteButton();
+
+		doNewBook();
 
 		RelativeLayout container = (RelativeLayout)findViewById(R.id.mainContainer);
 
@@ -286,20 +272,6 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 			finish();
 			startActivity(intent);
 		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		// Save the current state
-		savedInstanceState.putString("parsedText",tvText.getText().toString());
-		savedInstanceState.putString("morphText",strRawGreekText);
-		savedInstanceState.putInt("book",book);
-		savedInstanceState.putInt("chapter",chapter);
-		savedInstanceState.putInt("scroll",scrollerMain.getScrollY());
-		savedInstanceState.putString("defWord",defWord);
-		savedInstanceState.putInt("selectedWordId",selectedWordId);
-
-		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
