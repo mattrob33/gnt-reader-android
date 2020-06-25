@@ -38,6 +38,9 @@ class ReaderViewModel(
     private val _state = MutableLiveData<ReaderState>()
         val state: LiveData<ReaderState> = _state
 
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> = _title
+
     private val _spannedText = MutableLiveData<SpannableStringBuilder>()
         val spannedText: LiveData<SpannableStringBuilder> = _spannedText
 
@@ -123,8 +126,7 @@ class ReaderViewModel(
             }
         }
 
-//        val refStr = AppConstants.abbrvs[book] + " " + chapter
-//        setTitle(refStr)
+        _title.value = AppConstants.abbrvs[book] + " " + chapter
 
 //        audio.stop()
 //        refreshAudioUI()
