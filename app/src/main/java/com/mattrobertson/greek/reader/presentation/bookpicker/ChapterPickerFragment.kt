@@ -13,7 +13,9 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.ReaderActivity
 import com.mattrobertson.greek.reader.util.dpToPx
@@ -60,16 +62,20 @@ class ChapterPickerFragment : Fragment() {
             curRow = ButtonRow(requireContext())
             cp_container.addView(curRow)
             for (j in 0 until numSq) {
-                val chap = ch
+                val chapter = ch
                 btn = ChapterButton(requireContext(), wActual)
                 btn.text = "$ch"
                 curRow.addView(btn)
                 btn.setOnClickListener {
-                    Intent(requireContext(), ReaderActivity::class.java).apply {
-                        putExtra("book", args.book)
-                        putExtra("chapter", chap)
-                        startActivity(this)
-                    }
+//                    Intent(requireContext(), ReaderActivity::class.java).apply {
+//                        putExtra("book", args.book)
+//                        putExtra("chapter", chap)
+//                        startActivity(this)
+//                    }
+
+                    requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                            CoreNavigationDirections.toReader(args.book, chapter)
+                    )
                 }
                 ch++
                 if (ch > numChapters) break

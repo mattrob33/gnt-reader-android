@@ -5,6 +5,7 @@
     android:id="@+id/core_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <!-- Home -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.mattrobertson.greek.reader.presentation.HomeFragment"
@@ -37,6 +38,12 @@
 
     </fragment>
 
+    <action
+        android:id="@+id/to_reader"
+        app:destination="@id/navigation_read"
+        />
+
+    <!-- Read:: Chapter Picker -->
     <fragment
         android:id="@+id/navigation_chapter_picker"
         android:name="com.mattrobertson.greek.reader.presentation.bookpicker.ChapterPickerFragment"
@@ -50,6 +57,7 @@
 
     </fragment>
 
+    <!-- Plans:: Plan Splash -->
     <fragment
         android:id="@+id/navigation_plan_splash"
         android:name="com.mattrobertson.greek.reader.presentation.plans.PlanSplashFragment"
@@ -63,6 +71,7 @@
 
     </fragment>
 
+    <!-- Vocab:: Chapter Vocab -->
     <fragment
         android:id="@+id/navigation_chapter_vocab"
         android:name="com.mattrobertson.greek.reader.presentation.vocab.ChapterVocabFragment"
@@ -80,14 +89,35 @@
 
     </fragment>
 
+    <!-- Reader -->
+    <fragment
+        android:id="@+id/navigation_read"
+        android:name="com.mattrobertson.greek.reader.presentation.reader.ReaderFragment"
+        tools:layout="@layout/reader">
+
+        <argument
+            android:name="book"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="chapter"
+            android:defaultValue="1"
+            app:argType="integer" />
+
+    </fragment>
+
+    <!-- Settings -->
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.mattrobertson.greek.reader.presentation.SettingsFragment"
         />
 
+    <!-- About -->
     <fragment
         android:id="@+id/navigation_about"
         android:name="com.mattrobertson.greek.reader.presentation.AboutFragment"
+        tools:layout="@layout/about"
         />
 
 </navigation>
