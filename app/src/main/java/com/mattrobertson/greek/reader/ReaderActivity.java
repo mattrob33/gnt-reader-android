@@ -564,7 +564,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 			final int _index = index;
 
-			curSpan = new WordSpan(index, greekFont, index == selectedWordId, nightMode) {
+			curSpan = new WordSpan(index, greekFont, index == selectedWordId) {
 				@Override
 				public void onClick(View view) {
 

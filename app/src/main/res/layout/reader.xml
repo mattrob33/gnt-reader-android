@@ -46,29 +46,20 @@
 			android:focusable="false"
 		/>
 	</androidx.core.widget.NestedScrollView>
-	<!--
-	<RelativeLayout
-		android:layout_width="match_parent"
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:id="@+id/fabMediaRestart"
+		android:src="@drawable/ic_replay"
+		android:visibility="gone"
+		app:backgroundTint="@color/primary"
+		app:fabSize="mini"
+		android:layout_marginBottom="24dp"
+		android:layout_marginRight="16dp"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom"
-		app:layout_collapseMode="pin"
-		app:layout_scrollFlags="scroll|enterAlways"
-		>
-		-->
-		<com.google.android.material.floatingactionbutton.FloatingActionButton
-			android:id="@+id/fabMediaRestart"
-			android:src="@drawable/ic_replay"
-			android:visibility="invisible"
-			app:backgroundTint="@color/primary"
-			app:fabSize="mini"
-			android:layout_marginBottom="24dp"
-			android:layout_marginRight="16dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			app:layout_anchor="@id/scroller"
-			app:layout_anchorGravity="bottom|center_horizontal"
-			 />
-			 />
+		app:layout_anchor="@id/scroller"
+		app:layout_anchorGravity="bottom|center_horizontal"
+		 />
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabMediaPlay"
 		android:src="@android:drawable/ic_media_play"
@@ -80,11 +71,9 @@
 		app:layout_anchor="@id/scroller"
 		app:layout_anchorGravity="bottom|center_horizontal"
 		android:layout_gravity="bottom|center_horizontal"
-		
+		android:visibility="gone"
 		/>
-	<!--
-	</RelativeLayout>
-	-->
+
 	<androidx.core.widget.NestedScrollView
 		android:id="@+id/bottomSheet"
 		android:layout_width="match_parent"
@@ -96,6 +85,7 @@
 		android:layout_marginRight="0dp"
 		android:padding="0dp"
 		android:clipToPadding="true"
+		android:visibility="gone"
 		>
 		<LinearLayout
 			android:id="@+id/bottomSheetContainer"

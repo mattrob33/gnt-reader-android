@@ -133,8 +133,6 @@ public class AppConstants
 				// check if event is a single tab
 				boolean isClickEvent = detector.onTouchEvent(event);
 
-				//Toast.makeText(MainActivity.this,"type "+event.getAction(),Toast.LENGTH_SHORT).show();
-
 				// detect span that was clicked
 				if (isClickEvent) {
 					int x = (int) event.getX();
@@ -167,9 +165,6 @@ public class AppConstants
 
 							return false;
 						}
-					}
-					else {
-
 					}
 				}
 
