@@ -1,22 +1,42 @@
 package com.mattrobertson.greek.reader;
 
-import android.app.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.graphics.*;
-import android.os.*;
-import android.preference.*;
-import android.text.*;
-import android.text.style.*;
-import android.view.*;
-import android.widget.*;
-import com.mattrobertson.greek.reader.interfaces.*;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.text.style.SuperscriptSpan;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.*;
-import java.util.*;
-import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
+import com.mattrobertson.greek.reader.objects.DataBaseHelper;
+import com.mattrobertson.greek.reader.objects.Word;
+import com.mattrobertson.greek.reader.objects.WordSpan;
 import com.mattrobertson.greek.reader.util.AppConstants;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PlanReaderActivity extends Activity implements GreekTextProcessorInterface
 {
@@ -465,7 +485,7 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 
 			final int _index = index;
 
-			curSpan = new WordSpan(index,greekFont,index==selectedWordId,nightMode) {
+			curSpan = new WordSpan(index,greekFont,index==selectedWordId) {
 				@Override
 				public void onClick(View view) {
 

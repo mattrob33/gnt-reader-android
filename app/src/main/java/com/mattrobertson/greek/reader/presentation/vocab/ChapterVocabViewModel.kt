@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mattrobertson.greek.reader.objects.DataBaseHelper
 import com.mattrobertson.greek.reader.util.AppConstants
+import com.mattrobertson.greek.reader.util.getFileName
+import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStream
@@ -59,7 +61,7 @@ class ChapterVocabViewModel(private val applicationContext: Context,
 
     fun autoBuildWordList(maxOcc: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val greekText = readFromFile()
+            val greekText = readEntireFileFromAssets(applicationContext.assets, getFileName(book))
             if (greekText.isNotBlank()) {
                 val words = buildWordList(greekText, maxOcc)
                 for (d in words) {
@@ -71,18 +73,6 @@ class ChapterVocabViewModel(private val applicationContext: Context,
                 }
             }
         }
-    }
-
-    private fun readFromFile(): String {
-        try {
-            val filename = AppConstants.fNames[book].toString() + ".txt"
-            val inStream: InputStream = applicationContext.assets.open(filename)
-            val s = Scanner(inStream).useDelimiter("\\A")
-            return if (s.hasNext()) s.next() else ""
-        } catch (e: java.lang.Exception) {
-            Log.e("sblgnt", e.message ?: "")
-        }
-        return ""
     }
 
     private fun buildWordList(greekText: String, maxOcc: Int): ArrayList<DefInfo> {
