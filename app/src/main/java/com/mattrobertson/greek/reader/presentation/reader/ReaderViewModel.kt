@@ -32,7 +32,7 @@ import java.util.*
 class ReaderViewModel(
         private val applicationContext: Context,
         private var book: Int,
-        private val chapter: Int
+        private var chapter: Int
 ) : ViewModel() {
 
     private val _state = MutableLiveData<ReaderState>()
@@ -68,6 +68,8 @@ class ReaderViewModel(
     private val greekFont = Typeface.createFromAsset(applicationContext.assets, "fonts/sblgreek.ttf")
     private var fontSize = 0
 
+    private val refBackstack = arrayListOf<GntVerseRef>()
+
     init {
         try {
             dbHelper = DataBaseHelper(applicationContext)
@@ -81,6 +83,51 @@ class ReaderViewModel(
             showGloss(word)
             showConcordance(word)
         }
+    }
+
+    @ExperimentalStdlibApi
+    fun navigateBack(): Boolean {
+        return if(refBackstack.isEmpty()) {
+            false
+        }
+        else {
+            val toRef = refBackstack.removeLast()
+            goTo(toRef)
+            true
+        }
+    }
+
+    private fun goTo(ref: GntVerseRef) {
+        _selectedWordId.value = -1
+        chapter = ref.chapter
+        loadBook(ref.book)
+
+        // TODO : save to recents list
+    }
+
+    private fun loadBook(newBook: Int) {
+        _state.value = ReaderState.LOADING
+
+        book = newBook
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val rawFileText = readBookContents()
+
+            if (rawFileText.isNotBlank()) {
+                val text = processRawFileText(rawFileText)
+
+                viewModelScope.launch(Dispatchers.Main) {
+                    _state.value = ReaderState.READY
+                    _spannedText.value = text
+                }
+            }
+        }
+
+//        val refStr = AppConstants.abbrvs[book] + " " + chapter
+//        setTitle(refStr)
+
+//        audio.stop()
+//        refreshAudioUI()
     }
 
     private fun readBookContents() = readEntireFileFromAssets(applicationContext.assets, getFileName(book))
@@ -171,45 +218,6 @@ class ReaderViewModel(
         return spannableStringBuilder
     }
 
-    private fun loadBook(newBook: Int) {
-        _state.value = ReaderState.LOADING
-
-        book = newBook
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val rawFileText = readBookContents()
-
-            if (rawFileText.isNotBlank()) {
-                val text = processRawFileText(rawFileText)
-
-                viewModelScope.launch(Dispatchers.Main) {
-                    _state.value = ReaderState.READY
-                    _spannedText.value = text
-                }
-            }
-        }
-
-//        val refStr = AppConstants.abbrvs[book] + " " + chapter
-//        setTitle(refStr)
-
-//        audio.stop()
-//        refreshAudioUI()
-    }
-
-    private fun doNewChapter() {
-        _state.value = ReaderState.LOADING
-
-        // TODO : save to recents list
-
-//        val refStr = AppConstants.abbrvs[book] + " " + chapter
-//        setTitle(refStr)
-
-//        audio.stop()
-//        refreshAudioUI()
-
-//        selectedWordId = -1
-    }
-
     fun handleWordClick(id: Int) {
         val prevId = selectedWordId.value!!
         if (prevId in wordSpans.indices) {
@@ -297,7 +305,8 @@ class ReaderViewModel(
 
             span = object : ConcordanceWordSpan(book, chapter, verse) {
                 override fun onClick(v: View) {
-                    _concordanceItemSelected.value = GntVerseRef(book, chapter, verse)
+                    refBackstack.add(GntVerseRef(this@ReaderViewModel.book, this@ReaderViewModel.chapter, 0))
+                    goTo(GntVerseRef(book, chapter, verse))
                 }
             }
 

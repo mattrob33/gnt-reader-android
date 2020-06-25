@@ -6,13 +6,13 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.util.AppConstants
 import kotlinx.android.synthetic.main.reader.*
@@ -31,8 +31,16 @@ class ReaderFragment : Fragment() {
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
+    @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.reader, container, false)
+        val root = inflater.inflate(R.layout.reader, container, false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (!viewModel.navigateBack())
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
+        }
+
+        return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,6 +74,7 @@ class ReaderFragment : Fragment() {
 
         viewModel.spannedText.observe(viewLifecycleOwner) {
             tvText.text = it
+            tvText.invalidate()
         }
 
         viewModel.selectedWordId.observe(viewLifecycleOwner) {
@@ -92,11 +101,11 @@ class ReaderFragment : Fragment() {
         }
 
         viewModel.concordanceItemSelected.observe(viewLifecycleOwner) { item ->
-            item?.let {
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        CoreNavigationDirections.toReader(it.book, it.chapter)
-                )
-            }
+//            item?.let {
+//                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+//                        CoreNavigationDirections.toReader(it.book, it.chapter)
+//                )
+//            }
         }
     }
 }
