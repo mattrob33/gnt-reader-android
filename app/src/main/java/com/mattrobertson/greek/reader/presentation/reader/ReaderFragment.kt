@@ -2,14 +2,17 @@ package com.mattrobertson.greek.reader.presentation.reader
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.util.AppConstants
 import kotlinx.android.synthetic.main.reader.*
@@ -39,13 +42,11 @@ class ReaderFragment : Fragment() {
         tvText.setTextIsSelectable(false)
         tvText.movementMethod = AppConstants.createMovementMethod(requireContext())
 
+        tvConcordance.movementMethod = LinkMovementMethod.getInstance()
+
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         mBottomSheetBehavior.peekHeight = 400
         mBottomSheetBehavior.isHideable = true
-
-        requireActivity().window.decorView.post {
-            mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
 
         subscribeUI()
     }
@@ -55,9 +56,10 @@ class ReaderFragment : Fragment() {
             when (it) {
                 ReaderState.LOADING -> {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                    // TODO : show progress indicator
                 }
                 ReaderState.READY -> {
-
+                    // TODO : hide progress indicator
                 }
             }
         }
@@ -73,16 +75,27 @@ class ReaderFragment : Fragment() {
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->
             nullableGlossInfo?.let { glossInfo ->
-                var strDefDisplay: String = glossInfo.gloss
+                var defEntry = glossInfo.gloss
 
-                if (glossInfo.parsing.isNotBlank()) {
-                    strDefDisplay += "\n${glossInfo.parsing}"
-                }
+                if (glossInfo.parsing.isNotBlank())
+                    defEntry += "\n${glossInfo.parsing}"
 
+                tvDef.text = defEntry
                 tvLex.text = glossInfo.lex
-                tvDef.text = strDefDisplay
 
                 mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+
+        viewModel.concordanceInfo.observe(viewLifecycleOwner) { concordanceInfo ->
+            tvConcordance.text = concordanceInfo ?: ""
+        }
+
+        viewModel.concordanceItemSelected.observe(viewLifecycleOwner) { item ->
+            item?.let {
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                        CoreNavigationDirections.toReader(it.book, it.chapter)
+                )
             }
         }
     }
