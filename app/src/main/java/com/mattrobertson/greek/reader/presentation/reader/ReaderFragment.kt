@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -46,6 +49,10 @@ class ReaderFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
         tvText.typeface = Typeface.createFromAsset(requireActivity().assets, "fonts/sblgreek.ttf")
         tvText.setTextIsSelectable(false)
         tvText.movementMethod = AppConstants.createMovementMethod(requireContext())
@@ -70,6 +77,11 @@ class ReaderFragment : Fragment() {
                     // TODO : hide progress indicator
                 }
             }
+        }
+
+        viewModel.title.observe(viewLifecycleOwner) {
+            val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+            actionBar?.title = it
         }
 
         viewModel.spannedText.observe(viewLifecycleOwner) {
