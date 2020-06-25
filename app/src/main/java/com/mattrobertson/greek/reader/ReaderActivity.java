@@ -605,7 +605,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		
 		mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 	}
-	
+
 	public void lookupDef(String lex, String parsing) {
 		if (lex.isEmpty())
 			return;

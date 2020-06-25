@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.util.AppConstants
 import kotlinx.android.synthetic.main.reader.*
@@ -26,6 +26,8 @@ class ReaderFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory).get(ReaderViewModel::class.java)
     }
 
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.reader, container, false)
     }
@@ -37,10 +39,29 @@ class ReaderFragment : Fragment() {
         tvText.setTextIsSelectable(false)
         tvText.movementMethod = AppConstants.createMovementMethod(requireContext())
 
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        mBottomSheetBehavior.peekHeight = 400
+        mBottomSheetBehavior.isHideable = true
+
+        requireActivity().window.decorView.post {
+            mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
         subscribeUI()
     }
 
     private fun subscribeUI() {
+        viewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
+                ReaderState.LOADING -> {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                }
+                ReaderState.READY -> {
+
+                }
+            }
+        }
+
         viewModel.spannedText.observe(viewLifecycleOwner) {
             tvText.text = it
         }
@@ -50,8 +71,19 @@ class ReaderFragment : Fragment() {
             tvText.invalidate()
         }
 
-        viewModel.selectedWord.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "Clicked ${it.lex}", Toast.LENGTH_LONG).show()
+        viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->
+            nullableGlossInfo?.let { glossInfo ->
+                var strDefDisplay: String = glossInfo.gloss
+
+                if (glossInfo.parsing.isNotBlank()) {
+                    strDefDisplay += "\n${glossInfo.parsing}"
+                }
+
+                tvLex.text = glossInfo.lex
+                tvDef.text = strDefDisplay
+
+                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 }
