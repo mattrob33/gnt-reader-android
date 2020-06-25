@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.view.View
@@ -14,9 +17,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mattrobertson.greek.reader.model.GntVerseRef
+import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.objects.DataBaseHelper
 import com.mattrobertson.greek.reader.objects.Word
 import com.mattrobertson.greek.reader.objects.WordSpan
+import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +50,12 @@ class ReaderViewModel(
     private val _glossInfo = MutableLiveData<GlossInfo?>()
         var glossInfo: LiveData<GlossInfo?> = _glossInfo
 
+    private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
+    var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
+
+    private val _concordanceItemSelected = MutableLiveData<GntVerseRef?>()
+    var concordanceItemSelected: LiveData<GntVerseRef?> = _concordanceItemSelected
+
     private lateinit var dbHelper: DataBaseHelper
 
     private var words = ArrayList<Word>()
@@ -67,6 +79,7 @@ class ReaderViewModel(
 
         selectedWord.observeForever { word ->
             showGloss(word)
+            showConcordance(word)
         }
     }
 
@@ -178,14 +191,9 @@ class ReaderViewModel(
 
 //        val refStr = AppConstants.abbrvs[book] + " " + chapter
 //        setTitle(refStr)
+
 //        audio.stop()
 //        refreshAudioUI()
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
-
-//        selectedWordId = -1
-
-//        val async: ReaderActivity.AsyncFileReader = ReaderActivity.AsyncFileReader()
-//        async.execute()
     }
 
     private fun doNewChapter() {
@@ -195,14 +203,11 @@ class ReaderViewModel(
 
 //        val refStr = AppConstants.abbrvs[book] + " " + chapter
 //        setTitle(refStr)
+
 //        audio.stop()
 //        refreshAudioUI()
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
 
 //        selectedWordId = -1
-
-//        val async: ReaderActivity.AsyncGreekTextProcessor = ReaderActivity.AsyncGreekTextProcessor()
-//        async.execute()
     }
 
     fun handleWordClick(id: Int) {
@@ -256,6 +261,72 @@ class ReaderViewModel(
         c.close()
 
         return glossInfo
+    }
+
+    private fun showConcordance(word: Word) {
+        _concordanceInfo.value = lookupConcordance(word)
+    }
+
+    private fun lookupConcordance(word: Word): SpannableStringBuilder? {
+        val lex = word.lex
+
+        if (lex.isBlank()) return null
+
+        dbHelper.opendatabase()
+        val db = dbHelper.readableDatabase
+        val c = db.rawQuery("SELECT * FROM concordance WHERE lex='$lex'", null)
+
+        var i = 0
+        val size = c.count
+        var strLine: String
+        var totalLength = 0
+
+        val sb = SpannableStringBuilder()
+        var span: ConcordanceWordSpan
+
+        while (c.moveToNext()) {
+            val book = c.getInt(c.getColumnIndex("book"))
+            val chapter = c.getInt(c.getColumnIndex("chapter"))
+            val verse = c.getInt(c.getColumnIndex("verse"))
+
+            i++
+
+            strLine = "$i. ${AppConstants.abbrvs[book]} $chapter:$verse\n"
+
+            sb.append(strLine)
+
+            span = object : ConcordanceWordSpan(book, chapter, verse) {
+                override fun onClick(v: View) {
+                    _concordanceItemSelected.value = GntVerseRef(book, chapter, verse)
+                }
+            }
+
+            sb.setSpan(span, totalLength, totalLength + strLine.length - 1, Spanned.SPAN_COMPOSING)
+
+            totalLength += strLine.length
+
+            if (i >= 10) {
+                val strMore = "..." + (size - i) + " more"
+                sb.append(strMore)
+                val spanMore: ClickableSpan = object : ClickableSpan() {
+                    override fun onClick(v: View) {
+//                        val i = Intent(this@ReaderActivity, ConcordanceActivity::class.java)
+//                        i.putExtra("lex", lex)
+//                        startActivity(i)
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        ds.color = Color.parseColor("#0D47A1")
+                        ds.isUnderlineText = false
+                    }
+                }
+                sb.setSpan(spanMore, totalLength, totalLength + strMore.length, Spanned.SPAN_COMPOSING)
+                break
+            }
+        }
+
+        c.close()
+        return sb
     }
 
     private fun saveVocabWord(glossInfo: GlossInfo) {
