@@ -67,20 +67,18 @@ class ChapterPickerFragment : Fragment() {
                 btn.text = "$ch"
                 curRow.addView(btn)
                 btn.setOnClickListener {
-//                    Intent(requireContext(), ReaderActivity::class.java).apply {
-//                        putExtra("book", args.book)
-//                        putExtra("chapter", chap)
-//                        startActivity(this)
-//                    }
-
-                    requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                            CoreNavigationDirections.toReader(args.book, chapter)
-                    )
+                    launchReader(args.book, chapter)
                 }
                 ch++
                 if (ch > numChapters) break
             }
         }
+    }
+
+    private fun launchReader(book: Int, chapter: Int) {
+        requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                CoreNavigationDirections.toReader(book, chapter)
+        )
     }
 
     internal inner class ChapterButton(c: Context?, sidePx: Int) : AppCompatButton(c) {

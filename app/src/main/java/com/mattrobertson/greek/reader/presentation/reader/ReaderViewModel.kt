@@ -1,7 +1,9 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -12,7 +14,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.mattrobertson.greek.reader.objects.DataBaseHelper
 import com.mattrobertson.greek.reader.objects.Word
 import com.mattrobertson.greek.reader.objects.WordSpan
 import com.mattrobertson.greek.reader.util.getFileName
@@ -28,16 +30,21 @@ class ReaderViewModel(
 ) : ViewModel() {
 
     private val _state = MutableLiveData<ReaderState>()
-    val state: LiveData<ReaderState> = _state
+        val state: LiveData<ReaderState> = _state
 
     private val _spannedText = MutableLiveData<SpannableStringBuilder>()
-    val spannedText: LiveData<SpannableStringBuilder> = _spannedText
+        val spannedText: LiveData<SpannableStringBuilder> = _spannedText
 
     private val _selectedWordId = MutableLiveData(-1)
-    var selectedWordId: LiveData<Int> = _selectedWordId
+        var selectedWordId: LiveData<Int> = _selectedWordId
 
     private val _selectedWord = MutableLiveData<Word>()
-    var selectedWord: LiveData<Word> = _selectedWord
+        var selectedWord: LiveData<Word> = _selectedWord
+
+    private val _glossInfo = MutableLiveData<GlossInfo?>()
+        var glossInfo: LiveData<GlossInfo?> = _glossInfo
+
+    private lateinit var dbHelper: DataBaseHelper
 
     private var words = ArrayList<Word>()
     private var wordSpans = ArrayList<WordSpan>()
@@ -50,7 +57,17 @@ class ReaderViewModel(
     private var fontSize = 0
 
     init {
+        try {
+            dbHelper = DataBaseHelper(applicationContext)
+        } catch (e: Exception) {
+            // TODO : log exception
+        }
+
         loadBook(book)
+
+        selectedWord.observeForever { word ->
+            showGloss(word)
+        }
     }
 
     private fun readBookContents() = readEntireFileFromAssets(applicationContext.assets, getFileName(book))
@@ -189,19 +206,74 @@ class ReaderViewModel(
     }
 
     fun handleWordClick(id: Int) {
-        _selectedWord.value = words[id]
-
-        val lex = words[id].lex
-        val parsing = words[id].parsing
-
-        // mark last click set false
-        if (selectedWordId.value!! > -1) {
-            wordSpans[selectedWordId.value!!].setMarking(false)
+        val prevId = selectedWordId.value!!
+        if (prevId in wordSpans.indices) {
+            wordSpans[prevId].setMarking(false)
         }
-        _selectedWordId.value = id
 
-//        lookupDef(lex, parsing)
-//        lookupConcordance(lex)
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+        _selectedWordId.value = id
+        _selectedWord.value = words[id]
+    }
+
+    private fun showGloss(word: Word) {
+        val glossInfo = lookupGloss(word)
+        _glossInfo.value = glossInfo
+        glossInfo?.let {
+            saveVocabWord(it)
+        }
+    }
+
+    private fun lookupGloss(word: Word): GlossInfo? {
+        val lex = word.lex
+        val parsing = word.parsing
+
+        if (lex.isBlank()) return null
+
+        dbHelper.opendatabase()
+
+        val db: SQLiteDatabase = dbHelper.readableDatabase
+
+        var glossInfo: GlossInfo? = null
+
+        val c = db.rawQuery("SELECT * FROM words WHERE lemma='$lex'", null)
+
+        if (!c.moveToFirst()) {
+            // Temp hack to find missing words
+            val c2 = db.rawQuery("SELECT * FROM glosses WHERE gk='$lex'", null)
+            if (c2.moveToFirst()) {
+                val gloss = c2.getString(c2.getColumnIndex("gloss"))
+                val freq = c2.getInt(c2.getColumnIndex("occ"))
+                glossInfo = GlossInfo(lex = lex, gloss = gloss, parsing = parsing, frequency = freq)
+            }
+            c2.close()
+        } else {
+            val freq = c.getInt(c.getColumnIndex("freq"))
+            val def = c.getString(c.getColumnIndex("def"))
+            val gloss = c.getString(c.getColumnIndex("gloss"))
+            val strDef = gloss ?: def
+            glossInfo = GlossInfo(lex = lex, gloss=strDef, parsing = parsing, frequency = freq)
+        }
+        c.close()
+
+        return glossInfo
+    }
+
+    private fun saveVocabWord(glossInfo: GlossInfo) {
+        dbHelper.opendatabase()
+        val db = dbHelper.writableDatabase
+
+        val values = ContentValues().apply {
+            put("book", book)
+            put("chapter", chapter)
+            put("lex", glossInfo.lex)
+            put("gloss", glossInfo.gloss)
+            put("occ", glossInfo.frequency)
+            put("added_by", DataBaseHelper.ADDED_BY_USER)
+            put("date_added", System.currentTimeMillis())
+            put("learned", 0)
+        }
+
+        db.insertWithOnConflict("vocab", null, values, SQLiteDatabase.CONFLICT_IGNORE)
+        db.close()
     }
 }
