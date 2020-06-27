@@ -46,12 +46,6 @@
             android:parentActivityName=".ReaderActivity"
             />
 
-        <activity
-            android:name=".ConcordanceActivity"
-            android:label="Concordance"
-            android:parentActivityName=".ReaderActivity"
-            />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"
