@@ -22,6 +22,7 @@ import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.objects.DataBaseHelper
 import com.mattrobertson.greek.reader.objects.Word
 import com.mattrobertson.greek.reader.objects.WordSpan
+import com.mattrobertson.greek.reader.presentation.ScreenState
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
@@ -35,8 +36,8 @@ class ReaderViewModel(
         private var chapter: Int
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<ReaderState>()
-        val state: LiveData<ReaderState> = _state
+    private val _state = MutableLiveData<ScreenState>()
+        val state: LiveData<ScreenState> = _state
 
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
@@ -54,10 +55,13 @@ class ReaderViewModel(
         var glossInfo: LiveData<GlossInfo?> = _glossInfo
 
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
-    var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
+        var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
 
     private val _concordanceItemSelected = MutableLiveData<GntVerseRef?>()
-    var concordanceItemSelected: LiveData<GntVerseRef?> = _concordanceItemSelected
+        var concordanceItemSelected: LiveData<GntVerseRef?> = _concordanceItemSelected
+
+    private val _showConcordanceScreenForLex = MutableLiveData<String>()
+        var showConcordanceScreenForLex: LiveData<String> = _showConcordanceScreenForLex
 
     private lateinit var dbHelper: DataBaseHelper
 
@@ -109,7 +113,7 @@ class ReaderViewModel(
     }
 
     private fun loadBook(newBook: Int) {
-        _state.value = ReaderState.LOADING
+        _state.value = ScreenState.LOADING
 
         book = newBook
 
@@ -120,7 +124,7 @@ class ReaderViewModel(
                 val text = processRawFileText(rawFileText)
 
                 viewModelScope.launch(Dispatchers.Main) {
-                    _state.value = ReaderState.READY
+                    _state.value = ScreenState.READY
                     _spannedText.value = text
                 }
             }
@@ -321,9 +325,7 @@ class ReaderViewModel(
                 sb.append(strMore)
                 val spanMore: ClickableSpan = object : ClickableSpan() {
                     override fun onClick(v: View) {
-//                        val i = Intent(this@ReaderActivity, ConcordanceActivity::class.java)
-//                        i.putExtra("lex", lex)
-//                        startActivity(i)
+                        _showConcordanceScreenForLex.value = lex
                     }
 
                     override fun updateDrawState(ds: TextPaint) {
