@@ -697,9 +697,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 				ClickableSpan spanMore = new ClickableSpan() {
 					@Override
 					public void onClick(@NonNull View v) {
-						Intent i = new Intent(ReaderActivity.this,ConcordanceActivity.class);
-						i.putExtra("lex",lexF);
-						startActivity(i);
+
 					}
 					
 					@Override
