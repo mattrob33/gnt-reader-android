@@ -98,12 +98,32 @@
         <argument
             android:name="book"
             android:defaultValue="0"
-            app:argType="integer" />
+            app:argType="integer"
+            />
 
         <argument
             android:name="chapter"
             android:defaultValue="1"
-            app:argType="integer" />
+            app:argType="integer"
+            />
+
+        <action
+            android:id="@+id/to_concordance"
+            app:destination="@id/navigation_concordance"
+            />
+
+    </fragment>
+
+    <!-- Concordance -->
+    <fragment
+        android:id="@+id/navigation_concordance"
+        android:name="com.mattrobertson.greek.reader.presentation.reader.ConcordanceFragment"
+        tools:layout="@layout/concordance">
+
+        <argument
+            android:name="lex"
+            app:argType="string"
+            />
 
     </fragment>
 

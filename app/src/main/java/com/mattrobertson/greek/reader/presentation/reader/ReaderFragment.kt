@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -17,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.presentation.ScreenState
 import com.mattrobertson.greek.reader.util.AppConstants
 import kotlinx.android.synthetic.main.reader.*
 
@@ -69,11 +68,11 @@ class ReaderFragment : Fragment() {
     private fun subscribeUI() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                ReaderState.LOADING -> {
+                ScreenState.LOADING -> {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
                     // TODO : show progress indicator
                 }
-                ReaderState.READY -> {
+                ScreenState.READY -> {
                     // TODO : hide progress indicator
                 }
             }
@@ -112,12 +111,14 @@ class ReaderFragment : Fragment() {
             tvConcordance.text = concordanceInfo ?: ""
         }
 
-        viewModel.concordanceItemSelected.observe(viewLifecycleOwner) { item ->
-//            item?.let {
-//                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-//                        CoreNavigationDirections.toReader(it.book, it.chapter)
-//                )
-//            }
+        viewModel.showConcordanceScreenForLex.observe(viewLifecycleOwner) { lex ->
+            launchConcordanceScreen(lex)
         }
+    }
+
+    private fun launchConcordanceScreen(lex: String) {
+        requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                ReaderFragmentDirections.toConcordance(lex)
+        )
     }
 }
