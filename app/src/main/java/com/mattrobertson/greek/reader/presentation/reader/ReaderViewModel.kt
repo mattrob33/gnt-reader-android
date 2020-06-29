@@ -23,6 +23,7 @@ import com.mattrobertson.greek.reader.objects.DataBaseHelper
 import com.mattrobertson.greek.reader.objects.Word
 import com.mattrobertson.greek.reader.objects.WordSpan
 import com.mattrobertson.greek.reader.presentation.ScreenState
+import com.mattrobertson.greek.reader.presentation.SingleLiveEvent
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
@@ -57,11 +58,11 @@ class ReaderViewModel(
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
         var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
 
-    private val _concordanceItemSelected = MutableLiveData<GntVerseRef?>()
-        var concordanceItemSelected: LiveData<GntVerseRef?> = _concordanceItemSelected
+    var concordanceItemSelected = SingleLiveEvent<GntVerseRef?>()
+        private set
 
-    private val _showConcordanceScreenForLex = MutableLiveData<String>()
-        var showConcordanceScreenForLex: LiveData<String> = _showConcordanceScreenForLex
+    var showConcordanceScreenForLex = SingleLiveEvent<String>()
+        private set
 
     private lateinit var dbHelper: DataBaseHelper
 
@@ -325,7 +326,7 @@ class ReaderViewModel(
                 sb.append(strMore)
                 val spanMore: ClickableSpan = object : ClickableSpan() {
                     override fun onClick(v: View) {
-                        _showConcordanceScreenForLex.value = lex
+                        showConcordanceScreenForLex.value = lex
                     }
 
                     override fun updateDrawState(ds: TextPaint) {
