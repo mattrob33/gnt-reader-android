@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation
+package com.mattrobertson.greek.reader.presentation.settings
 
 import android.graphics.Color
 import android.os.Bundle
