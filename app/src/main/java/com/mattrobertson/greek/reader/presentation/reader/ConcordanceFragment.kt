@@ -2,9 +2,8 @@ package com.mattrobertson.greek.reader.presentation.reader
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -31,14 +30,40 @@ class ConcordanceFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.concordance, container, false)
+        val view = inflater.inflate(R.layout.concordance, container, false)
+        setHasOptionsMenu(true)
+        return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_concordance, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
+            }
+
+            R.id.menu_show_text -> {
+                viewModel.showText = !viewModel.showText
+            }
+        }
+        return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        tvConcordanceTitle.text = args.lex
-        tvConcordanceText.movementMethod = LinkMovementMethod.getInstance()
+        (activity as AppCompatActivity).setSupportActionBar(concordance_toolbar)
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
+        concordance_toolbar_title.text = args.lex
+
+        concordance_text.movementMethod = LinkMovementMethod.getInstance()
 
         subscribeUI()
 
@@ -49,17 +74,17 @@ class ConcordanceFragment : Fragment() {
         viewModel.screenState.observe(viewLifecycleOwner) {
             when (it) {
                 ScreenState.LOADING -> {
-                    concordanceProgressBar.visibility = View.VISIBLE
+                    concordance_progress_bar.visibility = View.VISIBLE
                 }
                 ScreenState.READY -> {
-                    concordanceProgressBar.visibility = View.INVISIBLE
+                    concordance_progress_bar.visibility = View.INVISIBLE
                 }
             }
         }
 
         viewModel.concordanceInfo.observe(viewLifecycleOwner) {
             it?.let { info ->
-                tvConcordanceText.text = info
+                concordance_text.text = info
             }
         }
 
@@ -69,6 +94,10 @@ class ConcordanceFragment : Fragment() {
                         CoreNavigationDirections.toReader(ref.book, ref.chapter)
                 )
             }
+        }
+
+        viewModel.loadingProgress.observe(viewLifecycleOwner) {
+            concordance_progress_bar.progress = it
         }
     }
 
