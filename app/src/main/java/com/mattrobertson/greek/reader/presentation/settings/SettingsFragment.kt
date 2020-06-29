@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation
+package com.mattrobertson.greek.reader.presentation.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat

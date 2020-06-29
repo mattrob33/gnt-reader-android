@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation
+package com.mattrobertson.greek.reader.presentation.util
 
 import android.util.Log
 import androidx.annotation.MainThread
