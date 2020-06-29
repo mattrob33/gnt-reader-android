@@ -24,10 +24,23 @@ import java.io.IOException
 
 class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
 
+    companion object {
+        private const val PROGRESS_UPDATE_FREQUENCY = 16
+    }
+
+    private var mLex = ""
+
     var showText = false
+        set(value) {
+            field = value
+            loadConcordance(mLex)
+        }
 
     private val _screenState = MutableLiveData<ScreenState>(ScreenState.LOADING)
     val screenState: LiveData<ScreenState> = _screenState
+
+    private val _loadingProgress = MutableLiveData(0)
+        val loadingProgress: LiveData<Int> = _loadingProgress
 
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
         val concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
@@ -43,8 +56,6 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
             dbHelper = DataBaseHelper(applicationContext)
             dbHelper.opendatabase()
             db = dbHelper.readableDatabase
-
-
         }
         catch (e: IOException) {
             // TODO: Log exception
@@ -52,6 +63,7 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
     }
 
     fun loadConcordance(lex: String) {
+        _loadingProgress.value = 0
         _screenState.value = ScreenState.LOADING
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -68,6 +80,8 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
         if (lex.isEmpty())
             return null
 
+        mLex = lex
+
         val sb = SpannableStringBuilder()
 
         val c: Cursor = db.rawQuery("SELECT * FROM concordance WHERE lex='$lex'", null)
@@ -77,6 +91,7 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
         var strWord: String
 
         var i = 0
+        val size = c.count
 
         var strLine: String
         var totalLength = 0
@@ -90,7 +105,13 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
             val verse = c.getInt(c.getColumnIndex("verse"))
             i++
 
-//            async.updateProgress(i, size)
+            if (showText) {
+                if (i % PROGRESS_UPDATE_FREQUENCY == 0)
+                    viewModelScope.launch(Dispatchers.Main) {
+                        _loadingProgress.value = (i.toDouble() / size.toDouble() * 100).toInt()
+                        _concordanceInfo.value = sb
+                    }
+            }
 
             strLine = "$i. ${AppConstants.abbrvs[book]} $chapter:$verse\n"
             sb.append(strLine)
