@@ -130,13 +130,13 @@
     <!-- Settings -->
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.mattrobertson.greek.reader.presentation.SettingsFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.settings.SettingsFragment"
         />
 
     <!-- About -->
     <fragment
         android:id="@+id/navigation_about"
-        android:name="com.mattrobertson.greek.reader.presentation.AboutFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.settings.AboutFragment"
         tools:layout="@layout/about"
         />
 
