@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.mattrobertson.greek.reader.objects.DataBaseHelper
+import com.mattrobertson.greek.reader.data.DataBaseHelper
 
 class VocabListViewModel(applicationContext: Context) : ViewModel() {
 
