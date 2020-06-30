@@ -8,6 +8,8 @@ import java.util.*
 
 object Recents {
 
+    private const val MAX_SIZE = 30
+
     private var mList = mutableListOf<GntVerseRef>()
 
     var size = 0
@@ -18,6 +20,8 @@ object Recents {
         synchronized(this) {
             mList.removeAll { it == ref }
             mList.add(0, ref)
+            if (mList.size > MAX_SIZE)
+                mList.removeAt(mList.lastIndex)
         }
     }
 
@@ -38,6 +42,8 @@ object Recents {
         }
     }
 
+    fun get(index: Int) = synchronized(this) { mList[index] }
+
     fun getAll() = synchronized(this) { mList as List<GntVerseRef> }
 
     fun clear() = synchronized(this) { mList.clear() }
@@ -47,6 +53,6 @@ object Recents {
     }
 
     fun fromJson(json: String) {
-        mList = Gson().fromJson(json, Array<GntVerseRef>::class.java).toMutableList()
+        mList = Gson().fromJson(json, Array<GntVerseRef>::class.java)?.toMutableList() ?: mutableListOf()
     }
 }
