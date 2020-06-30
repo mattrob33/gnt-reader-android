@@ -220,9 +220,9 @@ class RecentsTest {
         }
     }
 
-}
+    private fun newRef() = GntVerseRef(
+            Random.nextInt(0, 27),
+            Random.nextInt(0, 10)
+    )
 
-private fun newRef() = GntVerseRef(
-        Random.nextInt(0, 27),
-        Random.nextInt(0, 10)
-)
+}
