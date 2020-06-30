@@ -73,7 +73,7 @@ dependencies {
 
     // Other
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Testing
     testImplementation "androidx.test:core:1.2.0" // Robolectric

@@ -18,13 +18,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
-import com.mattrobertson.greek.reader.model.GntVerseRef
-import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.data.DataBaseHelper
+import com.mattrobertson.greek.reader.model.GntVerseRef
 import com.mattrobertson.greek.reader.model.Word
-import com.mattrobertson.greek.reader.presentation.util.WordSpan
+import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
+import com.mattrobertson.greek.reader.presentation.util.WordSpan
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
@@ -364,6 +364,6 @@ class ReaderViewModel(
     }
 
     fun updateRecentReadingPrefList() {
-
+        val prefs = getDefaultSharedPreferences(applicationContext)
     }
 }
