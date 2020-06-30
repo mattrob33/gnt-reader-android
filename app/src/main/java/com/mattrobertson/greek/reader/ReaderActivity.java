@@ -564,7 +564,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 			final int _index = index;
 
-			curSpan = new WordSpan(index, greekFont, index == selectedWordId) {
+			curSpan = new WordSpan(index, greekFont, index == selectedWordId, 0) {
 				@Override
 				public void onClick(View view) {
 
@@ -672,7 +672,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 			sb.append(strLine);
 			
-			span = new ConcordanceWordSpan(_book,_chapter,_verse) {
+			span = new ConcordanceWordSpan(_book,_chapter,_verse, 0) {
 				@Override
 				public void onClick(View v) {
 					Intent i = new Intent(ReaderActivity.this,ReaderActivity.class);
