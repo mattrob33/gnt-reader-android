@@ -12,18 +12,19 @@ public class WordSpan extends ClickableSpan
 	private boolean marking = false;
 	TextPaint tp;
 	Typeface font;
-	int color = Color.BLACK;
+	int color;
 
-	public WordSpan(int id, Typeface font, boolean marked) {
+	public WordSpan(int id, Typeface font, boolean marked, int color) {
 		this.id = id;
 		marking = marked;
 		this.font = font;
+		this.color = color;
 	}
 
 	@Override
 	public void updateDrawState(TextPaint ds) {
+		ds.setColor(color);
 		ds.setUnderlineText(false);
-
 		if (marking)
 			ds.setTypeface(Typeface.create(font, Typeface.BOLD));
 

@@ -8,10 +8,12 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.model.GntVerseRef
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.data.DataBaseHelper
@@ -22,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
+class ConcordanceViewModel (private val applicationContext: Context) : ViewModel() {
 
     companion object {
         private const val PROGRESS_UPDATE_FREQUENCY = 16
@@ -99,6 +101,8 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
         var span: ConcordanceWordSpan
         var boldSpan: StyleSpan
 
+        val linkColor = ResourcesCompat.getColor(applicationContext.resources, R.color.accent, applicationContext.theme)
+
         while (c.moveToNext()) {
             val book = c.getInt(c.getColumnIndex("book"))
             val chapter = c.getInt(c.getColumnIndex("chapter"))
@@ -115,7 +119,7 @@ class ConcordanceViewModel (applicationContext: Context) : ViewModel() {
 
             strLine = "$i. ${AppConstants.abbrvs[book]} $chapter:$verse\n"
             sb.append(strLine)
-            span = object : ConcordanceWordSpan(book, chapter, verse) {
+            span = object : ConcordanceWordSpan(book, chapter, verse, linkColor) {
                 override fun onClick(v: View) {
                     verseRefSelected.value = GntVerseRef(book, chapter, verse)
                 }

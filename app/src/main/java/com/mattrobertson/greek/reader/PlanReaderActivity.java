@@ -457,7 +457,7 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 
 			final int _index = index;
 
-			curSpan = new WordSpan(index,greekFont,index==selectedWordId) {
+			curSpan = new WordSpan(index,greekFont,index==selectedWordId, 0) {
 				@Override
 				public void onClick(View view) {
 

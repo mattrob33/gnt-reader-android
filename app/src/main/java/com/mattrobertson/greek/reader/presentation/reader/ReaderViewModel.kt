@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -13,10 +12,12 @@ import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
@@ -27,6 +28,7 @@ import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.presentation.util.WordSpan
 import com.mattrobertson.greek.reader.util.AppConstants
+import com.mattrobertson.greek.reader.util.getBookTitle
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
 import kotlinx.coroutines.Dispatchers
@@ -137,7 +139,7 @@ class ReaderViewModel(
             }
         }
 
-        _title.value = AppConstants.abbrvs[book] + " " + chapter
+        _title.value = getBookTitle(book) + " " + chapter
 
 //        audio.stop()
 //        refreshAudioUI()
@@ -168,6 +170,8 @@ class ReaderViewModel(
 
         val spannableStringBuilder = SpannableStringBuilder()
         var curSpan: WordSpan
+
+        val wordColor = ResourcesCompat.getColor(applicationContext.resources, R.color.textColor, applicationContext.theme)
 
         for (arrWord in arrWords) {
             str = arrWord
@@ -215,7 +219,7 @@ class ReaderViewModel(
             }
             spannableStringBuilder.append(x).append(" ")
             val _index = index
-            curSpan = object : WordSpan(_index, greekFont, _index == selectedWordId.value) {
+            curSpan = object : WordSpan(_index, greekFont, _index == selectedWordId.value, wordColor) {
                 override fun onClick(view: View) {
                     viewModelScope.launch(Dispatchers.Main) {
                         handleWordClick(_index)
@@ -305,6 +309,8 @@ class ReaderViewModel(
         val sb = SpannableStringBuilder()
         var span: ConcordanceWordSpan
 
+        val linkColor = ResourcesCompat.getColor(applicationContext.resources, R.color.accent, applicationContext.theme)
+
         while (c.moveToNext()) {
             val book = c.getInt(c.getColumnIndex("book"))
             val chapter = c.getInt(c.getColumnIndex("chapter"))
@@ -316,7 +322,7 @@ class ReaderViewModel(
 
             sb.append(strLine)
 
-            span = object : ConcordanceWordSpan(book, chapter, verse) {
+            span = object : ConcordanceWordSpan(book, chapter, verse, linkColor) {
                 override fun onClick(v: View) {
                     refBackstack.add(GntVerseRef(this@ReaderViewModel.book, this@ReaderViewModel.chapter, 0))
                     goTo(GntVerseRef(book, chapter, verse))
@@ -336,7 +342,7 @@ class ReaderViewModel(
                     }
 
                     override fun updateDrawState(ds: TextPaint) {
-                        ds.color = Color.parseColor("#0D47A1")
+                        ds.color = linkColor
                         ds.isUnderlineText = false
                     }
                 }

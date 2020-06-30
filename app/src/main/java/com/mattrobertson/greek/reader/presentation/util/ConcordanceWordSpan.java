@@ -5,21 +5,25 @@ import android.text.*;
 import android.text.style.*;
 import android.view.*;
 
+import androidx.core.content.res.ResourcesCompat;
+
 public class ConcordanceWordSpan extends ClickableSpan
 {
 	public static final int SHOW_MORE = -1;
 	
-	int book,chapter,verse;
+	int book, chapter, verse;
+	int color;
 
-	public ConcordanceWordSpan(int b, int c, int v) {
+	public ConcordanceWordSpan(int b, int c, int v, int color) {
 		book = b;
 		chapter = c;
 		verse = v;
+		this.color = color;
 	}
 	
 	@Override
 	public void updateDrawState(TextPaint ds) {
-		ds.setColor(Color.parseColor("#0D47A1"));
+		ds.setColor(color);
 		ds.setUnderlineText(false);
 	}
 
