@@ -4,20 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recents_list_item"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
     android:paddingLeft="12dp"
     android:paddingTop="8dp"
     android:paddingRight="12dp"
     android:paddingBottom="8dp"
     android:background="@drawable/recent_item"
     app:elevation="8dp"
-    android:layout_marginRight="8dp">
+    android:layout_marginLeft="8dp">
 
     <TextView
         android:id="@+id/recents_list_item_book"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/recents_list_item_chapter"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -32,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
