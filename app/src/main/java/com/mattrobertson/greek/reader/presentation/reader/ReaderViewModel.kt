@@ -38,6 +38,8 @@ class ReaderViewModel(
         private var chapter: Int
 ) : ViewModel() {
 
+    private val prefs = getDefaultSharedPreferences(applicationContext)
+
     private val _state = MutableLiveData<ScreenState>()
         val state: LiveData<ScreenState> = _state
 
@@ -364,6 +366,6 @@ class ReaderViewModel(
     }
 
     fun updateRecentReadingPrefList() {
-        val prefs = getDefaultSharedPreferences(applicationContext)
+
     }
 }
