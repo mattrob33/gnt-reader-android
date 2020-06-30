@@ -51,6 +51,10 @@ fun getBookTitle(bookNum: Int): String {
     return AppConstants.bookTitles[bookNum]
 }
 
+fun getBookAbbrv(bookNum: Int): String {
+    return AppConstants.abbrvs[bookNum]
+}
+
 
 
 // UI Utils
