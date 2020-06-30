@@ -155,6 +155,30 @@ class RecentsTest {
                 }
             }
         }
+
+        @Nested
+        @DisplayName("On serialization")
+        inner class Serialization {
+            @Test
+            @DisplayName("cleared & reloaded contents are correct")
+            fun `reloaded contents are correct`() {
+                Recents.clear()
+
+                Recents.add(GntVerseRef(0, 5))
+                Recents.add(GntVerseRef(2, 4))
+                Recents.add(GntVerseRef(5, 5))
+
+                val json = Recents.toJson()
+
+                Recents.clear()
+                Recents.fromJson(json)
+
+                val recents = Recents.getAll()
+                assertEquals(recents[0], GntVerseRef(5, 5))
+                assertEquals(recents[1], GntVerseRef(2, 4))
+                assertEquals(recents[2], GntVerseRef(0, 5))
+            }
+        }
     }
 
     @Nested
@@ -196,9 +220,9 @@ class RecentsTest {
         }
     }
 
-    private fun newRef() = GntVerseRef(
-            Random.nextInt(0, 27),
-            Random.nextInt(0, 10)
-    )
-
 }
+
+private fun newRef() = GntVerseRef(
+        Random.nextInt(0, 27),
+        Random.nextInt(0, 10)
+)
