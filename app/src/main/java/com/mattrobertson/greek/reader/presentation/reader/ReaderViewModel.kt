@@ -17,8 +17,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.mattrobertson.greek.reader.data.DataBaseHelper
+import com.mattrobertson.greek.reader.data.Recents
+import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.model.GntVerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
@@ -38,7 +39,7 @@ class ReaderViewModel(
         private var chapter: Int
 ) : ViewModel() {
 
-    private val prefs = getDefaultSharedPreferences(applicationContext)
+    private val settings = Settings.getInstance(applicationContext)
 
     private val _state = MutableLiveData<ScreenState>()
         val state: LiveData<ScreenState> = _state
@@ -88,6 +89,8 @@ class ReaderViewModel(
             // TODO : log exception
         }
 
+        addToRecents(GntVerseRef(book, chapter))
+
         loadBook(book)
 
         selectedWord.observeForever { word ->
@@ -113,7 +116,7 @@ class ReaderViewModel(
         chapter = ref.chapter
         loadBook(ref.book)
 
-        // TODO : save to recents list
+        addToRecents(GntVerseRef(book, chapter))
     }
 
     private fun loadBook(newBook: Int) {
@@ -365,7 +368,8 @@ class ReaderViewModel(
         db.close()
     }
 
-    fun updateRecentReadingPrefList() {
-
+    private fun addToRecents(ref: GntVerseRef) {
+        Recents.add(ref)
+        settings.saveRecents()
     }
 }
