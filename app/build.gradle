@@ -36,13 +36,14 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = "1.8"
     }
 
     testOptions {
         unitTests.all {
             useJUnitPlatform()
         }
+        unitTests.includeAndroidResources = true
     }
 }
 
@@ -76,12 +77,18 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Testing
-    testImplementation "androidx.test:core:1.2.0" // Robolectric
+    testImplementation "androidx.test:core-ktx:1.2.0"
     testImplementation "org.mockito:mockito-core:3.2.4"
+    testImplementation 'org.robolectric:robolectric:4.3'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.3.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.3.2"
+
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'androidx.test:runner:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
