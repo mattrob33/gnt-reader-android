@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
@@ -36,6 +37,7 @@ class ReaderFragment : Fragment() {
     @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.reader, container, false)
+        setHasOptionsMenu(true)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!viewModel.navigateBack())
@@ -43,6 +45,15 @@ class ReaderFragment : Fragment() {
         }
 
         return root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
+            }
+        }
+        return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
