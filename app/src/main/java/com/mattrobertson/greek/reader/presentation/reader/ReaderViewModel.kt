@@ -17,11 +17,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.mattrobertson.greek.reader.model.GntVerseRef
-import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan
-import com.mattrobertson.greek.reader.objects.DataBaseHelper
-import com.mattrobertson.greek.reader.objects.Word
-import com.mattrobertson.greek.reader.objects.WordSpan
+import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
+import com.mattrobertson.greek.reader.data.DataBaseHelper
+import com.mattrobertson.greek.reader.model.Word
+import com.mattrobertson.greek.reader.presentation.util.WordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.util.AppConstants
@@ -360,5 +361,9 @@ class ReaderViewModel(
 
         db.insertWithOnConflict("vocab", null, values, SQLiteDatabase.CONFLICT_IGNORE)
         db.close()
+    }
+
+    fun updateRecentReadingPrefList() {
+
     }
 }

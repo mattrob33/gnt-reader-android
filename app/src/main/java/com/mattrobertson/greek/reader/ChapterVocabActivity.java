@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.mattrobertson.greek.reader.objects.*;
+import com.mattrobertson.greek.reader.data.DataBaseHelper;
 import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.*;

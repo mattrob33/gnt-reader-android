@@ -9,13 +9,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mattrobertson.greek.reader.objects.DataBaseHelper
-import com.mattrobertson.greek.reader.util.AppConstants
+import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.util.getFileName
 import com.mattrobertson.greek.reader.util.readEntireFileFromAssets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.InputStream
 import java.util.*
 
 class ChapterVocabViewModel(private val applicationContext: Context,

@@ -1,7 +1,7 @@
-package com.mattrobertson.greek.reader.objects;
+package com.mattrobertson.greek.reader.model;
 
 public class Word {
-	private String text,refTag,lex;
+	private String text, refTag, lex;
 	private String parsing;
 	int id;
 

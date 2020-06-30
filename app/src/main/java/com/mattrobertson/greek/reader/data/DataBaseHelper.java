@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.objects;
+package com.mattrobertson.greek.reader.data;
 
 import android.content.*;
 import android.database.*;
