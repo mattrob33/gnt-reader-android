@@ -1,15 +1,12 @@
 package com.mattrobertson.greek.reader.presentation.bookpicker
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -17,8 +14,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.ReaderActivity
 import com.mattrobertson.greek.reader.util.dpToPx
+import com.mattrobertson.greek.reader.util.getBookTitle
 import com.mattrobertson.greek.reader.util.numChaptersInBook
 import kotlinx.android.synthetic.main.chapter_picker.*
 
@@ -27,11 +24,28 @@ class ChapterPickerFragment : Fragment() {
     private val args: ChapterPickerFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.chapter_picker, container, false)
+        val view = inflater.inflate(R.layout.chapter_picker, container, false)
+        setHasOptionsMenu(true)
+        return view
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
+            }
+        }
+        return true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(chapter_picker_toolbar)
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = getBookTitle(args.book)
+        }
 
         val numChapters = numChaptersInBook(args.book)
 
@@ -86,7 +100,7 @@ class ChapterPickerFragment : Fragment() {
             layoutParams = LinearLayout.LayoutParams(sidePx, sidePx)
             gravity = Gravity.CENTER
             background = ResourcesCompat.getDrawable(resources, R.drawable.chapter_button, null)
-            setTextColor(Color.WHITE)
+            setTextColor(ResourcesCompat.getColor(resources, R.color.accentSurfaceTextColor, requireContext().theme))
         }
     }
 

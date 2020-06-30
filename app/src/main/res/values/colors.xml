@@ -6,7 +6,14 @@
 	
 	<item name="primary" type="color">#0D47A1</item>
 	<item name="primary_dark" type="color">@color/primary</item>
-	<item name="accent" type="color">#FFC107</item>
+	<item name="accent" type="color">@color/primary</item>
+
+	<color name="accentSurfaceColor">@color/accent</color>
+	<color name="accentSurfaceTextColor">#FFFFFF</color>
+
+	<color name="recentItemTextColor">@color/accent</color>
+
+	<color name="textColor">#000000</color>
 
 	<color name="bottom_nav_icon_color_selected">@color/primary</color>
 	<color name="bottom_nav_icon_color_not_selected">#777777</color>

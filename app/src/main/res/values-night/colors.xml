@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="accent" type="color">#FFC107</item>
+
+    <color name="accentSurfaceColor">#333333</color>
+    <color name="accentSurfaceTextColor">#EEEEEE</color>
+
+    <color name="recentItemTextColor">@color/accent</color>
+
+    <color name="textColor">#FFFFFF</color>
+
     <color name="bottom_nav_icon_color_selected">@color/accent</color>
     <color name="bottom_nav_icon_color_not_selected">#999999</color>
 </resources>
