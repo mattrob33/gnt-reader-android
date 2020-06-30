@@ -13,8 +13,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mattrobertson.greek.reader.model.GntVerseRef
-import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan
-import com.mattrobertson.greek.reader.objects.DataBaseHelper
+import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
+import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.util.AppConstants

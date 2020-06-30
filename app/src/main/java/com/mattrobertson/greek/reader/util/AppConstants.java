@@ -5,7 +5,8 @@ import android.text.*;
 import android.text.method.*;
 import android.view.*;
 import android.widget.*;
-import com.mattrobertson.greek.reader.objects.*;
+
+import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 
 public class AppConstants
 {

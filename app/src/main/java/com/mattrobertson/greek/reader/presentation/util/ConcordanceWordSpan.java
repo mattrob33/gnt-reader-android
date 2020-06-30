@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.objects;
+package com.mattrobertson.greek.reader.presentation.util;
 
 import android.graphics.*;
 import android.text.*;

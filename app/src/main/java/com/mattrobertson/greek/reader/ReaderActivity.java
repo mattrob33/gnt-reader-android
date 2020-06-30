@@ -41,10 +41,10 @@ import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
 import com.mattrobertson.greek.reader.interfaces.UpdateDialogInterface;
 import com.mattrobertson.greek.reader.interfaces.WordRunnerDialogInterface;
 import com.mattrobertson.greek.reader.objects.AudioPlayer;
-import com.mattrobertson.greek.reader.objects.ConcordanceWordSpan;
-import com.mattrobertson.greek.reader.objects.DataBaseHelper;
-import com.mattrobertson.greek.reader.objects.Word;
-import com.mattrobertson.greek.reader.objects.WordSpan;
+import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan;
+import com.mattrobertson.greek.reader.data.DataBaseHelper;
+import com.mattrobertson.greek.reader.model.Word;
+import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 import com.mattrobertson.greek.reader.ui.SwipeActivity;
 import com.mattrobertson.greek.reader.util.AppConstants;
 

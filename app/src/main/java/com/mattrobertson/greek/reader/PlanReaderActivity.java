@@ -29,9 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
-import com.mattrobertson.greek.reader.objects.DataBaseHelper;
-import com.mattrobertson.greek.reader.objects.Word;
-import com.mattrobertson.greek.reader.objects.WordSpan;
+import com.mattrobertson.greek.reader.data.DataBaseHelper;
+import com.mattrobertson.greek.reader.model.Word;
+import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.InputStream;
