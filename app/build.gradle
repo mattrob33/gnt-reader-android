@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -38,6 +38,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -60,10 +66,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
-    implementation "androidx.navigation:navigation-fragment:2.2.2"
-    implementation "androidx.navigation:navigation-ui:2.2.2"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.2.2"
+    implementation "androidx.navigation:navigation-fragment:2.3.0"
+    implementation "androidx.navigation:navigation-ui:2.3.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.0"
 
     // Other
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
@@ -73,9 +79,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Testing
-    testImplementation "junit:junit:4.12"
     testImplementation "androidx.test:core:1.2.0" // Robolectric
     testImplementation "org.mockito:mockito-core:3.2.4"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.3.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.2"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
