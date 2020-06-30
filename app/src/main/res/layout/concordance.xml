@@ -4,7 +4,6 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-
 	<androidx.appcompat.widget.Toolbar
 		android:id="@+id/concordance_toolbar"
 		android:layout_width="0dp"
@@ -24,7 +23,6 @@
 			/>
 
 	</androidx.appcompat.widget.Toolbar>
-
 
 	<ProgressBar
 		android:id="@+id/concordance_progress_bar"
