@@ -283,8 +283,7 @@ public class ChapterVocabActivity extends Activity
 
         @Override
         protected void onPostExecute(String result) {
-            //progressDialog.dismiss();
-			AsyncGreekTextProcessor aParser = new AsyncGreekTextProcessor();
+            AsyncGreekTextProcessor aParser = new AsyncGreekTextProcessor();
 			aParser.execute();
         }
 
@@ -305,7 +304,15 @@ public class ChapterVocabActivity extends Activity
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            boolean doDismiss;
+        	if (Build.VERSION.SDK_INT >= 17)
+				doDismiss = !ChapterVocabActivity.this.isDestroyed();
+        	else
+				doDismiss = !ChapterVocabActivity.this.isFinishing();
+
+        	if (doDismiss && progressDialog.isShowing())
+        		progressDialog.dismiss();
+
 			renderText();
         }
 
