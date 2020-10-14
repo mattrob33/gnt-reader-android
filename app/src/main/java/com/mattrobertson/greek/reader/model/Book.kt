@@ -1,6 +1,6 @@
 package com.mattrobertson.greek.reader.model
 
-data class Book(val num: Int) {
+data class Book(val num: Int): Comparable<Book> {
 
 	init {
 		require(num in VALID_BOOKS) {
@@ -44,5 +44,15 @@ data class Book(val num: Int) {
 		val THIRD_JOHN = Book(24)
 		val JUDE = Book(25)
 		val REVELATION = Book(26)
+	}
+
+	override fun equals(other: Any?): Boolean {
+		if (other !is Book) return false
+
+		return num == other.num
+	}
+
+	override fun compareTo(other: Book): Int {
+		return num.compareTo(other.num)
 	}
 }

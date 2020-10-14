@@ -48,6 +48,30 @@ class VerseRefTests {
 			VerseRef(Book.MATTHEW, 1, 1)
 			VerseRef(Book.MATTHEW, 28, 20)
 		}
+
+		@Test
+		@DisplayName("compareTo is correct")
+		fun `compareTo works correctly`() {
+			assert(
+				VerseRef(Book.MARK, 1, 1) > VerseRef(Book.MATTHEW, 1, 1)
+			)
+			assert(
+				VerseRef(Book.MATTHEW, 2, 1) > VerseRef(Book.MATTHEW, 1, 1)
+			)
+			assert(
+				VerseRef(Book.MATTHEW, 1, 2) > VerseRef(Book.MATTHEW, 1, 1)
+			)
+
+			assert(
+				VerseRef(Book.MATTHEW, 1, 1) < VerseRef(Book.MARK, 1, 1)
+			)
+			assert(
+				VerseRef(Book.MATTHEW, 1, 1) < VerseRef(Book.MATTHEW, 2, 1)
+			)
+			assert(
+				VerseRef(Book.MATTHEW, 1, 1) < VerseRef(Book.MATTHEW, 1, 2)
+			)
+		}
 	}
 
 }
