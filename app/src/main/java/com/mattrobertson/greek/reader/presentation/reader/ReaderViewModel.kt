@@ -22,7 +22,7 @@ import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.model.GntVerseRef
-import com.mattrobertson.greek.reader.model.Word
+import com.mattrobertson.greek.reader.model.Word_OLD
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
@@ -55,8 +55,8 @@ class ReaderViewModel(
     private val _selectedWordId = MutableLiveData(-1)
         var selectedWordId: LiveData<Int> = _selectedWordId
 
-    private val _selectedWord = MutableLiveData<Word>()
-        var selectedWord: LiveData<Word> = _selectedWord
+    private val _selectedWord = MutableLiveData<Word_OLD>()
+        var selectedWord: LiveData<Word_OLD> = _selectedWord
 
     private val _glossInfo = MutableLiveData<GlossInfo?>()
         var glossInfo: LiveData<GlossInfo?> = _glossInfo
@@ -72,7 +72,7 @@ class ReaderViewModel(
 
     private lateinit var dbHelper: DataBaseHelper
 
-    private var words = ArrayList<Word>()
+    private var words = ArrayList<Word_OLD>()
     private var wordSpans = ArrayList<WordSpan>()
 
     private var showVerseNumbers = false
@@ -163,7 +163,7 @@ class ReaderViewModel(
         var l: String
         var p: String
         var str: String
-        var word: Word
+        var word: Word_OLD
 
         var totalLength = 0
         var lastVerse = 0
@@ -185,7 +185,7 @@ class ReaderViewModel(
             val curVerse = r.substring(4).toInt()
             if (curChap < chapter) continue
             if (curChap > chapter) break
-            word = Word(words.size, x, r, l, p)
+            word = Word_OLD(words.size, x, r, l, p)
             index = words.size
             words.add(word)
             val isUppercase = word.toString().substring(0, 1).toUpperCase() == word.toString().substring(0, 1)
@@ -245,7 +245,7 @@ class ReaderViewModel(
         _selectedWord.value = words[id]
     }
 
-    private fun showGloss(word: Word) {
+    private fun showGloss(word: Word_OLD) {
         val glossInfo = lookupGloss(word)
         _glossInfo.value = glossInfo
         glossInfo?.let {
@@ -253,7 +253,7 @@ class ReaderViewModel(
         }
     }
 
-    private fun lookupGloss(word: Word): GlossInfo? {
+    private fun lookupGloss(word: Word_OLD): GlossInfo? {
         val lex = word.lex
         val parsing = word.parsing
 
@@ -288,11 +288,11 @@ class ReaderViewModel(
         return glossInfo
     }
 
-    private fun showConcordance(word: Word) {
+    private fun showConcordance(word: Word_OLD) {
         _concordanceInfo.value = lookupConcordance(word)
     }
 
-    private fun lookupConcordance(word: Word): SpannableStringBuilder? {
+    private fun lookupConcordance(word: Word_OLD): SpannableStringBuilder? {
         val lex = word.lex
 
         if (lex.isBlank()) return null

@@ -1,11 +1,15 @@
 package com.mattrobertson.greek.reader.model;
 
-public class Word {
+/**
+ * @deprecated use {@link Word} instead
+ */
+@Deprecated
+public class Word_OLD {
 	private String text, refTag, lex;
 	private String parsing;
 	int id;
 
-	public Word(int id, String x, String r, String l, String p) {
+	public Word_OLD(int id, String x, String r, String l, String p) {
 		this.id = id;
 		text = x;
 		refTag = r;
