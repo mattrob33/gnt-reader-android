@@ -13,11 +13,11 @@ class BookTests {
 		@Test
 		fun `Invalid book num throws exception`() {
 			assertThrows<IllegalArgumentException> {
-				Book.fromBookNum(-1)
+				Book(-1)
 			}
 
 			assertThrows<IllegalArgumentException> {
-				Book.fromBookNum(27)
+				Book(27)
 			}
 		}
 	}
@@ -28,37 +28,37 @@ class BookTests {
 		@DisplayName("exception is not thrown")
 		@Test
 		fun `Valid book num does not throw exception`() {
-			val matthew = Book.fromBookNum(0)
-			val revelation = Book.fromBookNum(26)
+			val matthew = Book(0)
+			val revelation = Book(26)
 		}
 
 		@DisplayName("book num property is correct")
 		@Test
 		fun `book num is correct`() {
-			val matthew = Book.fromBookNum(0)
+			val matthew = Book(0)
 			assertEquals(0, matthew.num)
 
-			val revelation = Book.fromBookNum(26)
+			val revelation = Book(26)
 			assertEquals(26, revelation.num)
 		}
 
 		@DisplayName("abbrv is correct")
 		@Test
 		fun `book abbrv is correct`() {
-			val matthew = Book.fromBookNum(0)
+			val matthew = Book(0)
 			assertEquals("Matt", matthew.abbrv)
 
-			val revelation = Book.fromBookNum(26)
+			val revelation = Book(26)
 			assertEquals("Rev", revelation.abbrv)
 		}
 
 		@DisplayName("title is correct")
 		@Test
 		fun `book title is correct`() {
-			val matthew = Book.fromBookNum(0)
+			val matthew = Book(0)
 			assertEquals("Matthew", matthew.title)
 
-			val revelation = Book.fromBookNum(26)
+			val revelation = Book(26)
 			assertEquals("Revelation", revelation.title)
 		}
 	}
