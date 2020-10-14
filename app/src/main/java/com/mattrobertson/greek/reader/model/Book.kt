@@ -1,6 +1,6 @@
 package com.mattrobertson.greek.reader.model
 
-class Book(val num: Int) {
+data class Book(val num: Int) {
 
 	init {
 		require(num in VALID_BOOKS) {
