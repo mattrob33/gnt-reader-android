@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
 import com.mattrobertson.greek.reader.data.DataBaseHelper;
-import com.mattrobertson.greek.reader.model.Word;
+import com.mattrobertson.greek.reader.model.Word_OLD;
 import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 import com.mattrobertson.greek.reader.util.AppConstants;
 
@@ -51,7 +51,7 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 
 	String strRawGreekText = "", defWord ="";
 
-	ArrayList<Word> words;
+	ArrayList<Word_OLD> words;
 	ArrayList<WordSpan> wordSpans;
 
 	int selectedWordId = -1;
@@ -378,12 +378,12 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 
 		String[] arrLine;
 
-		words = new ArrayList<Word>();
+		words = new ArrayList<Word_OLD>();
 		wordSpans = new ArrayList<WordSpan>();
 
 		String x,r,l,p;
 		String str = "";
-		Word word;
+		Word_OLD word;
 
 		int totalLength = 0, lastVerse = 0;
 
@@ -412,7 +412,7 @@ public class PlanReaderActivity extends Activity implements GreekTextProcessorIn
 			if (curChap > chapter)
 				break;
 
-			word = new Word(words.size(),x,r,l,p);
+			word = new Word_OLD(words.size(),x,r,l,p);
 
 			index = words.size();
 

@@ -43,7 +43,7 @@ import com.mattrobertson.greek.reader.interfaces.WordRunnerDialogInterface;
 import com.mattrobertson.greek.reader.objects.AudioPlayer;
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan;
 import com.mattrobertson.greek.reader.data.DataBaseHelper;
-import com.mattrobertson.greek.reader.model.Word;
+import com.mattrobertson.greek.reader.model.Word_OLD;
 import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 import com.mattrobertson.greek.reader.ui.SwipeActivity;
 import com.mattrobertson.greek.reader.util.AppConstants;
@@ -70,7 +70,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 	String strRawGreekText = "";
 
-	ArrayList<Word> words;
+	ArrayList<Word_OLD> words;
 	ArrayList<WordSpan> wordSpans;
 	
 	int selectedWordId = -1;
@@ -490,7 +490,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 		String x,r,l,p;
 		String str;
-		Word word;
+		Word_OLD word;
 
 		int totalLength = 0, lastVerse = 0;
 
@@ -519,7 +519,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			if (curChap > chapter)
 				break;
 
-			word = new Word(words.size(), x, r, l, p);
+			word = new Word_OLD(words.size(), x, r, l, p);
 
 			index = words.size();
 
