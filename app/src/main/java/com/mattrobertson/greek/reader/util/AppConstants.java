@@ -43,8 +43,7 @@ public class AppConstants
 	public static final String[] fNames = {"matt","mark","luke","john","acts","rom","1cor","2cor","gal","eph","phil","col","1thes","2thes","1tim","2tim","tit","phlm","heb","jas","1pet","2pet","1jn","2jn","3jn","jude","rev"};
 
 	public static final String[] abbrvs = {"Matt","Mark","Luke","John","Acts","Rom","1 Cor","2 Cor","Gal","Eph","Phil","Col","1 Thess","2 Thess","1 Tim","2 Tim","Titus","Phlm","Heb","James","1 Pet","2 Pet","1 John","2 John","3 John","Jude","Rev"};
-	
-	
+
 	public static final String[] bookTitles = {"Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"};
 	
 	public static final String[] expertLevels = {"Beginner","Novice","Intermediate","Advanced","Expert","Mastery"};
