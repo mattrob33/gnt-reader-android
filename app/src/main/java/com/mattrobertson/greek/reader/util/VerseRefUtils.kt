@@ -2,6 +2,7 @@ package com.mattrobertson.greek.reader.util
 
 import android.content.Context
 import android.util.DisplayMetrics
+import com.mattrobertson.greek.reader.model.Book
 import kotlin.math.round
 
 
@@ -39,12 +40,17 @@ fun isSingleChapterBook(book: Int): Boolean {
     return numChaptersInBook(book) == 1
 }
 
+fun numChaptersInBook(book: Book): Int {
+    return verses[book.num].size
+}
+
 fun numChaptersInBook(book: Int): Int {
     return verses[book].size
 }
 
-fun numVersesInChapter(book: Int, chapter: Int): Int {
-    return verses[book][chapter]
+fun numVersesInChapter(book: Book, chapter: Int): Int {
+    if (chapter > verses[book.num].size) throw IllegalArgumentException("${book.title} does not have $chapter chapters")
+    return verses[book.num][chapter - 1]
 }
 
 fun getBookTitle(bookNum: Int): String {
