@@ -121,7 +121,7 @@ class ReaderFragment : Fragment() {
                 tvDef.text = defEntry
                 tvLex.text = glossInfo.lex
 
-                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 
