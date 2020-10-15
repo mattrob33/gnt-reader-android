@@ -14,9 +14,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.model.GntVerseRef
+import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.data.DataBaseHelper
+import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.util.AppConstants
@@ -47,7 +48,7 @@ class ConcordanceViewModel (private val applicationContext: Context) : ViewModel
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
         val concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
 
-    var verseRefSelected = SingleLiveEvent<GntVerseRef?>()
+    var verseRefSelected = SingleLiveEvent<VerseRef?>()
         private set
 
     private lateinit var dbHelper: DataBaseHelper
@@ -121,7 +122,7 @@ class ConcordanceViewModel (private val applicationContext: Context) : ViewModel
             sb.append(strLine)
             span = object : ConcordanceWordSpan(book, chapter, verse, linkColor) {
                 override fun onClick(v: View) {
-                    verseRefSelected.value = GntVerseRef(book, chapter, verse)
+                    verseRefSelected.value = VerseRef(Book(book), chapter, verse)
                 }
             }
 

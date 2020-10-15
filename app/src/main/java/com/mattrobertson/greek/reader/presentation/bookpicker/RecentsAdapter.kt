@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.Recents
-import com.mattrobertson.greek.reader.model.GntVerseRef
+import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.util.getBookAbbrv
 
 class RecentsAdapter constructor(
@@ -39,7 +39,7 @@ class RecentsAdapter constructor(
     }
 
     interface OnRecentSelectedListener {
-        fun onRecentItemSelected(ref: GntVerseRef)
+        fun onRecentItemSelected(ref: VerseRef)
     }
 
 }

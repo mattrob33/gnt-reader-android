@@ -36,16 +36,12 @@ val verses = arrayOf(
         intArrayOf(20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 17, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21)
 )
 
-fun isSingleChapterBook(book: Int): Boolean {
+fun isSingleChapterBook(book: Book): Boolean {
     return numChaptersInBook(book) == 1
 }
 
 fun numChaptersInBook(book: Book): Int {
     return verses[book.num].size
-}
-
-fun numChaptersInBook(book: Int): Int {
-    return verses[book].size
 }
 
 fun numVersesInChapter(book: Book, chapter: Int): Int {
@@ -57,12 +53,8 @@ fun getBookTitle(book: Book): String {
     return AppConstants.bookTitles[book.num]
 }
 
-fun getBookTitle(bookNum: Int): String {
-    return AppConstants.bookTitles[bookNum]
-}
-
-fun getBookAbbrv(bookNum: Int): String {
-    return AppConstants.abbrvs[bookNum]
+fun getBookAbbrv(book: Book): String {
+    return AppConstants.abbrvs[book.num]
 }
 
 

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.android.synthetic.main.vocab_list_fragment.*
@@ -57,7 +58,7 @@ class VocabListFragment: Fragment() {
             val tvItem = view.findViewById<View>(R.id.tvVocabItem) as TextView
             val book = cursor.getInt(cursor.getColumnIndexOrThrow("book"))
             val chapter = cursor.getInt(cursor.getColumnIndexOrThrow("chapter"))
-            val chapterText = "${getBookTitle(book)} $chapter"
+            val chapterText = "${getBookTitle(Book(book))} $chapter"
             tvItem.text = chapterText
         }
     }

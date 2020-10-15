@@ -20,7 +20,10 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
-import com.mattrobertson.greek.reader.model.*
+import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.model.GlossInfo
+import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
@@ -61,7 +64,7 @@ class ReaderViewModel(
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
     var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
 
-    var concordanceItemSelected = SingleLiveEvent<GntVerseRef?>()
+    var concordanceItemSelected = SingleLiveEvent<VerseRef?>()
         private set
 
     var showConcordanceScreenForLex = SingleLiveEvent<String>()
@@ -79,7 +82,7 @@ class ReaderViewModel(
     private val greekFont = Typeface.createFromAsset(applicationContext.assets, "fonts/sblgreek.ttf")
     private var fontSize = 0
 
-    private val refBackstack = arrayListOf<GntVerseRef>()
+    private val refBackstack = arrayListOf<VerseRef>()
 
     init {
         try {
@@ -88,7 +91,7 @@ class ReaderViewModel(
             // TODO : log exception
         }
 
-        addToRecents(GntVerseRef(book.num, chapter))
+        addToRecents(VerseRef(book, chapter))
 
         loadChapter(book, chapter)
 
@@ -105,7 +108,7 @@ class ReaderViewModel(
         }
         else {
             val toRef = refBackstack.removeLast()
-            goTo(VerseRef(Book(toRef.book), toRef.chapter, toRef.verse))
+            goTo(VerseRef(toRef.book, toRef.chapter, toRef.verse))
             true
         }
     }
@@ -116,7 +119,7 @@ class ReaderViewModel(
 
         loadChapter(ref.book, ref.chapter)
 
-        addToRecents(GntVerseRef(book.num, chapter))
+        addToRecents(VerseRef(book, chapter))
     }
 
     private fun loadChapter(newBook: Book, chapter: Int) {
@@ -307,7 +310,7 @@ class ReaderViewModel(
 
             span = object : ConcordanceWordSpan(book, chapter, verse, linkColor) {
                 override fun onClick(v: View) {
-                    refBackstack.add(GntVerseRef(this@ReaderViewModel.book.num, this@ReaderViewModel.chapter, 0))
+                    refBackstack.add(VerseRef(this@ReaderViewModel.book, this@ReaderViewModel.chapter))
                     goTo(VerseRef(Book(book), chapter, verse))
                 }
             }
@@ -359,7 +362,7 @@ class ReaderViewModel(
         db.close()
     }
 
-    private fun addToRecents(ref: GntVerseRef) {
+    private fun addToRecents(ref: VerseRef) {
         Recents.add(ref)
         settings.saveRecents()
     }

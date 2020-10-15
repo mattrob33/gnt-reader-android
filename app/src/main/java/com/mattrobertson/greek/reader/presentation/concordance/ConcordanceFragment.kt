@@ -90,7 +90,7 @@ class ConcordanceFragment : Fragment() {
         viewModel.verseRefSelected.observe(viewLifecycleOwner) {
             it?.let {  ref ->
                 requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        CoreNavigationDirections.toReader(ref.book, ref.chapter)
+                        CoreNavigationDirections.toReader(ref.book.num, ref.chapter)
                 )
             }
         }
