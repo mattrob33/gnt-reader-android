@@ -21,6 +21,7 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
+import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.GntVerseRef
 import com.mattrobertson.greek.reader.model.Word_OLD
@@ -28,6 +29,7 @@ import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.presentation.util.WordSpan
+import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getBookTitle
 import com.mattrobertson.greek.reader.util.getFileName
@@ -38,6 +40,7 @@ import java.util.*
 
 class ReaderViewModel(
         private val applicationContext: Context,
+        private val verseRepo: VerseRepo,
         private var book: Int,
         private var chapter: Int
 ) : ViewModel() {
@@ -94,7 +97,9 @@ class ReaderViewModel(
 
         addToRecents(GntVerseRef(book, chapter))
 
-        loadBook(book)
+        loadChapter(book, chapter)
+
+//        loadBook(book)
 
         selectedWord.observeForever { word ->
             showGloss(word)
@@ -120,6 +125,34 @@ class ReaderViewModel(
         loadBook(ref.book)
 
         addToRecents(GntVerseRef(book, chapter))
+    }
+
+    private fun loadChapter(newBook: Int, chapter: Int) {
+        _state.value = ScreenState.LOADING
+
+        book = newBook
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val verses = verseRepo.getVersesForChapter(Book(book), chapter)
+
+            val text = SpannableStringBuilder()
+
+            verses.forEach { verse ->
+                text.append(verse.text).append(" ")
+            }
+
+            text.trimEnd()
+
+            viewModelScope.launch(Dispatchers.Main) {
+                _state.value = ScreenState.READY
+                _spannedText.value = text
+            }
+        }
+
+        _title.value = getBookTitle(book) + " " + chapter
+
+//        audio.stop()
+//        refreshAudioUI()
     }
 
     private fun loadBook(newBook: Int) {
