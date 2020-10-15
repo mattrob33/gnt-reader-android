@@ -53,6 +53,10 @@ fun numVersesInChapter(book: Book, chapter: Int): Int {
     return verses[book.num][chapter - 1]
 }
 
+fun getBookTitle(book: Book): String {
+    return AppConstants.bookTitles[book.num]
+}
+
 fun getBookTitle(bookNum: Int): String {
     return AppConstants.bookTitles[bookNum]
 }
