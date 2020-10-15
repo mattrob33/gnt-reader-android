@@ -11,12 +11,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.presentation.reader.ConcordanceFragmentArgs
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import kotlinx.android.synthetic.main.concordance.*
 
 class ConcordanceFragment : Fragment() {
-
 
     private val args: ConcordanceFragmentArgs by navArgs()
 
