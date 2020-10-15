@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.VerseDatabase
+import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.AppConstants
@@ -31,7 +32,7 @@ class ReaderFragment : Fragment() {
     }
 
     private val viewModelFactory: ReaderViewModelFactory by lazy {
-        ReaderViewModelFactory(requireContext().applicationContext, verseRepo, args.book, args.chapter)
+        ReaderViewModelFactory(requireContext().applicationContext, verseRepo, Book(args.book), args.chapter)
     }
 
     private val viewModel: ReaderViewModel by lazy {
