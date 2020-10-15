@@ -1,7 +1,6 @@
 package com.mattrobertson.greek.reader.presentation.bookpicker
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.view.*
@@ -14,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.util.dpToPx
 import com.mattrobertson.greek.reader.util.getBookTitle
 import com.mattrobertson.greek.reader.util.numChaptersInBook
@@ -44,10 +44,10 @@ class ChapterPickerFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(chapter_picker_toolbar)
         (activity as AppCompatActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            title = getBookTitle(args.book)
+            title = getBookTitle(Book(args.book))
         }
 
-        val numChapters = numChaptersInBook(args.book)
+        val numChapters = numChaptersInBook(Book(args.book))
 
         val display = requireActivity().windowManager.defaultDisplay
         val size = Point()

@@ -1,22 +1,19 @@
 package com.mattrobertson.greek.reader.data
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.mattrobertson.greek.reader.model.GntVerseRef
-import java.lang.reflect.Type
-import java.util.*
+import com.mattrobertson.greek.reader.model.VerseRef
 
 object Recents {
 
     private const val MAX_SIZE = 30
 
-    private var mList = mutableListOf<GntVerseRef>()
+    private var mList = mutableListOf<VerseRef>()
 
     var size = 0
         private set
         get() = synchronized(this) { mList.size }
 
-    fun add(ref: GntVerseRef) {
+    fun add(ref: VerseRef) {
         synchronized(this) {
             mList.removeAll { it == ref }
             mList.add(0, ref)
@@ -25,7 +22,7 @@ object Recents {
         }
     }
 
-    fun remove(ref: GntVerseRef) {
+    fun remove(ref: VerseRef) {
         synchronized(this) {
             mList.removeAll { it == ref }
         }
@@ -44,7 +41,7 @@ object Recents {
 
     fun get(index: Int) = synchronized(this) { mList[index] }
 
-    fun getAll() = synchronized(this) { mList as List<GntVerseRef> }
+    fun getAll() = synchronized(this) { mList as List<VerseRef> }
 
     fun clear() = synchronized(this) { mList.clear() }
 
@@ -53,6 +50,6 @@ object Recents {
     }
 
     fun fromJson(json: String) {
-        mList = Gson().fromJson(json, Array<GntVerseRef>::class.java)?.toMutableList() ?: mutableListOf()
+        mList = Gson().fromJson(json, Array<VerseRef>::class.java)?.toMutableList() ?: mutableListOf()
     }
 }

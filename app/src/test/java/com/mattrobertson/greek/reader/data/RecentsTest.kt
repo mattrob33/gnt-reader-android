@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.data
 
-import com.mattrobertson.greek.reader.model.GntVerseRef
+import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.model.VerseRef
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -38,9 +39,9 @@ class RecentsTest {
         fun `size is correct`() {
             Recents.clear()
 
-            Recents.add(GntVerseRef(0, 5))
-            Recents.add(GntVerseRef(2, 4))
-            Recents.add(GntVerseRef(5, 5))
+            Recents.add(VerseRef(Book(0), 5))
+            Recents.add(VerseRef(Book(2), 4))
+            Recents.add(VerseRef(Book(5), 5))
 
             assertEquals(Recents.size, 3)
         }
@@ -50,14 +51,14 @@ class RecentsTest {
         fun `getAll is correct`() {
             Recents.clear()
 
-            Recents.add(GntVerseRef(0, 5))
-            Recents.add(GntVerseRef(2, 4))
-            Recents.add(GntVerseRef(5, 5))
+            Recents.add(VerseRef(Book(0), 5))
+            Recents.add(VerseRef(Book(2), 4))
+            Recents.add(VerseRef(Book(5), 5))
 
             val recents = Recents.getAll()
-            assertEquals(recents[0], GntVerseRef(5, 5))
-            assertEquals(recents[1], GntVerseRef(2, 4))
-            assertEquals(recents[2], GntVerseRef(0, 5))
+            assertEquals(recents[0], VerseRef(Book(5), 5))
+            assertEquals(recents[1], VerseRef(Book(2), 4))
+            assertEquals(recents[2], VerseRef(Book(0), 5))
         }
 
         @Nested
@@ -68,15 +69,15 @@ class RecentsTest {
             fun `remove leaves correct items`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
-                Recents.remove(GntVerseRef(2, 4))
+                Recents.remove(VerseRef(Book(2), 4))
 
                 val recents = Recents.getAll()
-                assertEquals(recents[0], GntVerseRef(5, 5))
-                assertEquals(recents[1], GntVerseRef(0, 5))
+                assertEquals(recents[0], VerseRef(Book(5), 5))
+                assertEquals(recents[1], VerseRef(Book(0), 5))
             }
 
             @Test
@@ -84,11 +85,11 @@ class RecentsTest {
             fun `remove leaves correct size`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
-                Recents.remove(GntVerseRef(2, 4))
+                Recents.remove(VerseRef(Book(2), 4))
 
                 assertEquals(Recents.size, 2)
             }
@@ -98,11 +99,11 @@ class RecentsTest {
             fun `invalid remove leaves correct size`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
-                Recents.remove(GntVerseRef(28, 40))
+                Recents.remove(VerseRef(Book(1), 1))
 
                 assertEquals(Recents.size, 3)
             }
@@ -116,15 +117,15 @@ class RecentsTest {
             fun `removeAt leaves correct items`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
                 Recents.removeAt(1)
 
                 val recents = Recents.getAll()
-                assertEquals(recents[0], GntVerseRef(5, 5))
-                assertEquals(recents[1], GntVerseRef(0, 5))
+                assertEquals(recents[0], VerseRef(Book(5), 5))
+                assertEquals(recents[1], VerseRef(Book(0), 5))
             }
 
             @Test
@@ -132,9 +133,9 @@ class RecentsTest {
             fun `removeAt leaves correct size`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
                 Recents.removeAt(2)
 
@@ -146,9 +147,9 @@ class RecentsTest {
             fun `illegal index throws exception`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
                 assertThrows<IndexOutOfBoundsException> {
                     Recents.removeAt(28)
@@ -164,9 +165,9 @@ class RecentsTest {
             fun `reloaded contents are correct`() {
                 Recents.clear()
 
-                Recents.add(GntVerseRef(0, 5))
-                Recents.add(GntVerseRef(2, 4))
-                Recents.add(GntVerseRef(5, 5))
+                Recents.add(VerseRef(Book(0), 5))
+                Recents.add(VerseRef(Book(2), 4))
+                Recents.add(VerseRef(Book(5), 5))
 
                 val json = Recents.toJson()
 
@@ -174,9 +175,9 @@ class RecentsTest {
                 Recents.fromJson(json)
 
                 val recents = Recents.getAll()
-                assertEquals(recents[0], GntVerseRef(5, 5))
-                assertEquals(recents[1], GntVerseRef(2, 4))
-                assertEquals(recents[2], GntVerseRef(0, 5))
+                assertEquals(recents[0], VerseRef(Book(5), 5))
+                assertEquals(recents[1], VerseRef(Book(2), 4))
+                assertEquals(recents[2], VerseRef(Book(0), 5))
             }
         }
     }
@@ -189,16 +190,16 @@ class RecentsTest {
         fun `size is correct`() {
             Recents.clear()
 
-            Recents.add(GntVerseRef(0, 5))
-            Recents.add(GntVerseRef(2, 4))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(2, 4))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(5, 5))
+            Recents.add(VerseRef(Book(0), 5))
+            Recents.add(VerseRef(Book(2), 4))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(2), 4))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(5), 5))
 
             assertEquals(Recents.size, 3)
         }
@@ -208,21 +209,21 @@ class RecentsTest {
         fun `getAll is correct`() {
             Recents.clear()
 
-            Recents.add(GntVerseRef(0, 5))
-            Recents.add(GntVerseRef(2, 4))
-            Recents.add(GntVerseRef(5, 5))
-            Recents.add(GntVerseRef(2, 4))
+            Recents.add(VerseRef(Book(0), 5))
+            Recents.add(VerseRef(Book(2), 4))
+            Recents.add(VerseRef(Book(5), 5))
+            Recents.add(VerseRef(Book(2), 4))
 
             val recents = Recents.getAll()
-            assertEquals(recents[0], GntVerseRef(2, 4))
-            assertEquals(recents[1], GntVerseRef(5, 5))
-            assertEquals(recents[2], GntVerseRef(0, 5))
+            assertEquals(recents[0], VerseRef(Book(2), 4))
+            assertEquals(recents[1], VerseRef(Book(5), 5))
+            assertEquals(recents[2], VerseRef(Book(0), 5))
         }
     }
 
-    private fun newRef() = GntVerseRef(
-            Random.nextInt(0, 27),
-            Random.nextInt(0, 10)
+    private fun newRef() = VerseRef(
+            Book(Random.nextInt(0, 27)),
+            Random.nextInt(1, 2)
     )
 
 }

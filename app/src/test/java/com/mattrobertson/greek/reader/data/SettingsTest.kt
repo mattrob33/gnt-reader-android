@@ -3,7 +3,8 @@ package com.mattrobertson.greek.reader.data
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.mattrobertson.greek.reader.SblGntApplication
-import com.mattrobertson.greek.reader.model.GntVerseRef
+import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.model.VerseRef
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,10 +25,10 @@ class SettingsTest {
 
     @Test
     fun `Recents saves & loads correctly`() {
-        Recents.add(GntVerseRef(0, 5))
-        Recents.add(GntVerseRef(1, 5))
-        Recents.add(GntVerseRef(2, 5))
-        Recents.add(GntVerseRef(3, 5))
+        Recents.add(VerseRef(Book(0), 5))
+        Recents.add(VerseRef(Book(1), 5))
+        Recents.add(VerseRef(Book(2), 5))
+        Recents.add(VerseRef(Book(3), 5))
 
         assertEquals(Recents.size, 4)
 
@@ -39,6 +40,6 @@ class SettingsTest {
         settings.loadRecents()
 
         assertEquals(Recents.size, 4)
-        assertEquals(Recents.getAll()[3], GntVerseRef(0, 5))
+        assertEquals(Recents.getAll()[3], VerseRef(Book(0), 5))
     }
 }

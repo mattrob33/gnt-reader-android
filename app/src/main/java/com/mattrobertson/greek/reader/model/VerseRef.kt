@@ -6,8 +6,13 @@ import com.mattrobertson.greek.reader.util.numVersesInChapter
 data class VerseRef (
 	val book: Book,
 	val chapter: Int,
-	val verse: Int
+	val verse: Int = NO_VERSE
 ) : Comparable<VerseRef> {
+
+	companion object {
+		const val NO_VERSE = -1
+	}
+
 	/**
 	 * Validates inputs. Note that Book is self-validating and is thus not validated here.
  	 */
@@ -20,7 +25,7 @@ data class VerseRef (
 			"${book.title} does not have $chapter chapters"
 		}
 
-		require(verse >= 1) {
+		require(verse >= 1 || verse == NO_VERSE) {
 			"Verse reference number cannot be less than 1"
 		}
 
