@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation.reader
+package com.mattrobertson.greek.reader.presentation.concordance
 
 import android.content.Context
 import android.database.Cursor

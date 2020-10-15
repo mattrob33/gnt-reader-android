@@ -117,7 +117,7 @@
     <!-- Concordance -->
     <fragment
         android:id="@+id/navigation_concordance"
-        android:name="com.mattrobertson.greek.reader.presentation.reader.ConcordanceFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.concordance.ConcordanceFragment"
         tools:layout="@layout/concordance">
 
         <argument
