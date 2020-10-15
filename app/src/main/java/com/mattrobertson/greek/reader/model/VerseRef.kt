@@ -10,7 +10,7 @@ data class VerseRef (
 ) : Comparable<VerseRef> {
 
 	companion object {
-		const val NO_VERSE = -1
+		const val NO_VERSE = 0
 	}
 
 	/**
@@ -23,10 +23,6 @@ data class VerseRef (
 
 		require(chapter <= numChaptersInBook(book)) {
 			"${book.title} does not have $chapter chapters"
-		}
-
-		require(verse >= 1 || verse == NO_VERSE) {
-			"Verse reference number cannot be less than 1"
 		}
 
 		require(verse <= numVersesInChapter(book, chapter)) {

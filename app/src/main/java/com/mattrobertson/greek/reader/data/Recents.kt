@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.data
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.mattrobertson.greek.reader.model.VerseRef
 
 object Recents {
@@ -50,6 +51,10 @@ object Recents {
     }
 
     fun fromJson(json: String) {
-        mList = Gson().fromJson(json, Array<VerseRef>::class.java)?.toMutableList() ?: mutableListOf()
+        mList = try {
+            Gson().fromJson(json, Array<VerseRef>::class.java)?.toMutableList() ?: mutableListOf()
+        } catch (e: JsonSyntaxException) {
+            mutableListOf()
+        }
     }
 }
