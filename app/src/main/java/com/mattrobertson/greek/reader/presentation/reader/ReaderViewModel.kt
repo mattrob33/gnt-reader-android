@@ -21,6 +21,7 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
+import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.GntVerseRef
 import com.mattrobertson.greek.reader.model.Word_OLD
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
@@ -281,7 +282,7 @@ class ReaderViewModel(
             val def = c.getString(c.getColumnIndex("def"))
             val gloss = c.getString(c.getColumnIndex("gloss"))
             val strDef = gloss ?: def
-            glossInfo = GlossInfo(lex = lex, gloss=strDef, parsing = parsing, frequency = freq)
+            glossInfo = GlossInfo(lex = lex, gloss = strDef, parsing = parsing, frequency = freq)
         }
         c.close()
 
