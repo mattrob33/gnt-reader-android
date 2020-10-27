@@ -95,7 +95,7 @@ class ChapterPickerFragment : Fragment() {
         )
     }
 
-    internal inner class ChapterButton(c: Context?, sidePx: Int) : AppCompatButton(c) {
+    internal inner class ChapterButton(c: Context, sidePx: Int) : AppCompatButton(c) {
         init {
             layoutParams = LinearLayout.LayoutParams(sidePx, sidePx)
             gravity = Gravity.CENTER

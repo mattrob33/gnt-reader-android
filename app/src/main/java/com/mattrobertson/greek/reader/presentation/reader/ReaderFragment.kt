@@ -1,5 +1,6 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
@@ -12,9 +13,10 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.VerseDatabase
@@ -76,12 +78,30 @@ class ReaderFragment : Fragment() {
             javaScriptEnabled = true
         }
 
+        val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isNightMode = when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> true
+            else -> false
+        }
+
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            if (isNightMode) {
+                WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_ON)
+            }
+            else {
+                WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_OFF)
+            }
+        }
+
         webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
 
         webview_reader.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_1\");"
-                webview_reader.loadUrl(anchorScroll)
+                if (!viewModel.hasScrolled) {
+                    viewModel.hasScrolled = true
+                    val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_1\");"
+                    webview_reader.loadUrl(anchorScroll)
+                }
             }
         }
 
@@ -113,49 +133,8 @@ class ReaderFragment : Fragment() {
         }
 
         viewModel.html.observe(viewLifecycleOwner) { html ->
-
-            val docStart = """
-                        <html>
-                            <head>
-                                <style type="text/css">
-                                    @font-face {
-                                        font-family: SblGreek;
-                                        src: url("file:///android_asset/fonts/sblgreek.ttf")
-                                    }
-                                    body {
-                                        font-family: SblGreek;
-                                        font-size: large;
-                                        line-height: 180%;
-                                    }
-                                    p {
-                                        margin: 0;
-                                        padding: 0;
-                                    }
-                                    .selectedWord {
-                                        font-weight: bold;
-                                    }
-                                </style>
-                            </head>
-                            <body>
-                                <script type="text/javascript">
-    
-                                    function scrollToAnchor(id) {
-                                        window.location.hash = id;
-                                    }
-    
-                                    function onWordClick(id, text, lexicalForm, codedParsing) {
-                                        var selectedWords = document.getElementsByClassName('selectedWord');
-                                        if (selectedWords.length > 0)
-                                            selectedWords[0].removeAttribute('class');
-                                        document.getElementById(id).setAttribute('class', 'selectedWord');
-                                        ReaderApp.onWordClick(text, lexicalForm, codedParsing);
-                                    }
-    
-                                </script>
-                            """
-
+            val docStart = "<html>$readerHtmlHead<body>"
             val docEnd = "</body></html>"
-
             val styledHtml = docStart + html + docEnd
 
             webview_reader.loadDataWithBaseURL(null, styledHtml, "text/html", "utf-8", null)

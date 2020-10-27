@@ -21,6 +21,7 @@ import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
+import com.mattrobertson.greek.reader.objects.HtmlBuilder
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
@@ -113,7 +114,7 @@ class ReaderViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val verses = verseRepo.getVersesForBook(book)
 
-            val htmlBuilder = StringBuilder()
+            val htmlBuilder = HtmlBuilder()
 
             var wordIndex = 0
             var lastVerseNum = 0
@@ -129,11 +130,9 @@ class ReaderViewModel(
 
                 if (chapterNum != lastChapterNum) {
                     if (chapterNum > 1)
-                        htmlBuilder.append("</p><br>")
+                        htmlBuilder.endChapter()
 
-                    htmlBuilder
-                        .append("<p style=\"text-indent: 3px;\">")
-                        .append("<span style=\"font-size: x-large; font-weight: bold; outline-style: double;\"><a name=\"${verse.verseRef.book.num}_${verse.verseRef.chapter}_${verse.verseRef.verse}\">&nbsp;$chapterNum&nbsp;</a></span>&nbsp;&nbsp;")
+                    htmlBuilder.newChapter(verse.verseRef)
                 }
 
                 lastChapterNum = chapterNum
@@ -144,31 +143,31 @@ class ReaderViewModel(
 
                     // Paragraph divisions
                     if (isUppercase && prevWasEndOfSentence && verseNum > 1) {
-                        htmlBuilder.append("<p style=\"text-indent: 1em;\">")
+                        htmlBuilder.newParagraph(indent = true)
                     }
 
                     prevWasEndOfSentence = word.text.last() == '.'
 
                      // Verse numbers
                     if (verseNum != lastVerseNum) {
-//                        if (showVersesNewLines) {
-//                            if (verseNum > 1)
-//                                htmlBuilder.append("</p>")
-//                            htmlBuilder.append("<p>")
-//                        }
+                        if (showVersesNewLines) {
+                            if (verseNum > 1)
+                                htmlBuilder.endParagraph()
+                            htmlBuilder.newParagraph(indent = false)
+                        }
                         if (showVerseNumbers) {
-                            htmlBuilder.append("<sup style=\"font-size:0.65em;\">$verseNum</sup>")
+                            htmlBuilder.appendVerseNum(verseNum)
                         }
                         lastVerseNum = verseNum
                     }
 
-                    htmlBuilder.append("<span id=\"$wordIndex\" onClick=\"onWordClick(this.id, '${word.text}', '${word.lexicalForm}', '${word.parsing.codedParsing}');\">${word.text}</span> ")
+                    htmlBuilder.appendWord(word, wordIndex)
 
                     wordIndex++
                 }
             }
 
-            htmlBuilder.append("</p>")
+            htmlBuilder.endParagraph()
 
             viewModelScope.launch(Dispatchers.Main) {
                 _state.value = ScreenState.READY
