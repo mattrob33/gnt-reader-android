@@ -162,7 +162,7 @@ class ReaderViewModel(
                         lastVerseNum = verseNum
                     }
 
-                    htmlBuilder.append("<span onClick=\"onWordClick('${word.text}', '${word.lexicalForm}', '${word.parsing.codedParsing}');\">${word.text}</span> ")
+                    htmlBuilder.append("<span id=\"$wordIndex\" onClick=\"onWordClick(this.id, '${word.text}', '${word.lexicalForm}', '${word.parsing.codedParsing}');\">${word.text}</span> ")
 
                     wordIndex++
                 }

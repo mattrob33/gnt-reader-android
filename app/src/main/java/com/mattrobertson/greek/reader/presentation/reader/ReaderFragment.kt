@@ -114,28 +114,49 @@ class ReaderFragment : Fragment() {
 
         viewModel.html.observe(viewLifecycleOwner) { html ->
 
-            val start = "<html><head>" +
-                            "<style type=\"text/css\">" +
-                                "@font-face { font-family: SblGreek; src: url(\"file:///android_asset/fonts/sblgreek.ttf\") }" +
-                                "body {" +
-                                    "font-family: SblGreek;" +
-                                    "font-size: large;" +
-                                    "line-height: 180%;" +
-                                "}" +
-                                "p {" +
-                                    "margin: 0;" +
-                                    "padding: 0;" +
-                                "}" +
-                            "</style>" +
-                        "</head>" +
-                        "<body>"+
-                            "<script type=\"text/javascript\">" +
-                                "function scrollToAnchor(id) { window.location.hash = id; } " +
-                                "function onWordClick(text, lexicalForm, codedParsing) { ReaderApp.onWordClick(text, lexicalForm, codedParsing); }" +
-                            "</script>"
-            val end = "</body></html>"
+            val docStart = """
+                        <html>
+                            <head>
+                                <style type="text/css">
+                                    @font-face {
+                                        font-family: SblGreek;
+                                        src: url("file:///android_asset/fonts/sblgreek.ttf")
+                                    }
+                                    body {
+                                        font-family: SblGreek;
+                                        font-size: large;
+                                        line-height: 180%;
+                                    }
+                                    p {
+                                        margin: 0;
+                                        padding: 0;
+                                    }
+                                    .selectedWord {
+                                        font-weight: bold;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <script type="text/javascript">
+    
+                                    function scrollToAnchor(id) {
+                                        window.location.hash = id;
+                                    }
+    
+                                    function onWordClick(id, text, lexicalForm, codedParsing) {
+                                        var selectedWords = document.getElementsByClassName('selectedWord');
+                                        if (selectedWords.length > 0)
+                                            selectedWords[0].removeAttribute('class');
+                                        document.getElementById(id).setAttribute('class', 'selectedWord');
+                                        ReaderApp.onWordClick(text, lexicalForm, codedParsing);
+                                    }
+    
+                                </script>
+                            """
 
-            val styledHtml = start + html + end
+            val docEnd = "</body></html>"
+
+            val styledHtml = docStart + html + docEnd
 
             webview_reader.loadDataWithBaseURL(null, styledHtml, "text/html", "utf-8", null)
         }
