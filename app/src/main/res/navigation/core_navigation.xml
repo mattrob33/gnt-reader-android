@@ -107,6 +107,11 @@
             app:argType="integer"
             />
 
+        <argument
+            android:name="verse"
+            android:defaultValue="1"
+            app:argType="integer" />
+
         <action
             android:id="@+id/to_concordance"
             app:destination="@id/navigation_concordance"

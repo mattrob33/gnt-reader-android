@@ -99,7 +99,7 @@ class ReaderFragment : Fragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 if (!viewModel.hasScrolled) {
                     viewModel.hasScrolled = true
-                    val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_1\");"
+                    val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_${args.chapter}\");"
                     webview_reader.loadUrl(anchorScroll)
                 }
             }
