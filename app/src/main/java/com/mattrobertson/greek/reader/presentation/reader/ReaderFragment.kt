@@ -21,6 +21,7 @@ import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.ui.ReaderJsInterface
 import kotlinx.android.synthetic.main.reader.*
 
 
@@ -72,17 +73,15 @@ class ReaderFragment : Fragment() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         webview_reader.settings.apply {
-            useWideViewPort = false
             javaScriptEnabled = true
         }
 
+        webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
+
         webview_reader.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                if (!viewModel.hasScrolled) {
-                    viewModel.hasScrolled = true
-                    val anchorScroll = "javascript:scrollAnchor(\"${args.book}_${args.chapter}_1\");"
-                    webview_reader.loadUrl(anchorScroll)
-                }
+                val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_1\");"
+                webview_reader.loadUrl(anchorScroll)
             }
         }
 
@@ -130,19 +129,15 @@ class ReaderFragment : Fragment() {
                             "</style>" +
                         "</head>" +
                         "<body>"+
-                            "<script>" +
-                                "function scrollAnchor(id) { window.location.hash = id; }" +
+                            "<script type=\"text/javascript\">" +
+                                "function scrollToAnchor(id) { window.location.hash = id; } " +
+                                "function onWordClick(text, lexicalForm, codedParsing) { ReaderApp.onWordClick(text, lexicalForm, codedParsing); }" +
                             "</script>"
             val end = "</body></html>"
 
             val styledHtml = start + html + end
 
             webview_reader.loadDataWithBaseURL(null, styledHtml, "text/html", "utf-8", null)
-        }
-
-        viewModel.selectedWordId.observe(viewLifecycleOwner) {
-//            tvText.refreshDrawableState()
-//            tvText.invalidate()
         }
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->

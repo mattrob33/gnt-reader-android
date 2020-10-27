@@ -3,7 +3,6 @@ package com.mattrobertson.greek.reader.presentation.reader
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -25,7 +24,6 @@ import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
-import com.mattrobertson.greek.reader.presentation.util.WordSpan
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getBookTitle
@@ -47,17 +45,8 @@ class ReaderViewModel(
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private val _spannedText = MutableLiveData<SpannableStringBuilder>()
-    val spannedText: LiveData<SpannableStringBuilder> = _spannedText
-
     private val _html = MutableLiveData<String>()
     val html: LiveData<String> = _html
-
-    private val _selectedWordId = MutableLiveData(-1)
-    var selectedWordId: LiveData<Int> = _selectedWordId
-
-    private val _selectedWord = MutableLiveData<Word>()
-    var selectedWord: LiveData<Word> = _selectedWord
 
     private val _glossInfo = MutableLiveData<GlossInfo?>()
     var glossInfo: LiveData<GlossInfo?> = _glossInfo
@@ -73,15 +62,10 @@ class ReaderViewModel(
 
     private lateinit var dbHelper: DataBaseHelper
 
-    private var words = ArrayList<Word>()
-    private var wordSpans = ArrayList<WordSpan>()
-
     private var showVerseNumbers = false
     private var showVersesNewLines = false
     private var showAudioBtn = false
 
-    private val greekFont = Typeface.createFromAsset(applicationContext.assets, "fonts/sblgreek.ttf")
-    private var fontSize = 0
 
     private val refBackstack = arrayListOf<VerseRef>()
 
@@ -94,14 +78,9 @@ class ReaderViewModel(
             // TODO : log exception
         }
 
-        loadChapter(book, chapter)
+        loadBook(book)
 
         addToRecents(VerseRef(book, chapter))
-
-        selectedWord.observeForever { word ->
-            showGloss(word)
-            showConcordance(word)
-        }
     }
 
     @ExperimentalStdlibApi
@@ -117,15 +96,14 @@ class ReaderViewModel(
     }
 
     private fun goTo(ref: VerseRef) {
-        _selectedWordId.value = -1
         chapter = ref.chapter
 
-        loadChapter(ref.book, ref.chapter)
+        loadBook(ref.book)
 
         addToRecents(VerseRef(book, chapter))
     }
 
-    private fun loadChapter(newBook: Book, chapter: Int) {
+    private fun loadBook(newBook: Book) {
         _state.value = ScreenState.LOADING
 
         hasScrolled = false
@@ -184,11 +162,9 @@ class ReaderViewModel(
                         lastVerseNum = verseNum
                     }
 
-                    htmlBuilder.append("${word.text} ")
+                    htmlBuilder.append("<span onClick=\"onWordClick('${word.text}', '${word.lexicalForm}', '${word.parsing.codedParsing}');\">${word.text}</span> ")
 
                     wordIndex++
-
-                    words.add(word)
                 }
             }
 
@@ -202,25 +178,19 @@ class ReaderViewModel(
             }
         }
 
-        _title.value = getBookTitle(book) + " " + chapter
+        _title.value = getBookTitle(book)
 
 //        audio.stop()
 //        refreshAudioUI()
     }
 
-    fun handleWordClick(id: Int) {
-        val prevId = selectedWordId.value!!
-        if (prevId in wordSpans.indices) {
-            wordSpans[prevId].setMarking(false)
+    fun showGloss(word: Word) {
+        val glossInfo = lookupGloss(word)
+
+        viewModelScope.launch(Dispatchers.Main) {
+            _glossInfo.value = glossInfo
         }
 
-        _selectedWordId.value = id
-        _selectedWord.value = words[id]
-    }
-
-    private fun showGloss(word: Word) {
-        val glossInfo = lookupGloss(word)
-        _glossInfo.value = glossInfo
         glossInfo?.let {
             saveVocabWord(it)
         }
@@ -261,8 +231,14 @@ class ReaderViewModel(
         return glossInfo
     }
 
-    private fun showConcordance(word: Word) {
-        _concordanceInfo.value = lookupConcordance(word)
+    fun showConcordance(word: Word) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val concordInfo = lookupConcordance(word)
+
+            viewModelScope.launch(Dispatchers.Main) {
+                _concordanceInfo.value = concordInfo
+            }
+        }
     }
 
     private fun lookupConcordance(word: Word): SpannableStringBuilder? {
