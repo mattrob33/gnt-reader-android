@@ -7,6 +7,12 @@ import com.mattrobertson.greek.reader.model.Verse
 
 class VerseRepo(private val versesDao: VersesDao) {
 
+	suspend fun getVersesForBook(book: Book): List<Verse> {
+		return versesDao.getVersesForBook(book.num).map { entity ->
+			VerseMapper.fromEntity(entity)
+		}
+	}
+
 	suspend fun getVersesForChapter(book: Book, chapter: Int): List<Verse> {
 		return versesDao.getVersesForChapter(book.num, chapter).map { entity ->
 			VerseMapper.fromEntity(entity)

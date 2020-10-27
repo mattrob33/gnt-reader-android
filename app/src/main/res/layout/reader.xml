@@ -31,15 +31,18 @@
 		android:layout_marginBottom="10dp"
 		android:scrollbars="vertical"
 		android:focusable="false"
+		android:fillViewport="true"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<TextView
-			android:id="@+id/tvText"
-			android:layout_width="fill_parent"
+		<com.mattrobertson.greek.reader.ui.NestedWebView
+			android:id="@+id/webview_reader"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textSize="22sp"
-			android:lineSpacingExtra="8dp"
-			android:focusable="false"
+			android:focusable="true"
+			android:isScrollContainer="false"
+			android:fillViewport="true"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed"
 		/>
 
 	</androidx.core.widget.NestedScrollView>
