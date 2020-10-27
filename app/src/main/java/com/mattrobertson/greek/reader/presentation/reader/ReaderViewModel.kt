@@ -21,7 +21,6 @@ import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
-import com.mattrobertson.greek.reader.objects.HtmlBuilder
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
@@ -33,10 +32,12 @@ import kotlinx.coroutines.launch
 
 class ReaderViewModel(
     private val applicationContext: Context,
-    private val verseRepo: VerseRepo,
+    verseRepo: VerseRepo,
     private var book: Book,
     private var chapter: Int
 ) : ViewModel() {
+
+    private val htmlGenerator = HtmlGenerator(verseRepo)
 
     private val settings = Settings.getInstance(applicationContext)
 
@@ -108,76 +109,17 @@ class ReaderViewModel(
         _state.value = ScreenState.LOADING
 
         hasScrolled = false
-
         book = newBook
+        _title.value = getBookTitle(newBook)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val verses = verseRepo.getVersesForBook(book)
-
-            val htmlBuilder = HtmlBuilder()
-
-            var wordIndex = 0
-            var lastVerseNum = 0
-            var lastChapterNum = 0
-
-            showVerseNumbers = true
-
-            var prevWasEndOfSentence = false
-
-            verses.forEach { verse ->
-                val chapterNum = verse.verseRef.chapter
-                val verseNum = verse.verseRef.verse
-
-                if (chapterNum != lastChapterNum) {
-                    if (chapterNum > 1)
-                        htmlBuilder.endChapter()
-
-                    htmlBuilder.newChapter(verse.verseRef)
-                }
-
-                lastChapterNum = chapterNum
-
-                verse.words.forEach { word ->
-
-                    val isUppercase = word.text.first().toUpperCase() == word.text.first()
-
-                    // Paragraph divisions
-                    if (isUppercase && prevWasEndOfSentence && verseNum > 1) {
-                        htmlBuilder.newParagraph(indent = true)
-                    }
-
-                    prevWasEndOfSentence = word.text.last() == '.'
-
-                     // Verse numbers
-                    if (verseNum != lastVerseNum) {
-                        if (showVersesNewLines) {
-                            if (verseNum > 1)
-                                htmlBuilder.endParagraph()
-                            htmlBuilder.newParagraph(indent = false)
-                        }
-                        if (showVerseNumbers) {
-                            htmlBuilder.appendVerseNum(verseNum)
-                        }
-                        lastVerseNum = verseNum
-                    }
-
-                    htmlBuilder.appendWord(word, wordIndex)
-
-                    wordIndex++
-                }
-            }
-
-            htmlBuilder.endParagraph()
+            val html = htmlGenerator.createBookHtml(newBook)
 
             viewModelScope.launch(Dispatchers.Main) {
                 _state.value = ScreenState.READY
-
-                val htmlString = htmlBuilder.toString()
-                _html.value = htmlString
+                _html.value = html
             }
         }
-
-        _title.value = getBookTitle(book)
 
 //        audio.stop()
 //        refreshAudioUI()
