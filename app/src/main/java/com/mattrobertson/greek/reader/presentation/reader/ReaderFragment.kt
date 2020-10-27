@@ -1,12 +1,13 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,8 +21,8 @@ import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.repo.VerseRepo
-import com.mattrobertson.greek.reader.util.AppConstants
 import kotlinx.android.synthetic.main.reader.*
+
 
 class ReaderFragment : Fragment() {
 
@@ -70,9 +71,20 @@ class ReaderFragment : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        tvText.typeface = Typeface.createFromAsset(requireActivity().assets, "fonts/sblgreek.ttf")
-        tvText.setTextIsSelectable(false)
-        tvText.movementMethod = AppConstants.createMovementMethod(requireContext())
+        webview_reader.settings.apply {
+            useWideViewPort = false
+            javaScriptEnabled = true
+        }
+
+        webview_reader.webViewClient = object: WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                if (!viewModel.hasScrolled) {
+                    viewModel.hasScrolled = true
+                    val anchorScroll = "javascript:scrollAnchor(\"${args.book}_${args.chapter}_1\");"
+                    webview_reader.loadUrl(anchorScroll)
+                }
+            }
+        }
 
         tvConcordance.movementMethod = LinkMovementMethod.getInstance()
 
@@ -101,14 +113,36 @@ class ReaderFragment : Fragment() {
             actionBar?.title = it
         }
 
-        viewModel.spannedText.observe(viewLifecycleOwner) {
-            tvText.text = it
-            tvText.invalidate()
+        viewModel.html.observe(viewLifecycleOwner) { html ->
+
+            val start = "<html><head>" +
+                            "<style type=\"text/css\">" +
+                                "@font-face { font-family: SblGreek; src: url(\"file:///android_asset/fonts/sblgreek.ttf\") }" +
+                                "body {" +
+                                    "font-family: SblGreek;" +
+                                    "font-size: large;" +
+                                    "line-height: 180%;" +
+                                "}" +
+                                "p {" +
+                                    "margin: 0;" +
+                                    "padding: 0;" +
+                                "}" +
+                            "</style>" +
+                        "</head>" +
+                        "<body>"+
+                            "<script>" +
+                                "function scrollAnchor(id) { window.location.hash = id; }" +
+                            "</script>"
+            val end = "</body></html>"
+
+            val styledHtml = start + html + end
+
+            webview_reader.loadDataWithBaseURL(null, styledHtml, "text/html", "utf-8", null)
         }
 
         viewModel.selectedWordId.observe(viewLifecycleOwner) {
-            tvText.refreshDrawableState()
-            tvText.invalidate()
+//            tvText.refreshDrawableState()
+//            tvText.invalidate()
         }
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->
@@ -136,7 +170,7 @@ class ReaderFragment : Fragment() {
 
     private fun launchConcordanceScreen(lex: String) {
         requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                ReaderFragmentDirections.toConcordance(lex)
+            ReaderFragmentDirections.toConcordance(lex)
         )
     }
 }

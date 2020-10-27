@@ -8,8 +8,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.SuperscriptSpan
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
@@ -52,6 +50,9 @@ class ReaderViewModel(
     private val _spannedText = MutableLiveData<SpannableStringBuilder>()
     val spannedText: LiveData<SpannableStringBuilder> = _spannedText
 
+    private val _html = MutableLiveData<String>()
+    val html: LiveData<String> = _html
+
     private val _selectedWordId = MutableLiveData(-1)
     var selectedWordId: LiveData<Int> = _selectedWordId
 
@@ -84,6 +85,8 @@ class ReaderViewModel(
 
     private val refBackstack = arrayListOf<VerseRef>()
 
+    var hasScrolled = false
+
     init {
         try {
             dbHelper = DataBaseHelper(applicationContext)
@@ -91,9 +94,9 @@ class ReaderViewModel(
             // TODO : log exception
         }
 
-        addToRecents(VerseRef(book, chapter))
-
         loadChapter(book, chapter)
+
+        addToRecents(VerseRef(book, chapter))
 
         selectedWord.observeForever { word ->
             showGloss(word)
@@ -125,93 +128,77 @@ class ReaderViewModel(
     private fun loadChapter(newBook: Book, chapter: Int) {
         _state.value = ScreenState.LOADING
 
+        hasScrolled = false
+
         book = newBook
 
         viewModelScope.launch(Dispatchers.IO) {
-            val verses = verseRepo.getVersesForChapter(book, chapter)
+            val verses = verseRepo.getVersesForBook(book)
 
-            val spanBuilder = SpannableStringBuilder()
+            val htmlBuilder = StringBuilder()
 
-            var curSpan: WordSpan
-
-            words = ArrayList()
-            wordSpans = ArrayList()
-
-            val wordColor = ResourcesCompat.getColor(applicationContext.resources, R.color.textColor, applicationContext.theme)
-
-            var totalLength = 0
-            var wordLength: Int
             var wordIndex = 0
-
             var lastVerseNum = 0
+            var lastChapterNum = 0
 
             showVerseNumbers = true
 
+            var prevWasEndOfSentence = false
+
             verses.forEach { verse ->
+                val chapterNum = verse.verseRef.chapter
                 val verseNum = verse.verseRef.verse
+
+                if (chapterNum != lastChapterNum) {
+                    if (chapterNum > 1)
+                        htmlBuilder.append("</p><br>")
+
+                    htmlBuilder
+                        .append("<p style=\"text-indent: 3px;\">")
+                        .append("<span style=\"font-size: x-large; font-weight: bold; outline-style: double;\"><a name=\"${verse.verseRef.book.num}_${verse.verseRef.chapter}_${verse.verseRef.verse}\">&nbsp;$chapterNum&nbsp;</a></span>&nbsp;&nbsp;")
+                }
+
+                lastChapterNum = chapterNum
 
                 verse.words.forEach { word ->
 
-                    val isUppercase = word.text[0].toUpperCase() == word.text[0]
-
-                    val isFirstWord = words.size <= 1
+                    val isUppercase = word.text.first().toUpperCase() == word.text.first()
 
                     // Paragraph divisions
-                    if (!isFirstWord) {
-                        val lastWord: String = words[wordIndex - 1].text.trim()
-                        if (lastWord.contains(".") && isUppercase) {
-                            spanBuilder.append("\n\t\t\t\t\t")
-                            totalLength += 6
-                        }
-                    }
-                    else if (isUppercase) {
-                        spanBuilder.append("\t\t\t\t\t")    // TODO: when would this be applicable?
-                        totalLength += 5
+                    if (isUppercase && prevWasEndOfSentence && verseNum > 1) {
+                        htmlBuilder.append("<p style=\"text-indent: 1em;\">")
                     }
 
-                    // Verse numbers
-                    if (verseNum > lastVerseNum) {
-                        if (showVersesNewLines) {
-                            spanBuilder.append("\n")
-                            totalLength += 1
-                        }
+                    prevWasEndOfSentence = word.text.last() == '.'
+
+                     // Verse numbers
+                    if (verseNum != lastVerseNum) {
+//                        if (showVersesNewLines) {
+//                            if (verseNum > 1)
+//                                htmlBuilder.append("</p>")
+//                            htmlBuilder.append("<p>")
+//                        }
                         if (showVerseNumbers) {
-                            val verseNumText = "$verseNum "
-
-                            spanBuilder.append(verseNumText)
-                            spanBuilder.setSpan(SuperscriptSpan(), totalLength, totalLength + verseNumText.length, Spanned.SPAN_COMPOSING)
-                            spanBuilder.setSpan(RelativeSizeSpan(0.65f), totalLength, totalLength + verseNumText.length, Spanned.SPAN_COMPOSING)
-                            totalLength += verseNumText.length
+                            htmlBuilder.append("<sup style=\"font-size:0.65em;\">$verseNum</sup>")
                         }
                         lastVerseNum = verseNum
                     }
 
-                    val _wordIndex = wordIndex
-                    curSpan = object : WordSpan(_wordIndex, greekFont, _wordIndex == selectedWordId.value, wordColor) {
-                        override fun onClick(view: View) {
-                            // TODO: look into why the coroutine is necessary
-                            viewModelScope.launch(Dispatchers.Main) {
-                                handleWordClick(_wordIndex)
-                                setMarking(true)
-                            }
-                        }
-                    }
-                    wordLength = word.text.length
+                    htmlBuilder.append("${word.text} ")
 
-                    spanBuilder.append(word.text).append(" ")
-                    spanBuilder.setSpan(curSpan, totalLength, totalLength + wordLength, Spanned.SPAN_COMPOSING)
-
-                    totalLength += wordLength + 1
                     wordIndex++
 
                     words.add(word)
-                    wordSpans.add(curSpan)
                 }
             }
 
+            htmlBuilder.append("</p>")
+
             viewModelScope.launch(Dispatchers.Main) {
                 _state.value = ScreenState.READY
-                _spannedText.value = spanBuilder
+
+                val htmlString = htmlBuilder.toString()
+                _html.value = htmlString
             }
         }
 

@@ -124,13 +124,13 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 
 		container = findViewById(R.id.mainContainer);
 		
-		tvLex = findViewById(R.id.tvLex);
-		tvDef = findViewById(R.id.tvDef);
-		tvConcordance = findViewById(R.id.tvConcordance);
-		tvConcTitle = findViewById(R.id.tvConcordTitle);
-		tvText = findViewById(R.id.tvText);
-		fabMediaPlay = findViewById(R.id.fabMediaPlay);
-		fabMediaRestart = findViewById(R.id.fabMediaRestart);
+//		tvLex = findViewById(R.id.tvLex);
+//		tvDef = findViewById(R.id.tvDef);
+//		tvConcordance = findViewById(R.id.tvConcordance);
+//		tvConcTitle = findViewById(R.id.tvConcordTitle);
+//		tvText = findViewById(R.id.tvText);
+//		fabMediaPlay = findViewById(R.id.fabMediaPlay);
+//		fabMediaRestart = findViewById(R.id.fabMediaRestart);
 		
 		tvText.setHighlightColor(Color.TRANSPARENT);
 		

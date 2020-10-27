@@ -22,4 +22,7 @@ interface VersesDao {
 
 	@Query("SELECT * FROM $VERSES_TABLE WHERE `book` = :book AND `chapter` = :chapter ORDER BY `verse` ASC")
 	suspend fun getVersesForChapter(book: Int, chapter: Int): List<VerseEntity>
+
+	@Query("SELECT * FROM $VERSES_TABLE WHERE `book` = :book ORDER BY `chapter`,`verse` ASC")
+	suspend fun getVersesForBook(book: Int): List<VerseEntity>
 }
