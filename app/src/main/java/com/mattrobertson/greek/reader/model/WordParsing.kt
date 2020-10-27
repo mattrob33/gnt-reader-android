@@ -1,7 +1,7 @@
 package com.mattrobertson.greek.reader.model
 
 class WordParsing private constructor(
-	codedParsing: String,
+	val codedParsing: String,
 	val humanReadable: String
 ) {
 
