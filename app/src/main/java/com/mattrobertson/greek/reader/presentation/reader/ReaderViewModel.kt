@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
@@ -27,17 +28,25 @@ import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getBookTitle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class ReaderViewModel(
     private val applicationContext: Context,
     verseRepo: VerseRepo,
-    private var book: Book,
-    private var chapter: Int
+    book: Book,
+    chapter: Int
 ) : ViewModel() {
 
-    private val htmlGenerator = HtmlGenerator(verseRepo)
+    private val loadJob = Job()
+    private val loadScope = CoroutineScope(Dispatchers.Main + loadJob)
+
+    private var showVerseNumbers = true
+    private var showVersesNewLines = false
+
+    private val htmlGenerator = HtmlGenerator(verseRepo).also {
+        it.showVerseNumbers = showVerseNumbers
+        it.showVersesNewLines = showVersesNewLines
+    }
 
     private val settings = Settings.getInstance(applicationContext)
 
@@ -64,14 +73,13 @@ class ReaderViewModel(
 
     private lateinit var dbHelper: DataBaseHelper
 
-    private var showVerseNumbers = false
-    private var showVersesNewLines = false
     private var showAudioBtn = false
 
+    private var currentRef = VerseRef(book, chapter, 1)
 
     private val refBackstack = arrayListOf<VerseRef>()
 
-    var hasScrolled = false
+    private var hasScrolled = false
 
     init {
         try {
@@ -80,9 +88,13 @@ class ReaderViewModel(
             // TODO : log exception
         }
 
-        loadBook(book)
+        loadChapter(currentRef)
+        addToRecents(currentRef)
+    }
 
-        addToRecents(VerseRef(book, chapter))
+    override fun onCleared() {
+        super.onCleared()
+        loadJob.cancel()
     }
 
     @ExperimentalStdlibApi
@@ -98,31 +110,24 @@ class ReaderViewModel(
     }
 
     private fun goTo(ref: VerseRef) {
-        chapter = ref.chapter
+        currentRef = ref
 
-        loadBook(ref.book)
-
-        addToRecents(VerseRef(book, chapter))
+        loadChapter(ref)
+        addToRecents(ref)
     }
 
-    private fun loadBook(newBook: Book) {
+    private fun loadChapter(ref: VerseRef) = loadScope.launch {
         _state.value = ScreenState.LOADING
 
         hasScrolled = false
-        book = newBook
-        _title.value = getBookTitle(newBook)
+        _title.value = "${getBookTitle(ref.book)} ${ref.chapter}"
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val html = htmlGenerator.createBookHtml(newBook)
-
-            viewModelScope.launch(Dispatchers.Main) {
-                _state.value = ScreenState.READY
-                _html.value = html
-            }
+        val html = withContext(Dispatchers.IO) {
+            htmlGenerator.createChapterHtml(ref)
         }
 
-//        audio.stop()
-//        refreshAudioUI()
+        _html.value = html
+        _state.value = ScreenState.READY
     }
 
     fun showGloss(word: Word) {
@@ -214,7 +219,7 @@ class ReaderViewModel(
 
             span = object : ConcordanceWordSpan(book, chapter, verse, linkColor) {
                 override fun onClick(v: View) {
-                    refBackstack.add(VerseRef(this@ReaderViewModel.book, this@ReaderViewModel.chapter))
+                    refBackstack.add(VerseRef(this@ReaderViewModel.currentRef.book, this@ReaderViewModel.currentRef.chapter))
                     goTo(VerseRef(Book(book), chapter, verse))
                 }
             }
@@ -252,8 +257,8 @@ class ReaderViewModel(
         val db = dbHelper.writableDatabase
 
         val values = ContentValues().apply {
-            put("book", book.num)
-            put("chapter", chapter)
+            put("book", currentRef.book.num)
+            put("chapter", currentRef.chapter)
             put("lex", glossInfo.lex)
             put("gloss", glossInfo.gloss)
             put("occ", glossInfo.frequency)

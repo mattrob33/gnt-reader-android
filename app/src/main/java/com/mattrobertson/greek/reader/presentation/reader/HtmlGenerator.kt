@@ -1,22 +1,26 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
 import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.objects.HtmlBuilder
+import com.mattrobertson.greek.reader.model.Verse
+import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.repo.VerseRepo
 
 class HtmlGenerator(
-	private val verseRepo: VerseRepo,
-	var showVerseNumbers: Boolean = true,
-	var showVersesNewLines: Boolean = false
+	private val verseRepo: VerseRepo
 ) {
 
-	suspend fun createBookHtml(
-			book: Book,
-			showVerseNumbers: Boolean = true,
-			showVersesNewLines: Boolean = false
-	): String {
-		val verses = verseRepo.getVersesForBook(book)
+	var showVerseNumbers: Boolean = true
+	var showVersesNewLines: Boolean = false
 
+
+	suspend fun createChapterHtml(ref: VerseRef) =
+		createHtmlForVerses(verseRepo.getVersesForChapter(ref))
+
+	suspend fun createBookHtml(book: Book) =
+		createHtmlForVerses(verseRepo.getVersesForBook(book))
+
+
+	private fun createHtmlForVerses(verses: List<Verse>): String {
 		val htmlBuilder = HtmlBuilder()
 
 		var wordIndex = 0
@@ -30,15 +34,12 @@ class HtmlGenerator(
 			val verseNum = verse.verseRef.verse
 
 			if (chapterNum != lastChapterNum) {
-				if (chapterNum > 1)
-					htmlBuilder.endChapter()
-
 				htmlBuilder.newChapter(verse.verseRef)
 			}
 
 			lastChapterNum = chapterNum
 
-			verse.words.forEach { word ->
+			verse.words.forEachIndexed { index, word ->
 
 				val isUppercase = word.text.first().toUpperCase() == word.text.first()
 
@@ -50,27 +51,31 @@ class HtmlGenerator(
 				prevWasEndOfSentence = word.text.last() == '.'
 
 				// Verse numbers
-				if (verseNum != lastVerseNum) {
-					if (showVersesNewLines) {
-						if (verseNum > 1)
-							htmlBuilder.endParagraph()
-						htmlBuilder.newParagraph(indent = false)
+				if (showVerseNumbers) {
+					if (verseNum != lastVerseNum) {
+						if (showVersesNewLines) {
+							if (verseNum > 1)
+								htmlBuilder.endParagraph()
+							htmlBuilder.newParagraph(indent = false)
+						}
+						if (showVerseNumbers) {
+							htmlBuilder.appendVerseNum(verse.verseRef)
+						}
+						lastVerseNum = verseNum
 					}
-					if (showVerseNumbers) {
-						htmlBuilder.appendVerseNum(verseNum)
-					}
-					lastVerseNum = verseNum
 				}
 
-				htmlBuilder.appendWord(word, wordIndex)
+				htmlBuilder.appendWord(word, "${verse.verseRef.book.num}_${verse.verseRef.chapter}_${verse.verseRef.verse}_$index")
 
 				wordIndex++
 			}
+
+			if (showVersesNewLines)
+				htmlBuilder.addVerseSeparator()
 		}
 
 		htmlBuilder.endParagraph()
 
 		return htmlBuilder.toString()
 	}
-	
 }
