@@ -1,5 +1,6 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -7,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,6 +23,7 @@ import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
+import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.android.synthetic.main.reader.*
 
 
@@ -67,12 +67,16 @@ class ReaderFragment : Fragment() {
         return true
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            title = "${getBookTitle(Book(args.book))} ${args.chapter}"
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         webview_reader.settings.apply {
             javaScriptEnabled = true
@@ -87,23 +91,13 @@ class ReaderFragment : Fragment() {
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
             if (isNightMode) {
                 WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_ON)
-            }
-            else {
+            } else {
                 WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_OFF)
             }
         }
 
         webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
 
-        webview_reader.webViewClient = object: WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                if (!viewModel.hasScrolled) {
-                    viewModel.hasScrolled = true
-                    val anchorScroll = "javascript:scrollToAnchor(\"${args.book}_${args.chapter}_${args.chapter}\");"
-                    webview_reader.loadUrl(anchorScroll)
-                }
-            }
-        }
 
         tvConcordance.movementMethod = LinkMovementMethod.getInstance()
 
@@ -137,7 +131,7 @@ class ReaderFragment : Fragment() {
             val docEnd = "</body></html>"
             val styledHtml = docStart + html + docEnd
 
-            webview_reader.loadDataWithBaseURL(null, styledHtml, "text/html", "utf-8", null)
+            webview_reader.loadDataWithBaseURL("app:html", styledHtml, "text/html", "utf-8", null)
         }
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->

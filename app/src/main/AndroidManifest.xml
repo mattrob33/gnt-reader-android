@@ -36,7 +36,6 @@
 
         <activity
             android:name=".ReaderActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />

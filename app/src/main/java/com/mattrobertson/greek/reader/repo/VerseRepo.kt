@@ -4,6 +4,7 @@ import com.mattrobertson.greek.reader.data.VersesDao
 import com.mattrobertson.greek.reader.mappers.VerseMapper
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.Verse
+import com.mattrobertson.greek.reader.model.VerseRef
 
 class VerseRepo(private val versesDao: VersesDao) {
 
@@ -18,5 +19,7 @@ class VerseRepo(private val versesDao: VersesDao) {
 			VerseMapper.fromEntity(entity)
 		}
 	}
+
+	suspend fun getVersesForChapter(ref: VerseRef) = getVersesForChapter(ref.book, ref.chapter)
 
 }
