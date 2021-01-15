@@ -126,8 +126,14 @@ class ReaderViewModel @ViewModelInject constructor(
             htmlGenerator.getChapterHtml(ref)
         }
 
-        _html.value = html
+        _html.value = wrapHtml(html)
         _state.value = ScreenState.READY
+    }
+
+    private fun wrapHtml(html: String): String {
+        val docStart = "<html>$readerHtmlHead<body>"
+        val docEnd = "</body></html>"
+        return docStart + html + docEnd
     }
 
     fun showGloss(word: Word) {

@@ -16,10 +16,7 @@ class HtmlGenerator(
 
 	suspend fun getChapterHtml(ref: VerseRef): String {
 		val cachedHtml = cache[viewSettings]?.get(ref)
-
-		if (cachedHtml != null) {
-			return cachedHtml
-		}
+		cachedHtml?.let { return it }
 
 		val verses = verseRepo.getVersesForChapter(ref)
 		val html = createHtmlForVerses(verses)
@@ -95,6 +92,7 @@ class HtmlGenerator(
 		var showVerseNumbers: Boolean = true,
 		var showVersesNewLines: Boolean = false
 	) {
+
 		override fun equals(other: Any?): Boolean {
 			if (other !is ViewSettings) return false
 
@@ -107,5 +105,6 @@ class HtmlGenerator(
 			result = 31 * result + showVersesNewLines.hashCode()
 			return result
 		}
+
 	}
 }
