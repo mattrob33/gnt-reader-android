@@ -25,6 +25,7 @@ import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getBookTitle
+import com.mattrobertson.greek.reader.util.numChaptersInBook
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 
@@ -37,13 +38,6 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private val loadJob = Job()
     private val loadScope = CoroutineScope(Dispatchers.Main + loadJob)
-
-    private val book = Book(
-        savedState.get<Int>("book") ?: throw IllegalStateException("a book is required but was not provided")
-    )
-
-    private val chapter = savedState.get<Int>("chapter")
-        ?: throw IllegalStateException("A chapter is required but was not provided")
 
     private val _state = MutableLiveData<ScreenState>()
     val state: LiveData<ScreenState> = _state
@@ -70,7 +64,16 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private var showAudioBtn = false
 
-    private var currentRef = VerseRef(book, chapter, 1)
+    private var currentRef = VerseRef(
+        book = Book(savedState.get<Int>("book")
+                ?: throw IllegalStateException("a book is required but was not provided")
+        ),
+        chapter = savedState.get<Int>("chapter")
+            ?: throw IllegalStateException("A chapter is required but was not provided"),
+        verse =  VerseRef.NO_VERSE
+    )
+
+
 
     private val refBackstack = arrayListOf<VerseRef>()
 
@@ -88,8 +91,7 @@ class ReaderViewModel @ViewModelInject constructor(
             // TODO : log exception
         }
 
-        loadChapter(currentRef)
-        addToRecents(currentRef)
+        goTo(currentRef)
     }
 
     override fun onCleared() {
@@ -107,6 +109,49 @@ class ReaderViewModel @ViewModelInject constructor(
             goTo(VerseRef(toRef.book, toRef.chapter, toRef.verse))
             true
         }
+    }
+
+    fun nextChapter() {
+        val isLastChapter = currentRef.chapter == numChaptersInBook(currentRef.book)
+        val isLastBook = currentRef.book == Book.REVELATION
+
+        val ref = when {
+            isLastChapter -> {
+                if (isLastBook)
+                    currentRef.copy()
+                else
+                    VerseRef(
+                        book = Book(currentRef.book.num + 1),
+                        chapter = 1
+                    )
+            }
+            else -> currentRef.copy(chapter = currentRef.chapter + 1)
+        }
+
+        goTo(ref)
+    }
+
+    fun prevChapter() {
+        val isFirstChapter = currentRef.chapter == 1
+        val isFirstBook = currentRef.book == Book.MATTHEW
+
+        val ref = when {
+            isFirstChapter -> {
+                if (isFirstBook)
+                    currentRef.copy()
+                else {
+                    val newBook = Book(currentRef.book.num - 1)
+
+                    VerseRef(
+                        book = newBook,
+                        chapter = numChaptersInBook(newBook)
+                    )
+                }
+            }
+            else -> currentRef.copy(chapter = currentRef.chapter - 1)
+        }
+
+        goTo(ref)
     }
 
     private fun goTo(ref: VerseRef) {

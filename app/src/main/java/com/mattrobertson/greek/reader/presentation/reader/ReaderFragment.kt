@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -21,6 +19,8 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
+import com.mattrobertson.greek.reader.ui.SwipeDetector
+import com.mattrobertson.greek.reader.ui.Swipeable
 import com.mattrobertson.greek.reader.util.getBookTitle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
@@ -35,9 +35,11 @@ class ReaderFragment : Fragment() {
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
+    lateinit var rootView: View
+
     @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.reader, container, false)
+        rootView = inflater.inflate(R.layout.reader, container, false)
         setHasOptionsMenu(true)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -45,7 +47,7 @@ class ReaderFragment : Fragment() {
                 requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
         }
 
-        return root
+        return rootView
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -57,7 +59,7 @@ class ReaderFragment : Fragment() {
         return true
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -95,6 +97,24 @@ class ReaderFragment : Fragment() {
         mBottomSheetBehavior.isHideable = true
 
         subscribeUI()
+
+        val swipeHandler = object: Swipeable {
+            override fun onSwipeLeft() {
+                viewModel.nextChapter()
+            }
+
+            override fun onSwipeRight() {
+                viewModel.prevChapter()
+            }
+        }
+
+        val swipeDetector = SwipeDetector(swipeHandler)
+
+        val gestureDetector = GestureDetector(requireContext(), swipeDetector)
+
+        webview_reader.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+        }
     }
 
     private fun subscribeUI() {
