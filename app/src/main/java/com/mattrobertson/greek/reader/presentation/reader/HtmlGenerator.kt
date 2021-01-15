@@ -9,8 +9,8 @@ class HtmlGenerator(
 	private val verseRepo: VerseRepo
 ) {
 
-	var showVerseNumbers: Boolean = true
-	var showVersesNewLines: Boolean = false
+	var showVerseNumbers = true
+	var showVersesNewLines = false
 
 
 	suspend fun createChapterHtml(ref: VerseRef) =

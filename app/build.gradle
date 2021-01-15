@@ -1,10 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
 
 android {
     compileSdkVersion 29
@@ -47,38 +50,53 @@ android {
     }
 }
 
-dependencies {
-    def room_version = "2.2.5"
+ext {
+    roomVersion = "2.2.5"
+    navVersion = "2.3.2"
+    jupiterVersion = "5.3.2"
+    lifecycleVersion = "2.2.0"
+    hiltViewModelsVersion = "1.0.0-alpha02"
+}
 
-    // Kotlin
+dependencies {
+    // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
     implementation "androidx.core:core-ktx:1.3.2"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6'
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
+    implementation 'androidx.activity:activity-ktx:1.2.0-rc01'
+
+    // Dependency Injection
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelsVersion"
+    kapt "androidx.hilt:hilt-compiler:$hiltViewModelsVersion"
 
     // UI
     implementation "com.google.android.material:material:1.2.1"
-    implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.preference:preference:1.1.1"
-    implementation "androidx.webkit:webkit:1.3.0"
+    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.webkit:webkit:1.4.0"
 
-    implementation "androidx.constraintlayout:constraintlayout:2.0.2"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
 
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment:2.3.1"
-    implementation "androidx.navigation:navigation-ui:2.3.1"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.1"
+    implementation "androidx.navigation:navigation-fragment:$navVersion"
+    implementation "androidx.navigation:navigation-ui:$navVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 
     // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     // Other
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
@@ -93,16 +111,16 @@ dependencies {
     testImplementation "org.mockito:mockito-core:3.2.4"
     testImplementation 'org.robolectric:robolectric:4.3'
 
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.3.2"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.2"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$jupiterVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$jupiterVersion"
 
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'androidx.test:runner:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
 
-    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "androidx.room:room-testing:$roomVersion"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

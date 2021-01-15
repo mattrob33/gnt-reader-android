@@ -11,37 +11,26 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
-import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
 import com.mattrobertson.greek.reader.util.getBookTitle
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
 
-
+@AndroidEntryPoint
 class ReaderFragment : Fragment() {
 
     private val args: ReaderFragmentArgs by navArgs()
 
-    private val verseRepo: VerseRepo by lazy {
-        VerseRepo(VerseDatabase.getInstance().versesDao())
-    }
-
-    private val viewModelFactory: ReaderViewModelFactory by lazy {
-        ReaderViewModelFactory(requireContext().applicationContext, verseRepo, Book(args.book), args.chapter)
-    }
-
-    private val viewModel: ReaderViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(ReaderViewModel::class.java)
-    }
+    private val viewModel by viewModels<ReaderViewModel>()
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
