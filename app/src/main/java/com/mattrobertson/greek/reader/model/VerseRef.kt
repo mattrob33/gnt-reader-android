@@ -56,4 +56,11 @@ data class VerseRef (
 			else -> 1
 		}
 	}
+
+	override fun hashCode(): Int {
+		var result = book.hashCode()
+		result = 31 * result + chapter
+		result = 31 * result + verse
+		return result
+	}
 }
