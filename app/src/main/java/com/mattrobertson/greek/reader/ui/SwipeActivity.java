@@ -18,13 +18,13 @@ public abstract class SwipeActivity extends AppCompatActivity
 		gestureDetector = new GestureDetector( new SwipeDetector() );
 	}
 
-	private class SwipeDetector extends SimpleOnGestureListener {
+	class SwipeDetector extends SimpleOnGestureListener {
 		@Override
 		public boolean onFling( MotionEvent e1, MotionEvent e2, float velocityX, float velocityY ) {
 
 			// Check movement along the Y-axis. If it exceeds SWIPE_MAX_OFF_PATH, then dismiss the swipe.
 			if( Math.abs( e1.getY() - e2.getY() ) > SWIPE_MAX_OFF_PATH ) {
-				
+
 				// Swipe from down to up.
 				// The swipe needs to exceed a certain distance (SWIPE_MIN_DISTANCE)
 				// and a certain velocity (SWIPE_THRESHOLD_VELOCITY).
@@ -40,13 +40,13 @@ public abstract class SwipeActivity extends AppCompatActivity
 					onSwipeDown();
 					return true;
 				}
-				
+
 				return false;
 			}
 
 			// Check movement along the X-axis. If it exceeds SWIPE_MAX_OFF_PATH, then dismiss the swipe.
 			if( Math.abs( e1.getX() - e2.getX() ) > SWIPE_MAX_OFF_PATH ) {
-				
+
 				// Swipe from right to left.
 				// The swipe needs to exceed a certain distance (SWIPE_MIN_DISTANCE)
 				// and a certain velocity (SWIPE_THRESHOLD_VELOCITY).
@@ -65,7 +65,7 @@ public abstract class SwipeActivity extends AppCompatActivity
 
 				return false;
 			}
-			
+
 			return false;
 		}
 	}
