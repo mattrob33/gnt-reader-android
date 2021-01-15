@@ -25,6 +25,7 @@ import com.mattrobertson.greek.reader.util.getBookTitle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
 
+
 @AndroidEntryPoint
 class ReaderFragment : Fragment() {
 
@@ -87,7 +88,6 @@ class ReaderFragment : Fragment() {
 
         webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
 
-
         tvConcordance.movementMethod = LinkMovementMethod.getInstance()
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -116,11 +116,7 @@ class ReaderFragment : Fragment() {
         }
 
         viewModel.html.observe(viewLifecycleOwner) { html ->
-            val docStart = "<html>$readerHtmlHead<body>"
-            val docEnd = "</body></html>"
-            val styledHtml = docStart + html + docEnd
-
-            webview_reader.loadDataWithBaseURL("app:html", styledHtml, "text/html", "utf-8", null)
+            webview_reader.loadDataWithBaseURL("app:html", html, "text/html", "utf-8", null)
         }
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->
