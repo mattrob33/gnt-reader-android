@@ -7,13 +7,11 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
@@ -25,30 +23,27 @@ import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.presentation.util.SingleLiveEvent
-import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getBookTitle
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 
-class ReaderViewModel(
-    private val applicationContext: Context,
-    verseRepo: VerseRepo,
-    book: Book,
-    chapter: Int
+class ReaderViewModel @ViewModelInject constructor(
+    private val htmlGenerator: HtmlGenerator,
+    private val settings: Settings,
+    @ApplicationContext private val applicationContext: Context,
+    @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
 
     private val loadJob = Job()
     private val loadScope = CoroutineScope(Dispatchers.Main + loadJob)
 
-    private var showVerseNumbers = true
-    private var showVersesNewLines = false
+    private val book = Book(
+        savedState.get<Int>("book") ?: throw IllegalStateException("a book is required but was not provided")
+    )
 
-    private val htmlGenerator = HtmlGenerator(verseRepo).also {
-        it.showVerseNumbers = showVerseNumbers
-        it.showVersesNewLines = showVersesNewLines
-    }
-
-    private val settings = Settings.getInstance(applicationContext)
+    private val chapter = savedState.get<Int>("chapter")
+        ?: throw IllegalStateException("A chapter is required but was not provided")
 
     private val _state = MutableLiveData<ScreenState>()
     val state: LiveData<ScreenState> = _state
@@ -82,6 +77,11 @@ class ReaderViewModel(
     private var hasScrolled = false
 
     init {
+        htmlGenerator.apply {
+            showVerseNumbers = true
+            showVersesNewLines = false
+        }
+
         try {
             dbHelper = DataBaseHelper(applicationContext)
         } catch (e: Exception) {
