@@ -77,7 +77,7 @@ class ReaderViewModel @ViewModelInject constructor(
     private var hasScrolled = false
 
     init {
-        htmlGenerator.apply {
+        htmlGenerator.viewSettings.apply {
             showVerseNumbers = true
             showVersesNewLines = false
         }
@@ -123,7 +123,7 @@ class ReaderViewModel @ViewModelInject constructor(
         _title.value = "${getBookTitle(ref.book)} ${ref.chapter}"
 
         val html = withContext(Dispatchers.IO) {
-            htmlGenerator.createChapterHtml(ref)
+            htmlGenerator.getChapterHtml(ref)
         }
 
         _html.value = html

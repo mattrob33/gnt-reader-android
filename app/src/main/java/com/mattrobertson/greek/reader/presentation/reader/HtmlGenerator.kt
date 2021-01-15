@@ -1,6 +1,5 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
-import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.repo.VerseRepo
@@ -9,16 +8,29 @@ class HtmlGenerator(
 	private val verseRepo: VerseRepo
 ) {
 
-	var showVerseNumbers = true
-	var showVersesNewLines = false
+	companion object {
+		private val cache: HashMap<ViewSettings, HashMap<VerseRef, String>> = hashMapOf()
+	}
 
+	val viewSettings = ViewSettings()
 
-	suspend fun createChapterHtml(ref: VerseRef) =
-		createHtmlForVerses(verseRepo.getVersesForChapter(ref))
+	suspend fun getChapterHtml(ref: VerseRef): String {
+		val cachedHtml = cache[viewSettings]?.get(ref)
 
-	suspend fun createBookHtml(book: Book) =
-		createHtmlForVerses(verseRepo.getVersesForBook(book))
+		if (cachedHtml != null) {
+			return cachedHtml
+		}
 
+		val verses = verseRepo.getVersesForChapter(ref)
+		val html = createHtmlForVerses(verses)
+
+		if (cache[viewSettings] == null)
+			cache[viewSettings] = hashMapOf()
+
+		cache[viewSettings]!![ref] = html
+
+		return html
+	}
 
 	private fun createHtmlForVerses(verses: List<Verse>): String {
 		val htmlBuilder = HtmlBuilder()
@@ -41,7 +53,7 @@ class HtmlGenerator(
 
 			verse.words.forEachIndexed { index, word ->
 
-				val isUppercase = word.text.first().toUpperCase() == word.text.first()
+				val isUppercase = word.text.first().isUpperCase()
 
 				// Paragraph divisions
 				if (isUppercase && prevWasEndOfSentence && verseNum > 1) {
@@ -51,14 +63,14 @@ class HtmlGenerator(
 				prevWasEndOfSentence = word.text.last() == '.'
 
 				// Verse numbers
-				if (showVerseNumbers) {
+				if (viewSettings.showVerseNumbers) {
 					if (verseNum != lastVerseNum) {
-						if (showVersesNewLines) {
+						if (viewSettings.showVersesNewLines) {
 							if (verseNum > 1)
 								htmlBuilder.endParagraph()
 							htmlBuilder.newParagraph(indent = false)
 						}
-						if (showVerseNumbers) {
+						if (viewSettings.showVerseNumbers) {
 							htmlBuilder.appendVerseNum(verse.verseRef)
 						}
 						lastVerseNum = verseNum
@@ -70,12 +82,30 @@ class HtmlGenerator(
 				wordIndex++
 			}
 
-			if (showVersesNewLines)
+			if (viewSettings.showVersesNewLines)
 				htmlBuilder.addVerseSeparator()
 		}
 
 		htmlBuilder.endParagraph()
 
 		return htmlBuilder.toString()
+	}
+
+	data class ViewSettings(
+		var showVerseNumbers: Boolean = true,
+		var showVersesNewLines: Boolean = false
+	) {
+		override fun equals(other: Any?): Boolean {
+			if (other !is ViewSettings) return false
+
+			return (showVerseNumbers == other.showVerseNumbers) &&
+				(showVersesNewLines == other.showVersesNewLines)
+		}
+
+		override fun hashCode(): Int {
+			var result = showVerseNumbers.hashCode()
+			result = 31 * result + showVersesNewLines.hashCode()
+			return result
+		}
 	}
 }
