@@ -61,7 +61,7 @@ class BookPickerFragment : Fragment() {
             }
             else {
                 requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        HomeFragmentDirections.toChapterPicker(book)
+                    BookPickerFragmentDirections.toChapterPicker(book)
                 )
             }
         }
