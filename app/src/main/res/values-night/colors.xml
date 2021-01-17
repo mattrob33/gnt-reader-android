@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="accent" type="color">#FFC107</item>
+    <item name="accent" type="color">#FFFFFF</item>
 
     <color name="accentSurfaceColor">#333333</color>
     <color name="accentSurfaceTextColor">#EEEEEE</color>

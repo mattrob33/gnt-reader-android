@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_read"
-        android:name="com.mattrobertson.greek.reader.presentation.bookpicker.BookPickerFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.reader.ReaderFragment"
         android:label="@string/read"
-        tools:layout="@layout/book_picker_fragment"
+        tools:layout="@layout/reader"
         />
 
     <fragment

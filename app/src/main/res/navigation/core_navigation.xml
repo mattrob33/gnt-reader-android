@@ -12,11 +12,6 @@
         tools:layout="@layout/home_fragment">
 
         <action
-            android:id="@+id/to_chapter_picker"
-            app:destination="@id/navigation_chapter_picker"
-            />
-
-        <action
             android:id="@+id/to_plan_splash"
             app:destination="@id/navigation_plan_splash"
             />
@@ -35,6 +30,10 @@
             android:id="@+id/to_about"
             app:destination="@id/navigation_about"
             />
+
+        <action
+            android:id="@+id/to_book_picker"
+            app:destination="@id/navigation_book_picker" />
 
     </fragment>
 
@@ -144,5 +143,18 @@
         android:name="com.mattrobertson.greek.reader.presentation.settings.AboutFragment"
         tools:layout="@layout/about"
         />
+
+    <fragment
+        android:id="@+id/navigation_book_picker"
+        android:name="com.mattrobertson.greek.reader.presentation.bookpicker.BookPickerFragment"
+        android:label="BookPickerFragment"
+        tools:layout="@layout/book_picker_fragment">
+
+        <action
+            android:id="@+id/to_chapter_picker"
+            app:destination="@id/navigation_chapter_picker"
+            />
+
+    </fragment>
 
 </navigation>

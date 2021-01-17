@@ -66,10 +66,10 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private var currentRef = VerseRef(
         book = Book(savedState.get<Int>("book")
-                ?: throw IllegalStateException("a book is required but was not provided")
+                ?: 5
         ),
         chapter = savedState.get<Int>("chapter")
-            ?: throw IllegalStateException("A chapter is required but was not provided"),
+            ?: 5,
         verse =  VerseRef.NO_VERSE
     )
 

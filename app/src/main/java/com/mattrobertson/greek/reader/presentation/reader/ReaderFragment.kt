@@ -63,11 +63,13 @@ class ReaderFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+//        val book = args.book
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.apply {
-            title = "${getBookTitle(Book(args.book))} ${args.chapter}"
-            setDisplayHomeAsUpEnabled(true)
+            title = "Title" //"${getBookTitle(Book(args.book))} ${args.chapter}"
+            setDisplayHomeAsUpEnabled(false)
         }
 
         webview_reader.settings.apply {
