@@ -9,6 +9,7 @@
 
     <color name="textColor">#FFFFFF</color>
 
-    <color name="bottom_nav_icon_color_selected">@color/accent</color>
+    <color name="bottom_nav_background">#222222</color>
+    <color name="bottom_nav_icon_color_selected">#FFFFFF</color>
     <color name="bottom_nav_icon_color_not_selected">#999999</color>
 </resources>

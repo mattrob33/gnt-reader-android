@@ -33,7 +33,20 @@
 
         <action
             android:id="@+id/to_book_picker"
-            app:destination="@id/navigation_book_picker" />
+            app:destination="@id/navigation_book_picker"
+            />
+
+        <argument
+            android:name="book"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
+
+        <argument
+            android:name="chapter"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
 
     </fragment>
 
@@ -52,6 +65,12 @@
             android:name="book"
             app:argType="integer"
             android:defaultValue="0"
+            />
+        <action
+            android:id="@+id/to_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@+id/core_navigation"
+            app:popUpToInclusive="true"
             />
 
     </fragment>

@@ -178,8 +178,8 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			}
 		});
 		
-		NestedScrollView bottomSheet = findViewById( R.id.bottomSheet);
-		mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+//		NestedScrollView bottomSheet = findViewById( R.id.bottomSheet);
+//		mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 		mBottomSheetBehavior.setPeekHeight(400);
 		mBottomSheetBehavior.setHideable(true);
 
