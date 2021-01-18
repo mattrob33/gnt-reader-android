@@ -19,7 +19,7 @@
         app:drawableStartCompat="@drawable/ic_settings"
         android:drawablePadding="16sp"
         app:drawableTint="?colorOnSurface"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         />
@@ -35,9 +35,10 @@
         app:drawableStartCompat="@drawable/ic_about"
         android:drawablePadding="16sp"
         app:drawableTint="?colorOnSurface"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+
         />
 
 </LinearLayout>
