@@ -11,7 +11,6 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -28,8 +27,6 @@ import kotlinx.android.synthetic.main.reader.*
 @AndroidEntryPoint
 class ReaderFragment : Fragment() {
 
-    private val args: ReaderFragmentArgs by navArgs()
-
     private val viewModel by viewModels<ReaderViewModel>()
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
@@ -44,7 +41,7 @@ class ReaderFragment : Fragment() {
     lateinit var rootView: View
 
     @ExperimentalStdlibApi
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         rootView = inflater.inflate(R.layout.reader, container, false)
         setHasOptionsMenu(true)
 
@@ -75,6 +72,8 @@ class ReaderFragment : Fragment() {
         tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
         tvDef = requireActivity().findViewById(R.id.tvDef)
         tvLex = requireActivity().findViewById(R.id.tvLex)
+
+        bottomSheet.visibility = View.VISIBLE
 
         webview_reader.settings.apply {
             javaScriptEnabled = true

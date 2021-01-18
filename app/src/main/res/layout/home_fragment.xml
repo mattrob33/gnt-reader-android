@@ -93,6 +93,7 @@
         android:padding="0dp"
         android:clipToPadding="true"
         android:elevation="16dp"
+        android:visibility="gone"
         >
         <LinearLayout
             android:id="@+id/bottomSheetContainer"

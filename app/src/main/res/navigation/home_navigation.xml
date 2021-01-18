@@ -26,4 +26,11 @@
         tools:layout="@layout/vocab_list_fragment"
         />
 
+    <fragment
+        android:id="@+id/navigation_more"
+        android:name="com.mattrobertson.greek.reader.presentation.more.MoreFragment"
+        android:label="@string/more"
+        tools:layout="@layout/more_fragment"
+        />
+
 </navigation>
