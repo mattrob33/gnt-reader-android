@@ -3,15 +3,20 @@ package com.mattrobertson.greek.reader.presentation.reader
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.*
+import android.widget.TextView
 import androidx.activity.addCallback
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
 import com.mattrobertson.greek.reader.ui.SwipeDetector
@@ -27,7 +32,14 @@ class ReaderFragment : Fragment() {
 
     private val viewModel by viewModels<ReaderViewModel>()
 
-//    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
+
+    private lateinit var toolbarTitle: TextView
+
+    private lateinit var bottomSheet: NestedScrollView
+    private lateinit var tvConcordance: TextView
+    private lateinit var tvDef: TextView
+    private lateinit var tvLex: TextView
 
     lateinit var rootView: View
 
@@ -57,12 +69,12 @@ class ReaderFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-//        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-//        actionBar?.apply {
-//            title = ""
-//            setDisplayHomeAsUpEnabled(false)
-//        }
+        toolbarTitle = requireActivity().findViewById(R.id.toolbar_title)
+
+        bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
+        tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
+        tvDef = requireActivity().findViewById(R.id.tvDef)
+        tvLex = requireActivity().findViewById(R.id.tvLex)
 
         webview_reader.settings.apply {
             javaScriptEnabled = true
@@ -84,17 +96,17 @@ class ReaderFragment : Fragment() {
 
         webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
 
-//        tvConcordance.movementMethod = LinkMovementMethod.getInstance()
-//
-//        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-//        mBottomSheetBehavior.peekHeight = 400
-//        mBottomSheetBehavior.isHideable = true
-//
-//        reader_toolbar_title.setOnClickListener {
-//            requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-//                HomeFragmentDirections.toBookPicker()
-//            )
-//        }
+        tvConcordance.movementMethod = LinkMovementMethod.getInstance()
+
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        mBottomSheetBehavior.peekHeight = 400
+        mBottomSheetBehavior.isHideable = true
+
+        toolbarTitle.setOnClickListener {
+            requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
+                HomeFragmentDirections.toBookPicker()
+            )
+        }
 
         subscribeUI()
 
@@ -121,7 +133,7 @@ class ReaderFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 ScreenState.LOADING -> {
-//                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
                     // TODO : show progress indicator
                 }
                 ScreenState.READY -> {
@@ -131,7 +143,7 @@ class ReaderFragment : Fragment() {
         }
 
         viewModel.title.observe(viewLifecycleOwner) {
-//            toolbar_title.text = it
+            toolbarTitle.text = it
         }
 
         viewModel.html.observe(viewLifecycleOwner) { html ->
@@ -145,15 +157,15 @@ class ReaderFragment : Fragment() {
                 if (glossInfo.parsing.isNotBlank())
                     defEntry += "\n${glossInfo.parsing}"
 
-//                tvDef.text = defEntry
-//                tvLex.text = glossInfo.lex
+                tvDef.text = defEntry
+                tvLex.text = glossInfo.lex
 
-//                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 
         viewModel.concordanceInfo.observe(viewLifecycleOwner) { concordanceInfo ->
-//            tvConcordance.text = concordanceInfo ?: ""
+            tvConcordance.text = concordanceInfo ?: ""
         }
 
         viewModel.showConcordanceScreenForLex.observe(viewLifecycleOwner) { lex ->

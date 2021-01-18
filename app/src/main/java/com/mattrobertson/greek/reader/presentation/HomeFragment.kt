@@ -52,10 +52,10 @@ class HomeFragment : Fragment() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             toolbar_title.text = when (destination.id) {
-                R.id.navigation_home -> "SBLGNT Reader"
+                R.id.navigation_home -> ""
                 R.id.navigation_plans -> "Plans"
                 R.id.navigation_vocab -> "Vocab"
-                else -> "SBLGNT Reader"
+                else -> ""
             }
         }
     }
