@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_vocab"
         android:title="@string/vocab" />
 
+    <item
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/more" />
+
 </menu>

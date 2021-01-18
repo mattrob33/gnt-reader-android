@@ -14,31 +14,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
-        setHasOptionsMenu(true)
-        return view
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_settings -> {
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        HomeFragmentDirections.toSettings()
-                )
-            }
-
-            R.id.menu_item_about -> {
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                        HomeFragmentDirections.toAbout()
-                )
-            }
-        }
-        return true
+        return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -55,6 +31,7 @@ class HomeFragment : Fragment() {
                 R.id.navigation_home -> ""
                 R.id.navigation_plans -> "Plans"
                 R.id.navigation_vocab -> "Vocab"
+                R.id.navigation_more -> "More"
                 else -> ""
             }
         }
