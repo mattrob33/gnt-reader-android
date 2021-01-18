@@ -15,6 +15,7 @@
 
 	<color name="textColor">#000000</color>
 
-	<color name="bottom_nav_icon_color_selected">@color/primary</color>
+	<color name="bottom_nav_background">#FFFFFF</color>
+	<color name="bottom_nav_icon_color_selected">#000000</color>
 	<color name="bottom_nav_icon_color_not_selected">#777777</color>
 </resources>

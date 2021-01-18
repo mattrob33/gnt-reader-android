@@ -91,7 +91,7 @@ class ChapterPickerFragment : Fragment() {
 
     private fun launchReader(book: Int, chapter: Int) {
         requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                CoreNavigationDirections.toReader(book, chapter)
+                ChapterPickerFragmentDirections.toHome()
         )
     }
 
