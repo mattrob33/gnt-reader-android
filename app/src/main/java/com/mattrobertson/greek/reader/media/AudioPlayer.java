@@ -1,15 +1,9 @@
-package com.mattrobertson.greek.reader.objects;
+package com.mattrobertson.greek.reader.media;
 
 import android.app.*;
 import android.content.*;
 import android.media.*;
-import android.os.*;
-import android.view.*;
-import android.view.ContextMenu.*;
 import android.widget.*;
-import android.widget.AdapterView.*;
-import java.io.*;
-import java.net.*;
 import android.net.*;
 import com.mattrobertson.greek.reader.interfaces.*;
 
