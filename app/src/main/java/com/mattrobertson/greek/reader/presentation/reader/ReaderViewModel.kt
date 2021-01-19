@@ -16,6 +16,8 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
+import com.mattrobertson.greek.reader.html.HtmlGenerator
+import com.mattrobertson.greek.reader.html.readerHtmlHead
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.VerseRef

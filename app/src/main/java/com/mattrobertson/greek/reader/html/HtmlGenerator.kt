@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.presentation.reader
+package com.mattrobertson.greek.reader.html
 
 import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
