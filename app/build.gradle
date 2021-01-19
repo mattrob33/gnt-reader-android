@@ -51,7 +51,7 @@ android {
 }
 
 ext {
-    roomVersion = "2.2.5"
+    roomVersion = "2.2.6"
     navVersion = "2.3.2"
     jupiterVersion = "5.3.2"
     lifecycleVersion = "2.2.0"
@@ -88,8 +88,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment:$navVersion"
-    implementation "androidx.navigation:navigation-ui:$navVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 
