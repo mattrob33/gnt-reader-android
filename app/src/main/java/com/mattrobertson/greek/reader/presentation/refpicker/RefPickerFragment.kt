@@ -146,6 +146,11 @@ class RefPickerFragment : Fragment() {
             return inflater.inflate(R.layout.chapter_picker, container, false)
         }
 
+        override fun onDestroy() {
+            cp_container.removeAllViews()
+            super.onDestroy()
+        }
+
         override fun onResume() {
             super.onResume()
 
