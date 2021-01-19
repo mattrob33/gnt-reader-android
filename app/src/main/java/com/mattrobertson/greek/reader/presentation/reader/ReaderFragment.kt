@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.*
+import android.view.GestureDetector
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.addCallback
+import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -20,6 +23,7 @@ import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
 import com.mattrobertson.greek.reader.ui.SwipeDetector
 import com.mattrobertson.greek.reader.ui.Swipeable
+import com.mattrobertson.greek.reader.util.getNavigationResult
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
 
@@ -27,7 +31,7 @@ import kotlinx.android.synthetic.main.reader.*
 @AndroidEntryPoint
 class ReaderFragment : Fragment() {
 
-    private val viewModel by viewModels<ReaderViewModel>()
+    private val viewModel by activityViewModels<ReaderViewModel>()
 
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
@@ -38,28 +42,9 @@ class ReaderFragment : Fragment() {
     private lateinit var tvDef: TextView
     private lateinit var tvLex: TextView
 
-    lateinit var rootView: View
-
     @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        rootView = inflater.inflate(R.layout.reader, container, false)
-        setHasOptionsMenu(true)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (!viewModel.navigateBack())
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
-        }
-
-        return rootView
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
-            }
-        }
-        return true
+        return inflater.inflate(R.layout.reader, container, false)
     }
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
@@ -169,6 +154,12 @@ class ReaderFragment : Fragment() {
 
         viewModel.showConcordanceScreenForLex.observe(viewLifecycleOwner) { lex ->
             launchConcordanceScreen(lex)
+        }
+
+        getNavigationResult("book")?.observe(viewLifecycleOwner) { book ->
+            val chapter = getNavigationResult("chapter")?.value ?: 0
+
+            Toast.makeText(requireContext(), "Ref is $book, $chapter", Toast.LENGTH_SHORT).show()
         }
     }
 

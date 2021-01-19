@@ -46,7 +46,7 @@ class PlanSplashFragment: Fragment() {
         var btn: Button
         val buttons = ArrayList<Button>()
 
-        val btnWidth = dpToPx(requireContext(), 60)
+        val btnWidth = dpToPx(requireContext(), 100)
         val params = LinearLayout.LayoutParams(btnWidth, btnWidth)
         params.setMargins(0, 0, dpToPx(requireContext(), 2), 0)
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
+import com.mattrobertson.greek.reader.util.getNavigationResult
 import com.mattrobertson.greek.reader.util.isSingleChapterBook
 import kotlinx.android.synthetic.main.book_picker_fragment.*
 
@@ -76,6 +78,16 @@ class BookPickerFragment : Fragment() {
         })
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        getNavigationResult("book")?.observe(viewLifecycleOwner) { book ->
+            val chapter = getNavigationResult("chapter")?.value ?: 0
+
+            Toast.makeText(requireContext(), "Ref is $book, $chapter", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun notifyScrollChange(isTop: Boolean) {

@@ -13,9 +13,13 @@
 
 	<color name="recentItemTextColor">@color/accent</color>
 
+	<color name="content_background">#FFFFFF</color>
+
 	<color name="textColor">#000000</color>
 
-	<color name="bottom_nav_background">#FFFFFF</color>
+	<color name="appbar_color">#FFFFFF</color>
+
+	<color name="bottom_nav_background">@color/appbar_color</color>
 	<color name="bottom_nav_icon_color_selected">#000000</color>
 	<color name="bottom_nav_icon_color_not_selected">#777777</color>
 </resources>
