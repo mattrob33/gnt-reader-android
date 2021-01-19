@@ -1,11 +1,10 @@
-package com.mattrobertson.greek.reader.media;
+package com.mattrobertson.greek.reader.audio;
 
 import android.app.*;
 import android.content.*;
 import android.media.*;
 import android.widget.*;
 import android.net.*;
-import com.mattrobertson.greek.reader.interfaces.*;
 
 public class AudioPlayer 
 {
