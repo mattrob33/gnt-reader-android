@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.ui
+package com.mattrobertson.greek.reader.webview
 
 import android.webkit.JavascriptInterface
 import com.mattrobertson.greek.reader.model.Word
