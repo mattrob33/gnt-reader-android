@@ -32,8 +32,8 @@
             />
 
         <action
-            android:id="@+id/to_book_picker"
-            app:destination="@id/navigation_book_picker"
+            android:id="@+id/to_ref_picker"
+            app:destination="@id/ref_picker"
             />
 
         <argument
@@ -56,24 +56,6 @@
         />
 
     <!-- Read:: Chapter Picker -->
-    <fragment
-        android:id="@+id/navigation_chapter_picker"
-        android:name="com.mattrobertson.greek.reader.presentation.bookpicker.ChapterPickerFragment"
-        tools:layout="@layout/chapter_picker">
-
-        <argument
-            android:name="book"
-            app:argType="integer"
-            android:defaultValue="0"
-            />
-        <action
-            android:id="@+id/to_home"
-            app:destination="@id/navigation_home"
-            app:popUpTo="@+id/core_navigation"
-            app:popUpToInclusive="true"
-            />
-
-    </fragment>
 
     <!-- Plans:: Plan Splash -->
     <fragment
@@ -164,16 +146,10 @@
         />
 
     <fragment
-        android:id="@+id/navigation_book_picker"
-        android:name="com.mattrobertson.greek.reader.presentation.bookpicker.BookPickerFragment"
-        android:label="BookPickerFragment"
-        tools:layout="@layout/book_picker_fragment">
-
-        <action
-            android:id="@+id/to_chapter_picker"
-            app:destination="@id/navigation_chapter_picker"
-            />
-
-    </fragment>
+        android:id="@+id/ref_picker"
+        android:name="com.mattrobertson.greek.reader.presentation.refpicker.RefPickerFragment"
+        android:label="RefPickerFragment"
+        tools:layout="@layout/ref_picker_fragment"
+        />
 
 </navigation>

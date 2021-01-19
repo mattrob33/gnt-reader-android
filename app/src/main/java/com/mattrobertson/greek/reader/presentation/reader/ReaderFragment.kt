@@ -2,6 +2,7 @@ package com.mattrobertson.greek.reader.presentation.reader
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.GestureDetector
@@ -78,7 +79,10 @@ class ReaderFragment : Fragment() {
             }
         }
 
-        webview_reader.addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
+        webview_reader.apply {
+            setBackgroundColor(Color.argb(1, 0, 0, 0))
+            addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
+        }
 
         tvConcordance.movementMethod = LinkMovementMethod.getInstance()
 
@@ -88,7 +92,7 @@ class ReaderFragment : Fragment() {
 
         toolbarTitle.setOnClickListener {
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                HomeFragmentDirections.toBookPicker()
+                HomeFragmentDirections.toRefPicker()
             )
         }
 
