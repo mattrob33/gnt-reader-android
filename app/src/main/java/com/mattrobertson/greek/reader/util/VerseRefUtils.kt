@@ -56,17 +56,3 @@ fun getBookTitle(book: Book): String {
 fun getBookAbbrv(book: Book): String {
     return AppConstants.abbrvs[book.num]
 }
-
-
-
-// UI Utils
-
-fun dpToPx(context: Context, dp: Int): Int {
-    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
-    return round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
-}
-
-fun pxToDp(context: Context, px: Int): Int {
-    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
-    return round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
-}

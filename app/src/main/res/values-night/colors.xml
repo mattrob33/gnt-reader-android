@@ -7,9 +7,13 @@
 
     <color name="recentItemTextColor">@color/accent</color>
 
+    <color name="content_background">#000000</color>
+
     <color name="textColor">#FFFFFF</color>
 
-    <color name="bottom_nav_background">#222222</color>
+    <color name="appbar_color">#1A1A1A</color>
+
+    <color name="bottom_nav_background">@color/appbar_color</color>
     <color name="bottom_nav_icon_color_selected">#FFFFFF</color>
     <color name="bottom_nav_icon_color_not_selected">#999999</color>
 </resources>

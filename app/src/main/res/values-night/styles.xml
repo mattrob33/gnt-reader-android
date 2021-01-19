@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="BaseTheme">
-        <item name="android:colorBackground">#222222</item>
+        <item name="android:colorBackground">#1A1A1A</item>
+        <item name="colorSurface">#1A1A1A</item>
     </style>
 </resources>

@@ -1,7 +1,9 @@
 package com.mattrobertson.greek.reader.presentation.bookpicker
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -11,12 +13,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.util.dpToPx
-import com.mattrobertson.greek.reader.util.getBookTitle
-import com.mattrobertson.greek.reader.util.numChaptersInBook
+import com.mattrobertson.greek.reader.util.*
 import kotlinx.android.synthetic.main.chapter_picker.*
 
 class ChapterPickerFragment : Fragment() {
@@ -54,7 +53,7 @@ class ChapterPickerFragment : Fragment() {
         display.getSize(size)
 
         val wScreen = size.x - 40
-        var wTarget = dpToPx(requireContext(), 60)
+        var wTarget = dpToPx(requireContext(), 100)
         var numSq = wScreen / wTarget // # of squares per row
 
         if (numSq < 4) {
@@ -90,17 +89,19 @@ class ChapterPickerFragment : Fragment() {
     }
 
     private fun launchReader(book: Int, chapter: Int) {
-        requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                ChapterPickerFragmentDirections.toHome()
-        )
+        setNavigationResult(book, "book")
+        setNavigationResult(chapter, "chapter")
+
+        requireActivity().findNavController(R.id.core_nav_host_fragment).navigateUp()
     }
 
     internal inner class ChapterButton(c: Context, sidePx: Int) : AppCompatButton(c) {
         init {
             layoutParams = LinearLayout.LayoutParams(sidePx, sidePx)
             gravity = Gravity.CENTER
-            background = ResourcesCompat.getDrawable(resources, R.drawable.chapter_button, null)
-            setTextColor(ResourcesCompat.getColor(resources, R.color.accentSurfaceTextColor, requireContext().theme))
+            background = ColorDrawable(Color.TRANSPARENT)
+            setTextColor(getThemedColor(c, R.attr.colorOnSurface))
+            textSize = dpToPx(c, 10f)
         }
     }
 
