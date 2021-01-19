@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.ui;
+package com.mattrobertson.greek.reader.swipe;
 
 import android.os.*;
 import android.view.*;
