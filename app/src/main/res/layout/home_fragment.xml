@@ -1,6 +1,6 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,6 +26,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pt_serif_bold"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/toolbar_reader_title"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pt_serif_bold"
+                app:drawableEndCompat="@drawable/ic_down_arrow"
+                app:drawableTint="@color/textColor"
+                tools:text="Romans 5"
                 />
 
         </androidx.appcompat.widget.Toolbar>

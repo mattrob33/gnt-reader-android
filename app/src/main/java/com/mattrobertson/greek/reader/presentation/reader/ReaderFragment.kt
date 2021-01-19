@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,7 +20,7 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
+import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.ui.ReaderJsInterface
 import com.mattrobertson.greek.reader.ui.SwipeDetector
@@ -43,7 +44,6 @@ class ReaderFragment : Fragment() {
     private lateinit var tvDef: TextView
     private lateinit var tvLex: TextView
 
-    @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.reader, container, false)
     }
@@ -52,7 +52,7 @@ class ReaderFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        toolbarTitle = requireActivity().findViewById(R.id.toolbar_title)
+        toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
         bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
         tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
@@ -92,9 +92,15 @@ class ReaderFragment : Fragment() {
 
         toolbarTitle.setOnClickListener {
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                HomeFragmentDirections.toRefPicker()
+                BottomNavHostFragmentDirections.toRefPicker()
             )
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.navigateBack()
+            }
+        })
 
         subscribeUI()
 
