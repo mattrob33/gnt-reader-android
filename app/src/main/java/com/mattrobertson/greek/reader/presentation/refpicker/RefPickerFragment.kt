@@ -119,8 +119,6 @@ class RefPickerFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
 
-            recents_list.visibility = View.GONE
-
             val arrBooks = resources.getStringArray(R.array.books)
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrBooks)
             lvBooks.adapter = adapter
@@ -135,6 +133,8 @@ class RefPickerFragment : Fragment() {
                     refPickerViewModel.book.value = book
                 }
             }
+
+            lvBooks.requestFocus()
         }
     }
 
@@ -146,9 +146,9 @@ class RefPickerFragment : Fragment() {
             return inflater.inflate(R.layout.chapter_picker, container, false)
         }
 
-        override fun onDestroy() {
+        override fun onPause() {
             cp_container.removeAllViews()
-            super.onDestroy()
+            super.onPause()
         }
 
         override fun onResume() {
