@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.ui
+package com.mattrobertson.greek.reader.swipe
 
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
