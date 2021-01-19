@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.PlanReaderActivity
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
+import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import kotlinx.android.synthetic.main.plan_picker_fragment.*
 
 class PlanPickerFragment: Fragment() {
@@ -47,7 +47,7 @@ class PlanPickerFragment: Fragment() {
         }
         else {
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                HomeFragmentDirections.toPlanSplash(plan)
+                BottomNavHostFragmentDirections.toPlanSplash(plan)
             )
         }
     }

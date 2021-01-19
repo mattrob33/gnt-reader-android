@@ -2,6 +2,7 @@ package com.mattrobertson.greek.reader.presentation
 
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
@@ -26,10 +27,24 @@ class BottomNavHostFragment : Fragment() {
         bottom_nav_view.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            // Set toolbar title
             when (destination.id) {
                 R.id.navigation_plans -> toolbar_title.text = "Plans"
                 R.id.navigation_vocab -> toolbar_title.text = "Vocabulary"
                 R.id.navigation_more -> toolbar_title.text = "More"
+            }
+
+            // Swap toolbar title view (Reader uses a different view with a right drawable dropdown arrow)
+            when (destination.id) {
+                R.id.navigation_read -> {
+                    toolbar_title.visibility = View.GONE
+                    toolbar_reader_title.visibility = View.VISIBLE
+                }
+                else -> {
+                    toolbar_reader_title.visibility = View.GONE
+                    toolbar_title.visibility = View.VISIBLE
+                }
             }
         }
     }

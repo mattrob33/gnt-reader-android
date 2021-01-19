@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.presentation.HomeFragmentDirections
+import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.android.synthetic.main.vocab_list_fragment.*
 
@@ -43,7 +43,7 @@ class VocabListFragment: Fragment() {
             val (book, chapter) = viewModel.getBookAndChapter(id)
 
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
-                    HomeFragmentDirections.toChapterVocab(book, chapter)
+                    BottomNavHostFragmentDirections.toChapterVocab(book, chapter)
             )
         }
     }

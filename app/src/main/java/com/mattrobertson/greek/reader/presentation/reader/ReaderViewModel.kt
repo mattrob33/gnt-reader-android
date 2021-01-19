@@ -97,11 +97,10 @@ class ReaderViewModel @ViewModelInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         loadJob.cancel()
+        super.onCleared()
     }
 
-    @ExperimentalStdlibApi
     fun navigateBack(): Boolean {
         return if(refBackstack.isEmpty()) {
             false
