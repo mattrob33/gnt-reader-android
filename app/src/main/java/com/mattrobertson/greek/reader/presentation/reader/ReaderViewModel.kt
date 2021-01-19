@@ -154,7 +154,7 @@ class ReaderViewModel @ViewModelInject constructor(
         goTo(ref)
     }
 
-    private fun goTo(ref: VerseRef) {
+    fun goTo(ref: VerseRef) {
         currentRef = ref
 
         loadChapter(ref)
