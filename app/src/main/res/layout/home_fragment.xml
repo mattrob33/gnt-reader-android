@@ -37,6 +37,9 @@
                 android:fontFamily="@font/pt_serif_bold"
                 app:drawableEndCompat="@drawable/ic_down_arrow"
                 app:drawableTint="@color/textColor"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 tools:text="Romans 5"
                 />
 
