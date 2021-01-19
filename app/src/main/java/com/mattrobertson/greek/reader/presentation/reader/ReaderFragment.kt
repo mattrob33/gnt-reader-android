@@ -123,6 +123,11 @@ class ReaderFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
     private fun subscribeUI() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
