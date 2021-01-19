@@ -8,7 +8,7 @@
     <!-- Home -->
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.mattrobertson.greek.reader.presentation.HomeFragment"
+        android:name="com.mattrobertson.greek.reader.presentation.BottomNavHostFragment"
         tools:layout="@layout/home_fragment">
 
         <action
