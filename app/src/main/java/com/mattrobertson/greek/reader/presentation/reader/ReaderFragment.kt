@@ -22,10 +22,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
-import com.mattrobertson.greek.reader.ui.ReaderJsInterface
-import com.mattrobertson.greek.reader.ui.SwipeDetector
-import com.mattrobertson.greek.reader.ui.Swipeable
+import com.mattrobertson.greek.reader.webview.ReaderJsInterface
+import com.mattrobertson.greek.reader.swipe.SwipeDetector
+import com.mattrobertson.greek.reader.swipe.Swipeable
 import com.mattrobertson.greek.reader.util.getNavigationResult
+import com.mattrobertson.greek.reader.webview.ScrollObserver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
 
@@ -121,6 +122,12 @@ class ReaderFragment : Fragment() {
         webview_reader.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
         }
+
+        webview_reader.addScrollObserver(object: ScrollObserver {
+            override fun onScroll() {
+                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        })
     }
 
     override fun onResume() {

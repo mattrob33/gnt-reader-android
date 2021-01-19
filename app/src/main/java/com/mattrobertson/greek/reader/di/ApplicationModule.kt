@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.di
 
 import android.content.Context
+import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.data.VersesDao
@@ -20,6 +21,10 @@ object ApplicationModule {
 	@Singleton
 	@Provides
 	fun provideDatabase(@ApplicationContext appContext: Context) = VerseDatabase.getInstance(appContext)
+
+	@Singleton
+	@Provides
+	fun provideDatabaseHelper(@ApplicationContext appContext: Context) = DataBaseHelper(appContext)
 
 	@Singleton
 	@Provides

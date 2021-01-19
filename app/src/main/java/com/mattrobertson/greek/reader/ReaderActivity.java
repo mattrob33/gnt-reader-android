@@ -45,7 +45,7 @@ import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan;
 import com.mattrobertson.greek.reader.data.DataBaseHelper;
 import com.mattrobertson.greek.reader.model.Word_OLD;
 import com.mattrobertson.greek.reader.presentation.util.WordSpan;
-import com.mattrobertson.greek.reader.ui.SwipeActivity;
+import com.mattrobertson.greek.reader.swipe.SwipeActivity;
 import com.mattrobertson.greek.reader.util.AppConstants;
 
 import java.io.InputStream;

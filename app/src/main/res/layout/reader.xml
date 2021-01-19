@@ -1,4 +1,4 @@
-<com.mattrobertson.greek.reader.ui.NestedWebView
+<com.mattrobertson.greek.reader.webview.ObservableNestedWebView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/webview_reader"

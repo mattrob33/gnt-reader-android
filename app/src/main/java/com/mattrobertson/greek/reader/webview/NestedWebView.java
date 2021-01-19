@@ -1,5 +1,6 @@
-package com.mattrobertson.greek.reader.ui;
+package com.mattrobertson.greek.reader.webview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -31,6 +32,7 @@ public class NestedWebView extends WebView implements NestedScrollingChild {
         setNestedScrollingEnabled(true);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         boolean returnValue = false;

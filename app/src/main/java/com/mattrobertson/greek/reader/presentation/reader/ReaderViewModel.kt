@@ -75,8 +75,6 @@ class ReaderViewModel @ViewModelInject constructor(
         verse =  VerseRef.NO_VERSE
     )
 
-
-
     private val refBackstack = arrayListOf<VerseRef>()
 
     private var hasScrolled = false
@@ -102,13 +100,14 @@ class ReaderViewModel @ViewModelInject constructor(
     }
 
     fun navigateBack(): Boolean {
-        return if(refBackstack.isEmpty()) {
-            false
-        }
-        else {
-            val toRef = refBackstack.removeLast()
-            goTo(VerseRef(toRef.book, toRef.chapter, toRef.verse))
-            true
+        return when {
+            refBackstack.isEmpty() -> false
+
+            else -> {
+                val toRef = refBackstack.removeLast()
+                goTo(VerseRef(toRef.book, toRef.chapter, toRef.verse))
+                true
+            }
         }
     }
 
