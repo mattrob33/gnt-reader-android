@@ -47,6 +47,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:progressTint="@color/textColor"
+        />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroller"
         android:layout_width="match_parent"

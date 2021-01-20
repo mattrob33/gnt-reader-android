@@ -2,6 +2,7 @@ package com.mattrobertson.greek.reader.presentation.reader
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -9,6 +10,9 @@ import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -40,6 +44,8 @@ class ReaderFragment : Fragment() {
 
     private lateinit var toolbarTitle: TextView
 
+    private lateinit var loadingProgress: ProgressBar
+
     private lateinit var bottomSheet: NestedScrollView
     private lateinit var tvConcordance: TextView
     private lateinit var tvDef: TextView
@@ -55,6 +61,8 @@ class ReaderFragment : Fragment() {
 
         toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
+        loadingProgress = requireActivity().findViewById(R.id.loading_progress)
+
         bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
         tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
         tvDef = requireActivity().findViewById(R.id.tvDef)
@@ -62,8 +70,40 @@ class ReaderFragment : Fragment() {
 
         bottomSheet.visibility = View.VISIBLE
 
-        webview_reader.settings.apply {
-            javaScriptEnabled = true
+        val swipeHandler = object: Swipeable {
+            override fun onSwipeLeft() = viewModel.nextChapter()
+            override fun onSwipeRight() = viewModel.prevChapter()
+        }
+
+        val gestureDetector = GestureDetector(requireContext(), SwipeDetector(swipeHandler))
+
+        webview_reader.apply {
+            setBackgroundColor(Color.argb(1, 0, 0, 0))
+            addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
+
+            settings.javaScriptEnabled = true
+
+            webViewClient = object: WebViewClient() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    loadingProgress.visibility = View.VISIBLE
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    loadingProgress.visibility = View.GONE
+                }
+            }
+
+            setOnTouchListener { _, event ->
+                gestureDetector.onTouchEvent(event)
+            }
+
+            observer = object: ScrollObserver {
+                override fun onScroll() {
+                    mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
         }
 
         val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -78,11 +118,6 @@ class ReaderFragment : Fragment() {
             } else {
                 WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_OFF)
             }
-        }
-
-        webview_reader.apply {
-            setBackgroundColor(Color.argb(1, 0, 0, 0))
-            addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
         }
 
         tvConcordance.movementMethod = LinkMovementMethod.getInstance()
@@ -104,30 +139,6 @@ class ReaderFragment : Fragment() {
         })
 
         subscribeUI()
-
-        val swipeHandler = object: Swipeable {
-            override fun onSwipeLeft() {
-                viewModel.nextChapter()
-            }
-
-            override fun onSwipeRight() {
-                viewModel.prevChapter()
-            }
-        }
-
-        val swipeDetector = SwipeDetector(swipeHandler)
-
-        val gestureDetector = GestureDetector(requireContext(), swipeDetector)
-
-        webview_reader.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-        }
-
-        webview_reader.addScrollObserver(object: ScrollObserver {
-            override fun onScroll() {
-                mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            }
-        })
     }
 
     override fun onResume() {
@@ -139,11 +150,10 @@ class ReaderFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 ScreenState.LOADING -> {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
-                    // TODO : show progress indicator
+                    mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    loadingProgress.visibility = View.VISIBLE
                 }
                 ScreenState.READY -> {
-                    // TODO : hide progress indicator
                 }
             }
         }
