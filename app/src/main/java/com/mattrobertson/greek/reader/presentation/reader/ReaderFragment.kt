@@ -22,10 +22,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
-import com.mattrobertson.greek.reader.webview.ReaderJsInterface
 import com.mattrobertson.greek.reader.swipe.SwipeDetector
 import com.mattrobertson.greek.reader.swipe.Swipeable
 import com.mattrobertson.greek.reader.util.getNavigationResult
+import com.mattrobertson.greek.reader.webview.ReaderJsInterface
 import com.mattrobertson.greek.reader.webview.ScrollObserver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.reader.*
