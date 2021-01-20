@@ -1,20 +1,21 @@
 package com.mattrobertson.greek.reader.presentation
 
 import android.os.Bundle
-import android.view.*
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.mattrobertson.greek.reader.R
-import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.bottom_nav_host_fragment.*
 
 
 class BottomNavHostFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return inflater.inflate(R.layout.bottom_nav_host_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

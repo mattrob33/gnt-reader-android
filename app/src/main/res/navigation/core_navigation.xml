@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.mattrobertson.greek.reader.presentation.BottomNavHostFragment"
-        tools:layout="@layout/home_fragment">
+        tools:layout="@layout/bottom_nav_host_fragment">
 
         <action
             android:id="@+id/to_plan_splash"
