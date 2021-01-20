@@ -2,7 +2,7 @@ package com.mattrobertson.greek.reader.audio
 
 import com.mattrobertson.greek.reader.model.VerseRef
 
-interface AudioPlayback {
+interface IAudioPlayer {
 
 	fun playChapter(ref: VerseRef)
 

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.GestureDetector
@@ -14,7 +16,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -23,12 +24,12 @@ import androidx.navigation.findNavController
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.swipe.SwipeDetector
 import com.mattrobertson.greek.reader.swipe.Swipeable
-import com.mattrobertson.greek.reader.util.getNavigationResult
 import com.mattrobertson.greek.reader.webview.ReaderJsInterface
 import com.mattrobertson.greek.reader.webview.ScrollObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +47,8 @@ class ReaderFragment : Fragment() {
 
     private lateinit var loadingProgress: ProgressBar
 
+    private lateinit var playAudioButton: FloatingActionButton
+
     private lateinit var bottomSheet: NestedScrollView
     private lateinit var tvConcordance: TextView
     private lateinit var tvDef: TextView
@@ -62,6 +65,8 @@ class ReaderFragment : Fragment() {
         toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
         loadingProgress = requireActivity().findViewById(R.id.loading_progress)
+
+        playAudioButton = requireActivity().findViewById(R.id.fab_play_audio)
 
         bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
         tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
@@ -138,6 +143,10 @@ class ReaderFragment : Fragment() {
             }
         })
 
+        playAudioButton.setOnClickListener {
+            viewModel.toggleAudioPlayback()
+        }
+
         subscribeUI()
     }
 
@@ -188,10 +197,17 @@ class ReaderFragment : Fragment() {
             launchConcordanceScreen(lex)
         }
 
-        getNavigationResult("book")?.observe(viewLifecycleOwner) { book ->
-            val chapter = getNavigationResult("chapter")?.value ?: 0
+        viewModel.audioReady.observe(viewLifecycleOwner) { ready ->
+            val icon = if(ready) {
+                resources.getDrawable(android.R.drawable.ic_media_pause)
+            }
+            else {
+                resources.getDrawable(android.R.drawable.ic_media_play)
+            }
 
-            Toast.makeText(requireContext(), "Ref is $book, $chapter", Toast.LENGTH_SHORT).show()
+            icon.mutate().colorFilter = PorterDuffColorFilter(resources.getColor(R.color.content_background), PorterDuff.Mode.SRC_ATOP)
+
+            playAudioButton.setImageDrawable(icon)
         }
     }
 

@@ -13,6 +13,8 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.audio.AudioPlayer
+import com.mattrobertson.greek.reader.audio.AudioPrepared
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
@@ -35,6 +37,7 @@ class ReaderViewModel @ViewModelInject constructor(
     private val htmlGenerator: HtmlGenerator,
     private val dbHelper: DataBaseHelper,
     private val settings: Settings,
+    private val audioPlayer: AudioPlayer,
     @ApplicationContext private val applicationContext: Context,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
@@ -56,6 +59,9 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private val _concordanceInfo = MutableLiveData<SpannableStringBuilder?>()
     var concordanceInfo: LiveData<SpannableStringBuilder?> = _concordanceInfo
+
+    private val _audioReady = MutableLiveData(false)
+    var audioReady: LiveData<Boolean> = _audioReady
 
     var concordanceItemSelected = SingleLiveEvent<VerseRef?>()
         private set
@@ -86,6 +92,12 @@ class ReaderViewModel @ViewModelInject constructor(
 
     init {
        goTo(currentRef)
+
+        audioPlayer.audioPrepared = object: AudioPrepared {
+            override fun onAudioPrepared() {
+                _audioReady.value = true
+            }
+        }
     }
 
     override fun onCleared() {
@@ -171,6 +183,22 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private fun wrapHtml(html: String): String {
         return wrapThemedHtml(html, htmlGenerator.viewSettings, isDarkTheme)
+    }
+
+    fun toggleAudioPlayback() {
+        if (audioReady.value == true)
+            stopAudio()
+        else
+            playAudio()
+    }
+
+    private fun playAudio() {
+        audioPlayer.playChapter(currentRef)
+    }
+
+    private fun stopAudio() {
+        audioPlayer.stop()
+        _audioReady.value = false
     }
 
     fun showGloss(word: Word) {

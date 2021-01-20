@@ -3,25 +3,16 @@ package com.mattrobertson.greek.reader.audio
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.util.Log
+import com.mattrobertson.greek.reader.SblGntApplication
 import com.mattrobertson.greek.reader.model.VerseRef
-import com.mattrobertson.greek.reader.util.getBookAbbrv
-import com.mattrobertson.greek.reader.util.getBookTitle
+import java.lang.Exception
 import javax.inject.Inject
 
 class AudioPlayer @Inject constructor(
 	private val connectivityManager: ConnectivityManager
-): AudioPlayback {
-
-	companion object {
-		private const val urlBase = "http://www.helding.net/greeklatinaudio/greek/"
-
-		private fun getUrl(ref: VerseRef): String {
-			val strChap = if (ref.chapter < 10) "0${ref.chapter}" else "" + ref.chapter
-			val bookAbbrv = getBookAbbrv(ref.book)
-			val bookName = getBookTitle(ref.book)
-			return urlBase + "/" + bookName + "/" + bookAbbrv + strChap + "g.mp3"
-		}
-	}
+): IAudioPlayer {
 
 	var audioPrepared: AudioPrepared? = null
 
@@ -38,26 +29,33 @@ class AudioPlayer @Inject constructor(
 
 		playingRef = ref
 
-		state = AudioPlaybackState.PREPARING
-		stop()
+		try {
+			state = AudioPlaybackState.PREPARING
 
-		player.apply {
-			setAudioStreamType(AudioManager.STREAM_MUSIC)
-			player.setDataSource(
-				getUrl(ref)
-			)
+			val url = GreekLatinAudio.getUrl(ref)
+
+			player = MediaPlayer.create(SblGntApplication.context, Uri.parse(url))
+
+			stop()
+
+			player.apply {
+				setAudioStreamType(AudioManager.STREAM_MUSIC)
+//				player.setDataSource(url)
+			}
+
+			player.setOnPreparedListener {
+				if (playProgress > 0)
+					player.seekTo(playProgress)
+
+				player.start()
+				state = AudioPlaybackState.PLAYING
+				audioPrepared?.onAudioPrepared()
+			}
+			player.prepareAsync()
 		}
-
-		player.setOnPreparedListener {
-			player = it
-			if (playProgress > 0)
-				player.seekTo(playProgress)
-
-			player.start()
-			state = AudioPlaybackState.PLAYING
-			audioPrepared?.onAudioPrepared()
+		catch (e: Exception) {
+			Log.e("gnt", "Error: ${e.message}")
 		}
-		player.prepareAsync()
 	}
 
 	override fun pause() {
@@ -71,6 +69,7 @@ class AudioPlayer @Inject constructor(
 	override fun stop() {
 		if (player.isPlaying) {
 			player.stop()
+			player.release()
 			state = AudioPlaybackState.STOPPED
 			playProgress = 0
 		}
