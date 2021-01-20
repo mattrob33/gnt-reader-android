@@ -168,7 +168,7 @@ class RefPickerFragment : Fragment() {
             display.getSize(size)
 
             val wScreen = size.x - 40
-            var wTarget = dpToPx(requireContext(), 100)
+            var wTarget = dpToPx(100)
             var numSq = wScreen / wTarget // # of squares per row
 
             if (numSq < 4) {
@@ -209,7 +209,7 @@ class RefPickerFragment : Fragment() {
                 gravity = Gravity.CENTER
                 background = ColorDrawable(Color.TRANSPARENT)
                 setTextColor(getThemedColor(c, R.attr.colorOnSurface))
-                textSize = dpToPx(c, 10f)
+                textSize = dpToPx(10f)
             }
         }
 

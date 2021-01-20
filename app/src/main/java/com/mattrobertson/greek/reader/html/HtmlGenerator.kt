@@ -3,6 +3,7 @@ package com.mattrobertson.greek.reader.html
 import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.viewsettings.ViewSettings
 
 class HtmlGenerator(
 	private val verseRepo: VerseRepo
@@ -86,25 +87,5 @@ class HtmlGenerator(
 		htmlBuilder.endParagraph()
 
 		return htmlBuilder.toString()
-	}
-
-	data class ViewSettings(
-		var showVerseNumbers: Boolean = true,
-		var showVersesNewLines: Boolean = false
-	) {
-
-		override fun equals(other: Any?): Boolean {
-			if (other !is ViewSettings) return false
-
-			return (showVerseNumbers == other.showVerseNumbers) &&
-				(showVersesNewLines == other.showVersesNewLines)
-		}
-
-		override fun hashCode(): Int {
-			var result = showVerseNumbers.hashCode()
-			result = 31 * result + showVersesNewLines.hashCode()
-			return result
-		}
-
 	}
 }
