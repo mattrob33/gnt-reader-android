@@ -22,6 +22,7 @@ class Settings private constructor(applicationContext: Context) {
 
     fun saveRecents() {
         save(KEY_RECENTS, Recents.toJson())
+        loadRecents()
     }
 
     fun loadRecents() {
