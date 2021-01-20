@@ -7,7 +7,6 @@ import android.net.Uri
 import android.util.Log
 import com.mattrobertson.greek.reader.SblGntApplication
 import com.mattrobertson.greek.reader.model.VerseRef
-import java.lang.Exception
 import javax.inject.Inject
 
 class AudioPlayer @Inject constructor(
@@ -32,22 +31,20 @@ class AudioPlayer @Inject constructor(
 		try {
 			state = AudioPlaybackState.PREPARING
 
+			stop()
+
 			val url = GreekLatinAudio.getUrl(ref)
 
 			player = MediaPlayer.create(SblGntApplication.context, Uri.parse(url))
 
-			stop()
-
-			player.apply {
-				setAudioStreamType(AudioManager.STREAM_MUSIC)
-//				player.setDataSource(url)
-			}
+			player.setAudioStreamType(AudioManager.STREAM_MUSIC)
 
 			player.setOnPreparedListener {
 				if (playProgress > 0)
 					player.seekTo(playProgress)
 
 				player.start()
+
 				state = AudioPlaybackState.PLAYING
 				audioPrepared?.onAudioPrepared()
 			}
