@@ -87,5 +87,5 @@ fun wrapThemedHtml(
 	<body>
 		$htmlBody
 	</body>
-</html>""";
+</html>"""
 }
