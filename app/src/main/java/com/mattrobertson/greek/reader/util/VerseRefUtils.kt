@@ -3,6 +3,7 @@ package com.mattrobertson.greek.reader.util
 import android.content.Context
 import android.util.DisplayMetrics
 import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.model.VerseRef
 import kotlin.math.round
 
 
@@ -52,6 +53,8 @@ fun numVersesInChapter(book: Book, chapter: Int): Int {
 fun getBookTitle(book: Book): String {
     return AppConstants.bookTitles[book.num]
 }
+
+fun getReference(ref: VerseRef) = "${getBookTitle(ref.book)} ${ref.chapter}"
 
 fun getBookAbbrv(book: Book): String {
     return AppConstants.abbrvs[book.num]
