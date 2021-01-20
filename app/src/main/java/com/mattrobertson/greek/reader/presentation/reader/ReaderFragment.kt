@@ -67,13 +67,13 @@ class ReaderFragment : Fragment() {
         }
 
         val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val isNightMode = when (nightModeFlags) {
+        viewModel.isDarkTheme = when (nightModeFlags) {
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
         }
 
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-            if (isNightMode) {
+            if (viewModel.isDarkTheme) {
                 WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_ON)
             } else {
                 WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_OFF)

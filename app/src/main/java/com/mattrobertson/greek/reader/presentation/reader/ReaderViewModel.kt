@@ -17,7 +17,7 @@ import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Recents
 import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.html.HtmlGenerator
-import com.mattrobertson.greek.reader.html.readerHtmlHead
+import com.mattrobertson.greek.reader.html.wrapThemedHtml
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.GlossInfo
 import com.mattrobertson.greek.reader.model.VerseRef
@@ -33,6 +33,7 @@ import kotlinx.coroutines.*
 
 class ReaderViewModel @ViewModelInject constructor(
     private val htmlGenerator: HtmlGenerator,
+    private val dbHelper: DataBaseHelper,
     private val settings: Settings,
     @ApplicationContext private val applicationContext: Context,
     @Assisted private val savedState: SavedStateHandle
@@ -62,7 +63,11 @@ class ReaderViewModel @ViewModelInject constructor(
     var showConcordanceScreenForLex = SingleLiveEvent<String>()
         private set
 
-    private lateinit var dbHelper: DataBaseHelper
+    var isDarkTheme: Boolean = false
+        set(value) {
+            field = value
+            htmlGenerator.viewSettings.useDarkTheme = isDarkTheme
+        }
 
     private var showAudioBtn = false
 
@@ -80,18 +85,7 @@ class ReaderViewModel @ViewModelInject constructor(
     private var hasScrolled = false
 
     init {
-        htmlGenerator.viewSettings.apply {
-            showVerseNumbers = true
-            showVersesNewLines = false
-        }
-
-        try {
-            dbHelper = DataBaseHelper(applicationContext)
-        } catch (e: Exception) {
-            // TODO : log exception
-        }
-
-        goTo(currentRef)
+       goTo(currentRef)
     }
 
     override fun onCleared() {
@@ -176,9 +170,7 @@ class ReaderViewModel @ViewModelInject constructor(
     }
 
     private fun wrapHtml(html: String): String {
-        val docStart = "<html>$readerHtmlHead<body>"
-        val docEnd = "</body></html>"
-        return docStart + html + docEnd
+        return wrapThemedHtml(html, htmlGenerator.viewSettings, isDarkTheme)
     }
 
     fun showGloss(word: Word) {
