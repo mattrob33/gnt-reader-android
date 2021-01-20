@@ -1,8 +1,11 @@
-<LinearLayout
+<androidx.recyclerview.widget.RecyclerView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/cp_container"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/rv_chapters"
 	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:layout_gravity="center_horizontal"
 	android:background="@color/content_background"
+	app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+	android:paddingTop="16dp"
 	/>
