@@ -4,7 +4,7 @@
 	<item name="green" type="color">#2E7D32</item>
 	<item name="red" type="color">#B71C1C</item>
 	
-	<item name="primary" type="color">#0D47A1</item>
+	<item name="primary" type="color">#111111</item>
 	<item name="primary_dark" type="color">@color/primary</item>
 	<item name="accent" type="color">@color/primary</item>
 
