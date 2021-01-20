@@ -324,7 +324,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_reader, menu);
+        getMenuInflater().inflate(R.menu.menu_reader_old, menu);
         return true;
     }
 	

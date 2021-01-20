@@ -8,15 +8,13 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.GestureDetector
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +22,6 @@ import androidx.navigation.findNavController
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
@@ -47,15 +44,17 @@ class ReaderFragment : Fragment() {
 
     private lateinit var loadingProgress: ProgressBar
 
-    private lateinit var playAudioButton: FloatingActionButton
-
     private lateinit var bottomSheet: NestedScrollView
     private lateinit var tvConcordance: TextView
     private lateinit var tvDef: TextView
     private lateinit var tvLex: TextView
 
+    private var audioMenuItem: MenuItem? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.reader, container, false)
+        val root = inflater.inflate(R.layout.reader, container, false)
+        setHasOptionsMenu(true)
+        return root
     }
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
@@ -65,8 +64,6 @@ class ReaderFragment : Fragment() {
         toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
         loadingProgress = requireActivity().findViewById(R.id.loading_progress)
-
-        playAudioButton = requireActivity().findViewById(R.id.fab_play_audio)
 
         bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
         tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
@@ -143,16 +140,26 @@ class ReaderFragment : Fragment() {
             }
         })
 
-        playAudioButton.setOnClickListener {
-            viewModel.toggleAudioPlayback()
-        }
-
         subscribeUI()
     }
 
     override fun onResume() {
         super.onResume()
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_reader, menu)
+        audioMenuItem = menu.findItem(R.id.menu_audio)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_audio -> viewModel.toggleAudioPlayback()
+        }
+        return true
     }
 
     private fun subscribeUI() {
@@ -199,15 +206,15 @@ class ReaderFragment : Fragment() {
 
         viewModel.audioReady.observe(viewLifecycleOwner) { ready ->
             val icon = if(ready) {
-                resources.getDrawable(android.R.drawable.ic_media_pause)
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_audio_stop, requireContext().theme)
             }
             else {
-                resources.getDrawable(android.R.drawable.ic_media_play)
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_audio_play, requireContext().theme)
             }
 
-            icon.mutate().colorFilter = PorterDuffColorFilter(resources.getColor(R.color.content_background), PorterDuff.Mode.SRC_ATOP)
+            icon!!.mutate().colorFilter = PorterDuffColorFilter(resources.getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP)
 
-            playAudioButton.setImageDrawable(icon)
+            audioMenuItem?.icon = icon
         }
     }
 

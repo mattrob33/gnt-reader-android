@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:compat="http://schemas.android.com/apk/res-auto">
-  	<item android:id="@+id/menu_my_vocab"
-		compat:showAsAction="never"
-		android:title="My Vocab" />
-	<item android:id="@+id/menu_chapter_vocab"
-		compat:showAsAction="never"
-		android:title="Chapter Vocab" />
-	<item android:id="@+id/menu_speed_read"
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/menu_audio"
+		android:icon="@drawable/ic_audio_play"
+		app:showAsAction="ifRoom"
+		android:title="@string/speed_read"
+		app:iconTint="@color/textColor"
+		/>
+
+	<item
+		android:id="@+id/menu_speed_read"
 		android:icon="@drawable/ic_running"
-		compat:showAsAction="never"
-		android:title="Speed Read" />
-	<item android:id="@+id/menu_toggle_mode"
-		android:icon="@drawable/ic_cursor"
-		compat:showAsAction="never"
-		android:title="Selection Mode" />
-	<item android:id="@+id/menu_prefs"
-		android:icon="@drawable/ic_prefs"
-		compat:showAsAction="never"
-		android:title="Preferences" />
+		app:showAsAction="never"
+		android:title="@string/speed_read"
+		/>
+
 </menu>
