@@ -6,7 +6,7 @@ import android.media.*;
 import android.widget.*;
 import android.net.*;
 
-public class AudioPlayer 
+public class AudioPlayer_OLD
 {
 	public static final int PREPARING = -1;
 	public static final int STOPPED = 0;
@@ -33,7 +33,7 @@ public class AudioPlayer
 	Context c;
 	AudioPrepared callback;
 	
-	public AudioPlayer(Context c, AudioPrepared ap) {
+	public AudioPlayer_OLD(Context c, AudioPrepared ap) {
 		this.c = c;
 		player = new MediaPlayer();
 		state = STOPPED;

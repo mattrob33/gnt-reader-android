@@ -40,7 +40,7 @@ import com.mattrobertson.greek.reader.audio.AudioPrepared;
 import com.mattrobertson.greek.reader.interfaces.GreekTextProcessorInterface;
 import com.mattrobertson.greek.reader.interfaces.UpdateDialogInterface;
 import com.mattrobertson.greek.reader.interfaces.WordRunnerDialogInterface;
-import com.mattrobertson.greek.reader.audio.AudioPlayer;
+import com.mattrobertson.greek.reader.audio.AudioPlayer_OLD;
 import com.mattrobertson.greek.reader.presentation.util.ConcordanceWordSpan;
 import com.mattrobertson.greek.reader.data.DataBaseHelper;
 import com.mattrobertson.greek.reader.model.Word_OLD;
@@ -97,7 +97,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	WordRunnerDialog wr;
 	boolean isWordRunnerPaused = false;
 	
-	AudioPlayer audio;
+	AudioPlayer_OLD audio;
 	
 	UpdateDialog updateDialog;
 	
@@ -120,7 +120,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 		if (actionBar != null)
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		audio = new AudioPlayer(this,this);
+		audio = new AudioPlayer_OLD(this,this);
 
 		container = findViewById(R.id.mainContainer);
 		
@@ -138,7 +138,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 			@Override
 			public void onClick(View p1)
 			{
-				if (audio.getState() == AudioPlayer.PLAYING) {
+				if (audio.getState() == AudioPlayer_OLD.PLAYING) {
 					audio.pause();
 				}
 				else {
@@ -763,19 +763,19 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 	}
 	
 	public void refreshAudioUI() {
-		if (audio.getState() == AudioPlayer.PLAYING) {
+		if (audio.getState() == AudioPlayer_OLD.PLAYING) {
 			fabMediaPlay.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_pause));
 			fabMediaRestart.setVisibility(View.VISIBLE);
 			fabMediaRestart.animate().translationX((int)(-1 * (fabMediaRestart.getWidth()*1.5)));
 		}
-		else if (audio.getState() == AudioPlayer.PREPARING) {
+		else if (audio.getState() == AudioPlayer_OLD.PREPARING) {
 			fabMediaPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_loading));
 			fabMediaPlay.animate().rotationBy(-360)
 			.setListener(new AnimatorListenerAdapter() {
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						super.onAnimationEnd(animation);
-						if (audio.getState() == AudioPlayer.PREPARING)
+						if (audio.getState() == AudioPlayer_OLD.PREPARING)
 							fabMediaPlay.animate().rotationBy(-360);
 						else {
 							fabMediaPlay.animate().cancel();
@@ -792,7 +792,7 @@ public class ReaderActivity extends SwipeActivity implements WordRunnerDialogInt
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						super.onAnimationEnd(animation);
-						if (audio.getState() == AudioPlayer.PAUSED)
+						if (audio.getState() == AudioPlayer_OLD.PAUSED)
 							fabMediaRestart.setVisibility(View.INVISIBLE);
 					}
 				});
