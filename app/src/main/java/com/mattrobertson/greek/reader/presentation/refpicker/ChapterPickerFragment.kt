@@ -1,24 +1,20 @@
 package com.mattrobertson.greek.reader.presentation.refpicker
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.util.dpToPx
-import com.mattrobertson.greek.reader.util.getThemedColor
 import com.mattrobertson.greek.reader.util.numChaptersInBook
 import kotlinx.android.synthetic.main.chapter_picker.*
+
 
 class ChapterPickerFragment : Fragment() {
 
@@ -28,15 +24,8 @@ class ChapterPickerFragment : Fragment() {
 		return inflater.inflate(R.layout.chapter_picker, container, false)
 	}
 
-	override fun onPause() {
-		cp_container.removeAllViews()
-		super.onPause()
-	}
-
 	override fun onResume() {
 		super.onResume()
-
-		cp_container.removeAllViews()
 
 		if (refPickerViewModel.book.value == null)
 			refPickerViewModel.book.value = Book.MATTHEW
@@ -45,60 +34,60 @@ class ChapterPickerFragment : Fragment() {
 
 		val numChapters = numChaptersInBook(book)
 
-		val display = requireActivity().windowManager.defaultDisplay
-		val size = Point()
-		display.getSize(size)
-
-		val wScreen = size.x - 40
-		var wTarget = dpToPx(100)
-		var numSq = wScreen / wTarget // # of squares per row
-
-		if (numSq < 4) {
-			numSq = 4
-			wTarget = wScreen / numSq
+		val chapters = (1..numChapters).toList()
+		
+		val adapter = ChaptersAdapter(requireContext(), chapters.map { it.toString() }).apply {
+			setClickListener(object : ChaptersAdapter.ItemClickListener {
+				override fun onItemClick(position: Int) {
+					refPickerViewModel.chapter.value = chapters[position]
+				}
+			})
 		}
 
-		val rem = wScreen % wTarget // total remaining space on each row
-		val remPer = rem / numSq // remaining pixels per square, per row
-		val wActual = wTarget + remPer
-		val numRows = (numChapters + numSq - 1) / numSq // # of rows needed
+		rv_chapters.layoutManager = GridLayoutManager(requireContext(), 4)
+		rv_chapters.adapter = adapter
+	}
 
-		var curRow: ButtonRow
-		var btn: ChapterButton
+	internal class ChaptersAdapter(
+		context: Context,
+		private val data: List<String>
+	) : RecyclerView.Adapter<ChaptersAdapter.ViewHolder>() {
 
-		var ch = 1
+		private var mClickListener: ItemClickListener? = null
 
-		for (i in 0 until numRows) {
-			curRow = ButtonRow(requireContext())
-			cp_container.addView(curRow)
-			for (j in 0 until numSq) {
-				val chapter = ch
-				btn = ChapterButton(requireContext(), wActual)
-				btn.text = "$ch"
-				curRow.addView(btn)
-				btn.setOnClickListener {
-					refPickerViewModel.chapter.value = chapter
-				}
-				ch++
-				if (ch > numChapters) break
+		private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+
+		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+			val view: View = inflater.inflate(R.layout.chapter_picker_item, parent, false)
+			return ViewHolder(view)
+		}
+
+		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+			holder.textItem.text = data[position]
+		}
+
+		override fun getItemCount() = data.size
+
+		inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+			val textItem: TextView = itemView.findViewById(R.id.chapter_item)
+
+			override fun onClick(view: View) {
+				mClickListener?.onItemClick(adapterPosition)
+			}
+
+			init {
+				itemView.setOnClickListener(this)
 			}
 		}
-	}
 
-	internal inner class ChapterButton(c: Context, sidePx: Int) : AppCompatButton(c) {
-		init {
-			layoutParams = LinearLayout.LayoutParams(sidePx, sidePx)
-			gravity = Gravity.CENTER
-			background = ColorDrawable(Color.TRANSPARENT)
-			setTextColor(getThemedColor(c, R.attr.colorOnSurface))
-			textSize = dpToPx(10f)
+		fun setClickListener(itemClickListener: ItemClickListener?) {
+			mClickListener = itemClickListener
 		}
-	}
 
-	internal inner class ButtonRow(c: Context?) : LinearLayout(c) {
-		init {
-			layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-			orientation = HORIZONTAL
+		interface ItemClickListener {
+			fun onItemClick(position: Int)
 		}
 	}
 }
