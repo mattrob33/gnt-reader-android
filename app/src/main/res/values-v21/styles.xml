@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-	<style name="BaseTheme_v21" parent="BaseTheme">
-		<item name="android:statusBarColor">?android:colorBackground</item>
-	</style>
-
-	<style name="AppTheme" parent="BaseTheme_v21" />
-</resources>

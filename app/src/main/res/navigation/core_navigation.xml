@@ -3,7 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/core_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_splash">
+
+    <!-- Splash -->
+    <fragment
+        android:id="@+id/navigation_splash"
+        android:name="com.mattrobertson.greek.reader.presentation.splash.SplashFragment"
+        android:label="splash_fragment"
+        tools:layout="@layout/splash_fragment" >
+
+        <action
+            android:id="@+id/to_home"
+            app:destination="@id/navigation_home"
+            />
+
+    </fragment>
 
     <!-- Home -->
     <fragment
@@ -34,18 +48,6 @@
         <action
             android:id="@+id/to_ref_picker"
             app:destination="@id/ref_picker"
-            />
-
-        <argument
-            android:name="book"
-            app:argType="integer"
-            android:defaultValue="0"
-            />
-
-        <argument
-            android:name="chapter"
-            app:argType="integer"
-            android:defaultValue="0"
             />
 
     </fragment>
