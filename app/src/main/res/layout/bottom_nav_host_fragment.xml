@@ -88,19 +88,18 @@
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         />
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fabMediaPlay"-->
-<!--        android:src="@android:drawable/ic_media_play"-->
-<!--        app:backgroundTint="@color/primary"-->
-<!--        app:fabSize="normal"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_anchor="@id/scroller"-->
-<!--        app:layout_anchorGravity="bottom|center_horizontal"-->
-<!--        android:layout_gravity="bottom|center_horizontal"-->
-<!--        android:visibility="gone"-->
-<!--        />-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_play_audio"
+        android:src="@android:drawable/ic_media_play"
+        app:fabSize="normal"
+        app:backgroundTint="@color/textColor"
+        app:tint="@color/content_background"
+        android:layout_marginBottom="64dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/scroller"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/bottomSheet"
