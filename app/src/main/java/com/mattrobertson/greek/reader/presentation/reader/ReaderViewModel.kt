@@ -3,6 +3,8 @@ package com.mattrobertson.greek.reader.presentation.reader
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -193,7 +195,9 @@ class ReaderViewModel @ViewModelInject constructor(
     }
 
     private fun playAudio() {
-        audioPlayer.playChapter(currentRef)
+        Handler(Looper.getMainLooper()).postDelayed( {
+            audioPlayer.playChapter(currentRef)
+        }, 300)
     }
 
     private fun stopAudio() {
