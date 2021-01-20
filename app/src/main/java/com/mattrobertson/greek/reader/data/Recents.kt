@@ -42,6 +42,13 @@ object Recents {
 
     fun get(index: Int) = synchronized(this) { mList[index] }
 
+    fun getMostRecent(): VerseRef? = synchronized(this) {
+        if (mList.isNotEmpty())
+            mList[0]
+        else
+            null
+    }
+
     fun getAll() = synchronized(this) { mList }
 
     fun clear() = synchronized(this) { mList.clear() }

@@ -79,21 +79,18 @@ class ReaderViewModel @ViewModelInject constructor(
 
     private var showAudioBtn = false
 
-    private var currentRef = VerseRef(
-        book = Book(savedState.get<Int>("book")
-                ?: 5
-        ),
-        chapter = savedState.get<Int>("chapter")
-            ?: 5,
-        verse =  VerseRef.NO_VERSE
-    )
+    private var currentRef: VerseRef
 
     private val refBackstack = arrayListOf<VerseRef>()
 
     private var hasScrolled = false
 
     init {
-       goTo(currentRef)
+       settings.loadRecents()
+
+        currentRef = Recents.getMostRecent() ?: VerseRef(Book.MATTHEW, 1)
+
+        goTo(currentRef)
 
         audioPlayer.audioPrepared = object: AudioPrepared {
             override fun onAudioPrepared() {
