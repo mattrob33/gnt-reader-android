@@ -152,6 +152,19 @@
         android:name="com.mattrobertson.greek.reader.presentation.refpicker.RefPickerFragment"
         android:label="RefPickerFragment"
         tools:layout="@layout/ref_picker_fragment"
+>
+        <action
+            android:id="@+id/to_recent_refs"
+            app:destination="@id/navigation_recent_refs"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_recent_refs"
+        android:name="com.mattrobertson.greek.reader.presentation.refpicker.RecentRefsFragment"
+        android:label="RecentRefsFragment"
+        tools:layout="@layout/book_picker_fragment"
         />
 
 </navigation>

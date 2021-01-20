@@ -42,7 +42,7 @@ object Recents {
 
     fun get(index: Int) = synchronized(this) { mList[index] }
 
-    fun getAll() = synchronized(this) { mList as List<VerseRef> }
+    fun getAll() = synchronized(this) { mList }
 
     fun clear() = synchronized(this) { mList.clear() }
 
