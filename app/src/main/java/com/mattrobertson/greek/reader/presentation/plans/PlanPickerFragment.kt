@@ -11,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.PlanReaderActivity
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.PlanPickerFragmentBinding
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
-import kotlinx.android.synthetic.main.plan_picker_fragment.*
 
 class PlanPickerFragment: Fragment() {
+
+    private var _binding: PlanPickerFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModelFactory: PlanPickerViewModelFactory by lazy {
         PlanPickerViewModelFactory(requireContext().applicationContext)
@@ -25,17 +28,15 @@ class PlanPickerFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.plan_picker_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        _binding = PlanPickerFragmentBinding.inflate(inflater, container, false)
 
         val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, viewModel.plans)
-        lvPlan.adapter = adapter
-        lvPlan.setOnItemClickListener { _, _, plan, _ ->
+        binding.lvPlan.adapter = adapter
+        binding.lvPlan.setOnItemClickListener { _, _, plan, _ ->
             launchPlan(plan)
         }
+
+        return binding.root
     }
 
     private fun launchPlan(plan: Int) {
