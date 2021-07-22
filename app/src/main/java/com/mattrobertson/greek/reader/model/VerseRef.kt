@@ -2,6 +2,8 @@ package com.mattrobertson.greek.reader.model
 
 import com.mattrobertson.greek.reader.util.numChaptersInBook
 import com.mattrobertson.greek.reader.util.numVersesInChapter
+import com.mattrobertson.greek.reader.util.verses
+import java.lang.IllegalArgumentException
 
 data class VerseRef (
 	val book: Book,
@@ -13,10 +15,21 @@ data class VerseRef (
 		const val NO_VERSE = 0
 
 		fun fromAbsoluteChapterNum(absChapterNum: Int): VerseRef {
-			return when (absChapterNum) {
-				in 0..27 -> VerseRef(Book.MATTHEW, absChapterNum + 1)
-				else -> VerseRef(Book.MARK, 1)
+			var bookNum = 0
+
+			for (bookEntry in verses.withIndex()) {
+				if (absChapterNum < bookNum + bookEntry.value.size) {
+					val book = Book(bookEntry.index)
+					val chapter = absChapterNum - bookNum + 1
+
+					return VerseRef(book, chapter)
+				}
+				else {
+					bookNum += bookEntry.value.size
+				}
 			}
+
+			throw IllegalArgumentException("Invalid absolute chapter num: $absChapterNum")
 		}
 	}
 
