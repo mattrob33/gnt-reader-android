@@ -11,10 +11,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.CoreNavigationDirections
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.ConcordanceBinding
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
-import kotlinx.android.synthetic.main.concordance.*
 
 class ConcordanceFragment : Fragment() {
+
+    private var _binding: ConcordanceBinding? = null
+    private val binding get() = _binding!!
 
     private val args: ConcordanceFragmentArgs by navArgs()
 
@@ -26,12 +29,25 @@ class ConcordanceFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory).get(ConcordanceViewModel::class.java)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = ConcordanceBinding.inflate(inflater, container, false)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.concordance, container, false)
         setHasOptionsMenu(true)
-        return view
+
+        (activity as AppCompatActivity).setSupportActionBar(binding.concordanceToolbar)
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
+        binding.concordanceToolbarTitle.text = args.lex
+
+        binding.concordanceText.movementMethod = LinkMovementMethod.getInstance()
+
+        subscribeUI()
+
+        viewModel.loadConcordance(args.lex)
+
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -52,38 +68,21 @@ class ConcordanceFragment : Fragment() {
         return true
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        (activity as AppCompatActivity).setSupportActionBar(concordance_toolbar)
-        (activity as AppCompatActivity).supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            setDisplayHomeAsUpEnabled(true)
-        }
-        concordance_toolbar_title.text = args.lex
-
-        concordance_text.movementMethod = LinkMovementMethod.getInstance()
-
-        subscribeUI()
-
-        viewModel.loadConcordance(args.lex)
-    }
-
     private fun subscribeUI() {
         viewModel.screenState.observe(viewLifecycleOwner) {
             when (it) {
                 ScreenState.LOADING -> {
-                    concordance_progress_bar.visibility = View.VISIBLE
+                    binding.concordanceProgressBar.visibility = View.VISIBLE
                 }
                 ScreenState.READY -> {
-                    concordance_progress_bar.visibility = View.INVISIBLE
+                    binding.concordanceProgressBar.visibility = View.INVISIBLE
                 }
             }
         }
 
         viewModel.concordanceInfo.observe(viewLifecycleOwner) {
             it?.let { info ->
-                concordance_text.text = info
+                binding.concordanceText.text = info
             }
         }
 
@@ -96,7 +95,7 @@ class ConcordanceFragment : Fragment() {
         }
 
         viewModel.loadingProgress.observe(viewLifecycleOwner) {
-            concordance_progress_bar.progress = it
+            binding.concordanceProgressBar.progress = it
         }
     }
 
