@@ -9,10 +9,13 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.html.HtmlGenerator
+import com.mattrobertson.greek.reader.repo.VerseRepo
 
 @Composable
-@Preview
-fun MainScreen() {
+fun MainScreen(
+    verseRepo: VerseRepo
+) {
     AppTheme {
         val bottomNavItems = listOf(
             BottomNavItem.Vocab,
@@ -54,7 +57,7 @@ fun MainScreen() {
                 }
             }
         ) { innerPadding ->
-            ComposeReader()
+            ComposeReader(verseRepo)
         }
     }
 }

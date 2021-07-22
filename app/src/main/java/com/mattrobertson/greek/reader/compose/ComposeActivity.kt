@@ -9,22 +9,22 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.html.HtmlGenerator
+import com.mattrobertson.greek.reader.repo.VerseRepo
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ComposeActivity : ComponentActivity() {
+
+    @Inject lateinit var verseRepo: VerseRepo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
-                MainScreen()
+                MainScreen(verseRepo)
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AppTheme {
-        MainScreen()
     }
 }
