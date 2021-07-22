@@ -7,56 +7,58 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-
     <application
+        android:name=".SblGntApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme"
         android:hardwareAccelerated="true"
-        android:usesCleartextTraffic="true"
-        android:name=".SblGntApplication">
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".compose.ComposeActivity"
+            android:exported="true"
+            android:label="@string/title_activity_compose"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.CoreActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PlanReaderActivity"
-            android:label="Plan"
-            />
-
+            android:label="Plan" />
         <activity
             android:name=".PlanCompletedActivity"
-            android:label="Plan Completed!"
-            />
-
+            android:label="Plan Completed!" />
         <activity
             android:name=".ReaderActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ChapterVocabActivity"
             android:label="Vocab"
-            android:parentActivityName=".ReaderActivity"
-            />
+            android:parentActivityName=".ReaderActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts"
-            />
-
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

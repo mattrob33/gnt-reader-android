@@ -99,4 +99,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="speed_read">Speed Read</string>
     <string name="recents">Recents</string>
+    <string name="title_activity_compose">ComposeActivity</string>
+    <string name="audio">audio</string>
 </resources>
