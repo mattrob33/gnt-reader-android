@@ -12,11 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.mattrobertson.greek.reader.PlanReaderActivity
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.PlanSplashBinding
 import com.mattrobertson.greek.reader.util.dpToPx
-import kotlinx.android.synthetic.main.plan_splash.*
 import java.util.*
 
 class PlanSplashFragment: Fragment() {
+
+    private var _binding: PlanSplashBinding? = null
+    private val binding get() = _binding!!
 
     private val args: PlanSplashFragmentArgs by navArgs()
 
@@ -32,16 +35,12 @@ class PlanSplashFragment: Fragment() {
     var day = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.plan_splash, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        _binding = PlanSplashBinding.inflate(inflater, container, false)
 
         plan = args.plan
 
-        tvTitle.text = viewModel.planTitle
-        tvDesc.text = viewModel.planDesc
+        binding.tvTitle.text = viewModel.planTitle
+        binding.tvDesc.text = viewModel.planDesc
 
         var btn: Button
         val buttons = ArrayList<Button>()
@@ -61,18 +60,20 @@ class PlanSplashFragment: Fragment() {
                 buttons[day].setBackgroundResource(R.drawable.day_square)
                 day = v.tag.toString().toInt()
                 v.setBackgroundResource(R.drawable.day_square_focus)
-                tvChapters.text = viewModel.getPreviewForDay(day)
+                binding.tvChapters.text = viewModel.getPreviewForDay(day)
             }
             buttons.add(btn)
-            daysContainer.addView(btn)
+            binding.daysContainer.addView(btn)
         }
 
         buttons[0].performClick()
 
-        btnBegin.setOnClickListener {
+        binding.btnBegin.setOnClickListener {
             val i = Intent(requireContext(), PlanReaderActivity::class.java)
             i.putExtra("plan", plan)
             startActivity(i)
         }
+
+        return binding.root
     }
 }
