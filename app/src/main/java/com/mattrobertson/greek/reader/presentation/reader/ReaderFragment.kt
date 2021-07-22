@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.presentation.reader
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -18,6 +19,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.navigation.findNavController
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -33,7 +37,7 @@ import com.mattrobertson.greek.reader.webview.ScrollObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReaderFragment : Fragment() {
+class ReaderFragment : Fragment(), LifecycleObserver {
 
     private var _binding: ReaderBinding? = null
     private val binding get() = _binding!!
@@ -58,15 +62,6 @@ class ReaderFragment : Fragment() {
         _binding = ReaderBinding.inflate(inflater, container, false)
 
         setHasOptionsMenu(true)
-
-        toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
-
-        loadingProgress = requireActivity().findViewById(R.id.loading_progress)
-
-        bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
-        tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
-        tvDef = requireActivity().findViewById(R.id.tvDef)
-        tvLex = requireActivity().findViewById(R.id.tvLex)
 
         bottomSheet.visibility = View.VISIBLE
 
@@ -126,6 +121,13 @@ class ReaderFragment : Fragment() {
         mBottomSheetBehavior.peekHeight = 400
         mBottomSheetBehavior.isHideable = true
 
+        subscribeUI()
+
+        return binding.root
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreated() {
         toolbarTitle.setOnClickListener {
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
                 BottomNavHostFragmentDirections.toRefPicker()
@@ -138,9 +140,19 @@ class ReaderFragment : Fragment() {
             }
         })
 
-        subscribeUI()
+        toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
-        return binding.root
+        loadingProgress = requireActivity().findViewById(R.id.loading_progress)
+
+        bottomSheet = requireActivity().findViewById(R.id.bottomSheet)
+        tvConcordance = requireActivity().findViewById(R.id.tvConcordance)
+        tvDef = requireActivity().findViewById(R.id.tvDef)
+        tvLex = requireActivity().findViewById(R.id.tvLex)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().lifecycle.addObserver(this)
     }
 
     override fun onResume() {
