@@ -10,13 +10,16 @@ import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.RefPickerFragmentBinding
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.presentation.reader.ReaderViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.ref_picker_fragment.*
 
 @AndroidEntryPoint
 class RefPickerFragment : Fragment() {
+
+    private var _binding: RefPickerFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val readerViewModel by activityViewModels<ReaderViewModel>()
     private val refPickerViewModel by activityViewModels<RefPickerViewModel>()
@@ -26,22 +29,22 @@ class RefPickerFragment : Fragment() {
     private lateinit var navController: NavController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val root =  inflater.inflate(R.layout.ref_picker_fragment, container, false)
+        _binding = RefPickerFragmentBinding.inflate(inflater, container, false)
+
         setHasOptionsMenu(true)
-        return root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         refPickerAdapter = RefPickerAdapter(this)
-        ref_picker_view_pager.adapter = refPickerAdapter
+        binding.refPickerViewPager.adapter = refPickerAdapter
 
-        TabLayoutMediator(ref_picker_tab_layout, ref_picker_view_pager) { tab, position ->
+        TabLayoutMediator(binding.refPickerTabLayout, binding.refPickerViewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Book"
                 1 -> "Chapter"
                 else -> ""
             }
         }.attach()
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,7 +53,7 @@ class RefPickerFragment : Fragment() {
         navController = requireActivity().findNavController(R.id.core_nav_host_fragment)
 
         (activity as AppCompatActivity).apply {
-            setSupportActionBar(ref_picker_toolbar)
+            setSupportActionBar(binding.refPickerToolbar)
             supportActionBar?.apply {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowTitleEnabled(false)
@@ -62,9 +65,9 @@ class RefPickerFragment : Fragment() {
 
         refPickerViewModel.book.observe(viewLifecycleOwner) { book ->
             book?.let {
-                ref_picker_view_pager.post {
+                binding.refPickerViewPager.post {
                     refPickerAdapter.notifyDataSetChanged()
-                    ref_picker_view_pager.currentItem = 1
+                    binding.refPickerViewPager.currentItem = 1
                 }
             }
         }

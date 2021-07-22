@@ -18,7 +18,7 @@ class MoreFragment : Fragment() {
 
 	private lateinit var viewModel: MoreViewModel
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = MoreFragmentBinding.inflate(inflater, container, false)
 
 		viewModel = ViewModelProvider(this).get(MoreViewModel::class.java)
