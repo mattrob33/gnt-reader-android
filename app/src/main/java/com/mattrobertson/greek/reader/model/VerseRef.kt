@@ -11,6 +11,13 @@ data class VerseRef (
 
 	companion object {
 		const val NO_VERSE = 0
+
+		fun fromAbsoluteChapterNum(absChapterNum: Int): VerseRef {
+			return when (absChapterNum) {
+				in 0..27 -> VerseRef(Book.MATTHEW, absChapterNum + 1)
+				else -> VerseRef(Book.MARK, 1)
+			}
+		}
 	}
 
 	/**
