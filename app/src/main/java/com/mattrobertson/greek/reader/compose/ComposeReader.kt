@@ -73,7 +73,7 @@ fun ReaderText(
     LazyColumn(
         state = listState
     ) {
-        for (i in 0..27) {
+        for (i in 0 until 260) {
             item {
                 ChapterText(position = i, verseRepo = verseRepo, coroutineScope = coroutineScope)
             }
@@ -131,9 +131,10 @@ fun ChapterText(
 
             it.words.forEach { word ->
                 wordMap[offset] = word.text
+                val oldOffset = offset
                 offset += word.text.length + 1
 
-                val isClicked = (clickedIndex in (offset - word.text.length + 1)..offset)
+                val isClicked = clickedIndex in oldOffset..offset
 
                 val wordFontWeight =
                     if (isClicked)
