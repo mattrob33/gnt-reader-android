@@ -23,6 +23,7 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.ReaderBinding
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.presentation.util.ScreenState
 import com.mattrobertson.greek.reader.swipe.SwipeDetector
@@ -30,11 +31,12 @@ import com.mattrobertson.greek.reader.swipe.Swipeable
 import com.mattrobertson.greek.reader.webview.ReaderJsInterface
 import com.mattrobertson.greek.reader.webview.ScrollObserver
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.reader.*
-
 
 @AndroidEntryPoint
 class ReaderFragment : Fragment() {
+
+    private var _binding: ReaderBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by activityViewModels<ReaderViewModel>()
 
@@ -51,15 +53,11 @@ class ReaderFragment : Fragment() {
 
     private var audioMenuItem: MenuItem? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val root = inflater.inflate(R.layout.reader, container, false)
-        setHasOptionsMenu(true)
-        return root
-    }
-
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = ReaderBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
 
         toolbarTitle = requireActivity().findViewById(R.id.toolbar_reader_title)
 
@@ -79,7 +77,7 @@ class ReaderFragment : Fragment() {
 
         val gestureDetector = GestureDetector(requireContext(), SwipeDetector(swipeHandler))
 
-        webview_reader.apply {
+        binding.webviewReader.apply {
             setBackgroundColor(Color.argb(1, 0, 0, 0))
             addJavascriptInterface(ReaderJsInterface(viewModel), "ReaderApp")
 
@@ -116,9 +114,9 @@ class ReaderFragment : Fragment() {
 
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
             if (viewModel.isDarkTheme) {
-                WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_ON)
+                WebSettingsCompat.setForceDark(binding.webviewReader.settings, WebSettingsCompat.FORCE_DARK_ON)
             } else {
-                WebSettingsCompat.setForceDark(webview_reader.settings, WebSettingsCompat.FORCE_DARK_OFF)
+                WebSettingsCompat.setForceDark(binding.webviewReader.settings, WebSettingsCompat.FORCE_DARK_OFF)
             }
         }
 
@@ -141,6 +139,8 @@ class ReaderFragment : Fragment() {
         })
 
         subscribeUI()
+
+        return binding.root
     }
 
     override fun onResume() {
@@ -179,7 +179,7 @@ class ReaderFragment : Fragment() {
         }
 
         viewModel.html.observe(viewLifecycleOwner) { html ->
-            webview_reader.loadDataWithBaseURL("app:html", html, "text/html", "utf-8", null)
+            binding.webviewReader.loadDataWithBaseURL("app:html", html, "text/html", "utf-8", null)
         }
 
         viewModel.glossInfo.observe(viewLifecycleOwner) { nullableGlossInfo ->

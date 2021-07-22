@@ -11,17 +11,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.ChapterPickerBinding
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.util.numChaptersInBook
-import kotlinx.android.synthetic.main.chapter_picker.*
-
 
 class ChapterPickerFragment : Fragment() {
 
+	private var _binding: ChapterPickerBinding? = null
+	private val binding get() = _binding!!
+
 	private val refPickerViewModel by activityViewModels<RefPickerViewModel>()
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-		return inflater.inflate(R.layout.chapter_picker, container, false)
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+		_binding = ChapterPickerBinding.inflate(inflater, container, false)
+		return binding.root
 	}
 
 	override fun onResume() {
@@ -44,8 +47,8 @@ class ChapterPickerFragment : Fragment() {
 			})
 		}
 
-		rv_chapters.layoutManager = GridLayoutManager(requireContext(), 4)
-		rv_chapters.adapter = adapter
+		binding.rvChapters.layoutManager = GridLayoutManager(requireContext(), 4)
+		binding.rvChapters.adapter = adapter
 	}
 
 	internal class ChaptersAdapter(
