@@ -11,10 +11,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.mattrobertson.greek.reader.R
-import kotlinx.android.synthetic.main.about.*
+import com.mattrobertson.greek.reader.databinding.AboutBinding
 
 class AboutFragment: Fragment() {
+
+    private var _binding: AboutBinding? = null
+    private val binding get() = _binding!!
 
     private val sbl = "<p>Scripture is from the <a href='http://sblgnt.com'>SBL Greek New Testament</a>. Copyright © 2010 <a href='http://www.sbl-site.org/'>Society of Biblical Literature</a> and <a href='http://www.logos.com/'>Logos Bible Software</a>.</p>"
     private val morph = "<p>The <a href='https://github.com/morphgnt/sblgnt'>MorphGNT SBLGNT</a> project is used as the text base to identify lexical forms.</p>"
@@ -24,22 +26,20 @@ class AboutFragment: Fragment() {
     private val aboutText = sbl+"\n"+morph+"\n"+mounce+"\n"+audio
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.about, container, false)
-        setHasOptionsMenu(true)
-        return view
-    }
+        _binding = AboutBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
 
         (activity as AppCompatActivity).apply {
-            setSupportActionBar(about_toolbar)
+            setSupportActionBar(binding.aboutToolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        tvAbout.text = Html.fromHtml(aboutText)
-        tvAbout.movementMethod = LinkMovementMethod.getInstance()
-        tvAbout.highlightColor = Color.TRANSPARENT
+        binding.tvAbout.text = Html.fromHtml(aboutText)
+        binding.tvAbout.movementMethod = LinkMovementMethod.getInstance()
+        binding.tvAbout.highlightColor = Color.TRANSPARENT
+
+        return binding.root
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
