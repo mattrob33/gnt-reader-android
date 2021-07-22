@@ -12,12 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.VocabListFragmentBinding
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.presentation.BottomNavHostFragmentDirections
 import com.mattrobertson.greek.reader.util.getBookTitle
-import kotlinx.android.synthetic.main.vocab_list_fragment.*
 
 class VocabListFragment: Fragment() {
+
+    private var _binding: VocabListFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModelFactory: VocabListViewModelFactory by lazy {
         VocabListViewModelFactory(requireContext().applicationContext)
@@ -27,25 +30,23 @@ class VocabListFragment: Fragment() {
         ViewModelProvider(this, viewModelFactory).get(VocabListViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.vocab_list_fragment, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = VocabListFragmentBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        lvWords.emptyView = emptyListItem
+        binding.lvWords.emptyView = binding.emptyListItem
 
         val c = viewModel.getCursor()
         val adapter = VocabAdapter(requireContext(), c)
-        lvWords.adapter = adapter
-        lvWords.setOnItemClickListener { _, _, _, id ->
+        binding.lvWords.adapter = adapter
+        binding.lvWords.setOnItemClickListener { _, _, _, id ->
             val (book, chapter) = viewModel.getBookAndChapter(id)
 
             requireActivity().findNavController(R.id.core_nav_host_fragment).navigate(
                     BottomNavHostFragmentDirections.toChapterVocab(book, chapter)
             )
         }
+
+        return binding.root
     }
 
     class VocabAdapter(context: Context, c: Cursor?) : CursorAdapter(context, c) {

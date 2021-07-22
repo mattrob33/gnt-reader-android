@@ -14,11 +14,14 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.daimajia.swipe.SwipeLayout
 import com.mattrobertson.greek.reader.R
+import com.mattrobertson.greek.reader.databinding.ChapterVocabFragmentBinding
 import com.mattrobertson.greek.reader.dialog.VocabWizardDialog
 import com.mattrobertson.greek.reader.interfaces.VocabWizardDialogInterface
-import kotlinx.android.synthetic.main.chapter_vocab_fragment.*
 
 class ChapterVocabFragment : Fragment(), VocabWizardDialogInterface {
+
+    private var _binding: ChapterVocabFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val args: ChapterVocabFragmentArgs by navArgs()
 
@@ -30,12 +33,9 @@ class ChapterVocabFragment : Fragment(), VocabWizardDialogInterface {
         ViewModelProvider(this, viewModelFactory).get(ChapterVocabViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.chapter_vocab_fragment, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = ChapterVocabFragmentBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         refreshAdapter()
 
         val wizard = VocabWizardDialog(requireActivity(), this)
@@ -44,23 +44,25 @@ class ChapterVocabFragment : Fragment(), VocabWizardDialogInterface {
             setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
             setGravity(Gravity.CENTER)
         }
-        fabWizard.setOnClickListener {
+        binding.fabWizard.setOnClickListener {
             wizard.show()
         }
 
         subscribeUI()
+
+        return binding.root
     }
 
     private fun subscribeUI() {
         viewModel.cursorVersion.observe(viewLifecycleOwner) {
             refreshAdapter()
-            chapter_vocab_progress_bar.visibility = View.INVISIBLE
+            binding.chapterVocabProgressBar.visibility = View.INVISIBLE
         }
     }
 
     private fun refreshAdapter() {
         val adapter = VocabSwipeAdapter(requireContext(), viewModel.getCursor())
-        lvMyVocab.adapter = adapter
+        binding.lvMyVocab.adapter = adapter
     }
 
     override fun onVocabWizardGo(level: Int) {
@@ -69,7 +71,7 @@ class ChapterVocabFragment : Fragment(), VocabWizardDialogInterface {
             refreshAdapter()
         }
         else {
-            chapter_vocab_progress_bar.visibility = View.VISIBLE
+            binding.chapterVocabProgressBar.visibility = View.VISIBLE
             viewModel.autoBuildWordList(level)
         }
     }
