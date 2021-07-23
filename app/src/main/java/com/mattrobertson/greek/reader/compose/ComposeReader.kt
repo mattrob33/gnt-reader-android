@@ -1,17 +1,13 @@
 package com.mattrobertson.greek.reader.compose
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
@@ -30,20 +27,87 @@ import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
 @Composable
 fun ComposeReader(
-    verseRepo: VerseRepo
+    verseRepo: VerseRepo,
+    wordState: MutableState<Word?>
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    Column {
+    var isTopBarVisible by remember { mutableStateOf(true) }
+
+    var lastScrollLocation by remember {
+        mutableStateOf(
+            Pair(
+                listState.firstVisibleItemIndex,
+                listState.firstVisibleItemScrollOffset
+            )
+        )
+    }
+
+    Box {
         val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
 
         val title = "${getBookTitle(ref.book)} ${ref.chapter}"
 
-        ReaderTopBar(title)
-        ReaderText(listState, verseRepo = verseRepo, coroutineScope = coroutineScope)
+//        if (listState.isScrollInProgress) {
+//            val isScrollingDown = when {
+//                listState.firstVisibleItemIndex > lastScrollLocation.first -> true
+//                listState.firstVisibleItemIndex < lastScrollLocation.first -> false
+//                else -> {
+//                    listState.firstVisibleItemScrollOffset > lastScrollLocation.second
+//                }
+//            }
+//
+//            isTopBarVisible = ! isScrollingDown
+//
+//            if (isScrollingDown)
+//                ReaderPreviewBar(title = title)
+//
+//            lastScrollLocation = Pair(
+//                listState.firstVisibleItemIndex,
+//                listState.firstVisibleItemScrollOffset
+//            )
+//        }
+
+        isTopBarVisible = !listState.isScrollInProgress
+
+        if (isTopBarVisible)
+            ReaderTopBar(title)
+
+        ReaderText(
+            listState = listState,
+            wordState = wordState,
+            verseRepo = verseRepo,
+            coroutineScope = coroutineScope
+        )
+    }
+}
+
+@Composable
+fun ReaderPreviewBar(
+    title: String
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .zIndex(1f),
+        color = MaterialTheme.colors.surface
+    ) {
+        Column {
+            Text(
+                text = title,
+                textAlign = TextAlign.Center,
+                fontFamily = FontFamily.Serif,
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+            Divider()
+        }
     }
 }
 
@@ -53,7 +117,9 @@ fun ReaderTopBar(
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface
+        elevation = 4.dp,
+        contentColor = MaterialTheme.colors.onSurface,
+        modifier = Modifier.zIndex(2f)
     ) {
         Text(
             text = title,
@@ -67,6 +133,7 @@ fun ReaderTopBar(
 @Composable
 fun ReaderText(
     listState: LazyListState,
+    wordState: MutableState<Word?>,
     verseRepo: VerseRepo,
     coroutineScope: CoroutineScope
 ) {
@@ -75,20 +142,47 @@ fun ReaderText(
     ) {
         for (i in 0 until 260) {
             item {
-                ChapterText(position = i, verseRepo = verseRepo, coroutineScope = coroutineScope)
+                val chapterRef = VerseRef.fromAbsoluteChapterNum(i)
+
+                if (chapterRef.chapter == 1) {
+                    BookSpacer()
+                    BookTitle(title = getBookTitle(chapterRef.book))
+                }
+
+                ChapterText(
+                    chapterRef = chapterRef,
+                    wordState = wordState,
+                    verseRepo = verseRepo,
+                    coroutineScope = coroutineScope
+                )
+
+                ChapterSpacer()
             }
         }
     }
 }
 
 @Composable
+fun BookTitle(title: String) {
+    Column {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.h1,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
 fun ChapterText(
-    position: Int,
+    chapterRef: VerseRef,
+    wordState: MutableState<Word?>,
     verseRepo: VerseRepo,
     coroutineScope: CoroutineScope
 ) {
-    val chapterRef = remember { VerseRef.fromAbsoluteChapterNum(position) }
-
     var isLoading by remember { mutableStateOf(true) }
 
     var verses by remember { mutableStateOf(listOf<Verse>()) }
@@ -97,7 +191,7 @@ fun ChapterText(
 
     val wordMap by remember { mutableStateOf(mutableMapOf<Int, Word>()) }
 
-    LaunchedEffect(key1 = position, block = {
+    LaunchedEffect(key1 = chapterRef, block = {
         coroutineScope.launch {
             verses = verseRepo.getVersesForChapter(chapterRef)
             isLoading = false
@@ -157,32 +251,34 @@ fun ChapterText(
         }
 
         Column {
-            val context = LocalContext.current
-
             ClickableText(
                 text = chapterText,
                 style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
                 modifier = Modifier.padding(horizontal = 20.dp),
                 onClick = { clickOffset ->
-                    clickedIndex = clickOffset
-
-                    var clickedWord = ""
-
                     wordMap.forEach { entry ->
                         val wordOffset = entry.key
                         val word = entry.value
 
-                        if (wordOffset > clickOffset) {
-                            return@forEach
-                        }
-                        clickedWord = "${word.text} (${word.lexicalForm}) ${word.parsing.humanReadable}"
-                    }
+                        clickedIndex = clickOffset
 
-                    Toast.makeText(context, clickedWord, Toast.LENGTH_SHORT).show()
+                        if (wordOffset > clickOffset)
+                            return@forEach
+
+                        wordState.value = word
+                    }
                 }
             )
-
-            Spacer(modifier = Modifier.height(60.dp))
         }
     }
+}
+
+@Composable
+fun BookSpacer() {
+    Spacer(modifier = Modifier.height(60.dp))
+}
+
+@Composable
+fun ChapterSpacer() {
+    Spacer(modifier = Modifier.height(8.dp))
 }
