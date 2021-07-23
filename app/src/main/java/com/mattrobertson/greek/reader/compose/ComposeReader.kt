@@ -3,7 +3,6 @@ package com.mattrobertson.greek.reader.compose
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -32,7 +31,7 @@ import kotlinx.coroutines.launch
 fun ComposeReader(
     verseRepo: VerseRepo,
     listState: LazyListState,
-    wordState: MutableState<Word?>
+    onWordSelected: (word: Word) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -45,7 +44,7 @@ fun ComposeReader(
 
         ReaderText(
             listState = listState,
-            wordState = wordState,
+            onWordSelected = onWordSelected,
             verseRepo = verseRepo,
             coroutineScope = coroutineScope
         )
@@ -80,7 +79,7 @@ fun ReaderPreviewBar(
 @Composable
 fun ReaderText(
     listState: LazyListState,
-    wordState: MutableState<Word?>,
+    onWordSelected: (word: Word) -> Unit,
     verseRepo: VerseRepo,
     coroutineScope: CoroutineScope
 ) {
@@ -98,7 +97,7 @@ fun ReaderText(
 
                 ChapterText(
                     chapterRef = chapterRef,
-                    wordState = wordState,
+                    onWordSelected = onWordSelected,
                     verseRepo = verseRepo,
                     coroutineScope = coroutineScope
                 )
@@ -126,7 +125,7 @@ fun BookTitle(title: String) {
 @Composable
 fun ChapterText(
     chapterRef: VerseRef,
-    wordState: MutableState<Word?>,
+    onWordSelected: (word: Word) -> Unit,
     verseRepo: VerseRepo,
     coroutineScope: CoroutineScope
 ) {
@@ -212,7 +211,7 @@ fun ChapterText(
                         if (wordOffset > clickOffset)
                             return@forEach
 
-                        wordState.value = word
+                        onWordSelected(word)
                     }
                 }
             )

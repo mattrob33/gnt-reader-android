@@ -41,49 +41,11 @@ fun MainScreen(
 
     var activeBottomNavItem by remember { mutableStateOf<BottomNavItem?>(null) }
 
-    val wordState = remember { mutableStateOf<Word?>(null) }
-
-    var word by wordState
-
-    word?.let {
-        if (!bottomSheetState.isVisible) {
-            coroutineScope.launch {
-                bottomSheetState.show()
-            }
-        }
-    }
+    var word by remember { mutableStateOf<Word?>(null) }
 
     AppTheme {
         ModalBottomSheetLayout(
             sheetContent = {
-                word?.let { word ->
-                    activeBottomNavItem = null
-
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = FontFamily(Font(R.font.sblgreek, FontWeight.Normal))
-                                )
-                            ) {
-                                append("${word.lexicalForm}\n")
-                            }
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily.SansSerif
-                                )
-                            ) {
-                                append(word.parsing.humanReadable)
-                            }
-                        }
-                    )
-                }
-
                 when (activeBottomNavItem) {
                     BottomNavItem.Contents -> {
                         TableOfContents(
@@ -92,11 +54,13 @@ fun MainScreen(
                                     listState.scrollToItem(position)
                                     bottomSheetState.hide()
                                 }
+                                activeBottomNavItem = null
                             },
                             onDismiss = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
                                 }
+                                activeBottomNavItem = null
                             }
                         )
                     }
@@ -104,6 +68,34 @@ fun MainScreen(
                     BottomNavItem.Audio -> {}
                     BottomNavItem.Settings -> {}
                     null -> {
+                        word?.let { word ->
+                            activeBottomNavItem = null
+
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontSize = 22.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            fontFamily = FontFamily(Font(R.font.sblgreek, FontWeight.Normal))
+                                        )
+                                    ) {
+                                        append("${word.lexicalForm}\n")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    ) {
+                                        append(word.parsing.humanReadable)
+                                    }
+                                }
+                            )
+                        }
+
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -139,7 +131,12 @@ fun MainScreen(
                 ComposeReader(
                     verseRepo = verseRepo,
                     listState = listState,
-                    wordState = wordState
+                    onWordSelected = {
+                        word = it
+                        coroutineScope.launch {
+                            bottomSheetState.show()
+                        }
+                    }
                 )
             }
         }
