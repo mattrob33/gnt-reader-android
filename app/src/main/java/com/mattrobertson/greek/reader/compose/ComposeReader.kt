@@ -1,6 +1,5 @@
 package com.mattrobertson.greek.reader.compose
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.coroutines.CoroutineScope
@@ -81,7 +81,6 @@ fun ReaderText(
     }
 }
 
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun ChapterText(
     position: Int,
@@ -90,135 +89,100 @@ fun ChapterText(
 ) {
     val chapterRef = remember { VerseRef.fromAbsoluteChapterNum(position) }
 
+    var isLoading by remember { mutableStateOf(true) }
+
     var verses by remember { mutableStateOf(listOf<Verse>()) }
-
     var chapterText by remember { mutableStateOf(AnnotatedString("")) }
-
     var clickedIndex by remember { mutableStateOf(-1) }
 
-    val wordMap by remember { mutableStateOf(mutableMapOf<Int, String>()) }
+    val wordMap by remember { mutableStateOf(mutableMapOf<Int, Word>()) }
 
     LaunchedEffect(key1 = position, block = {
         coroutineScope.launch {
             verses = verseRepo.getVersesForChapter(chapterRef)
+            isLoading = false
         }
     })
 
     var offset = 0
 
-    chapterText = buildAnnotatedString {
-        withStyle(
-            style = SpanStyle(
-                fontSize = 48.sp
-            )
-        ) {
-            val text = "${chapterRef.chapter} "
-            offset += text.length
-            append(text)
-        }
-
-        verses.forEach {
+    if (isLoading) {
+        // hack to speed up loading - this ensures only the first ChapterText is visible and
+        // loaded, rather than trying to load all of them (since the initial height is ~0)
+        //TODO find a better way of doing this
+        Spacer(
+            modifier = Modifier.height(1200.dp)
+        )
+    }
+    else {
+        chapterText = buildAnnotatedString {
             withStyle(
-                style = SpanStyle(
-                    fontSize = 16.sp,
-                    baselineShift = BaselineShift.Superscript
-                )
+                style = SpanStyle(fontSize = 48.sp)
             ) {
-                val text = " ${it.verseRef.verse}"
+                val text = " ${chapterRef.chapter} "
                 offset += text.length
                 append(text)
             }
 
-            it.words.forEach { word ->
-                wordMap[offset] = word.text
-                val oldOffset = offset
-                offset += word.text.length + 1
+            verses.forEach {
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 16.sp,
+                        baselineShift = BaselineShift.Superscript
+                    )
+                ) {
+                    val text = " ${it.verseRef.verse}"
+                    offset += text.length
+                    append(text)
+                }
 
-                val isClicked = clickedIndex in oldOffset..offset
+                it.words.forEach { word ->
+                    wordMap[offset] = word
+                    val oldOffset = offset
+                    offset += word.text.length + 1
 
-                val wordFontWeight =
-                    if (isClicked)
-                        FontWeight.Bold
-                    else
-                        FontWeight.Normal
+                    val isClicked = clickedIndex in oldOffset..offset
 
-                withStyle(style = SpanStyle(fontWeight = wordFontWeight)) {
-                    append("${word.text} ")
+                    val wordFontWeight =
+                        if (isClicked)
+                            FontWeight.Bold
+                        else
+                            FontWeight.Normal
+
+                    withStyle(style = SpanStyle(fontWeight = wordFontWeight)) {
+                        append("${word.text} ")
+                    }
                 }
             }
         }
-    }
 
-    Column {
-        val context = LocalContext.current
+        Column {
+            val context = LocalContext.current
 
-        ClickableText(
-            text = chapterText,
-            style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
-            modifier = Modifier.padding(horizontal = 20.dp),
-            onClick = { clickOffset ->
-                clickedIndex = clickOffset
+            ClickableText(
+                text = chapterText,
+                style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
+                modifier = Modifier.padding(horizontal = 20.dp),
+                onClick = { clickOffset ->
+                    clickedIndex = clickOffset
 
-                var clickedWord = ""
+                    var clickedWord = ""
 
-                wordMap.forEach { entry ->
-                    val wordOffset = entry.key
-                    val word = entry.value
+                    wordMap.forEach { entry ->
+                        val wordOffset = entry.key
+                        val word = entry.value
 
-                    if (wordOffset > clickOffset) {
-                        return@forEach
+                        if (wordOffset > clickOffset) {
+                            return@forEach
+                        }
+                        clickedWord = "${word.text} (${word.lexicalForm}) ${word.parsing.humanReadable}"
                     }
-                    clickedWord = word
+
+                    Toast.makeText(context, clickedWord, Toast.LENGTH_SHORT).show()
                 }
+            )
 
-                Toast.makeText(context, clickedWord, Toast.LENGTH_SHORT).show()
-            }
-        )
-
-        Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(60.dp))
+        }
     }
 }
-
-//@SuppressLint("SetJavaScriptEnabled")
-//@Composable
-//fun ChapterWebView(
-//    position: Int,
-//    verseRepo: VerseRepo,
-//    coroutineScope: CoroutineScope
-//) {
-//    var verses by remember { mutableStateOf(listOf<Verse>()) }
-//
-//    LaunchedEffect(key1 = position, block = {
-//        coroutineScope.launch {
-//            verses = verseRepo.getVersesForChapter(VerseRef.fromAbsoluteChapterNum(position))
-//        }
-//    })
-//
-//    AndroidView(factory = {
-//        WebView(it).apply {
-//            layoutParams = ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT
-//            )
-//
-//            settings.javaScriptEnabled = true
-//
-//            webViewClient = object: WebViewClient() {
-//                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-//                    super.onPageStarted(view, url, favicon)
-//
-//                }
-//
-//                override fun onPageFinished(view: WebView?, url: String?) {
-//                    super.onPageFinished(view, url)
-//
-//                }
-//            }
-//
-//            loadDataWithBaseURL("app:html", verses, "text/html", "utf-8", null)
-//        }
-//    }, update = {
-//        it.loadDataWithBaseURL("app:html", verses, "text/html", "utf-8", null)
-//    })
-//
-//}
