@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getAbsoluteChapterNumForBook
+import com.mattrobertson.greek.reader.util.isSingleChapterBook
 import com.mattrobertson.greek.reader.util.verses
 
 @Composable
@@ -28,7 +29,9 @@ fun TableOfContents(
     var isBookScreen by remember { mutableStateOf(true) }
     var book by remember { mutableStateOf(Book.MATTHEW) }
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -59,7 +62,13 @@ fun TableOfContents(
             TableOfContentsBooks(
                 onBookSelected = { selectedBook ->
                     book = selectedBook
-                    isBookScreen = false
+                    if (isSingleChapterBook(book)) {
+                        val absChapter = getAbsoluteChapterNumForBook(book)
+                        onSelected(absChapter)
+                    }
+                    else {
+                        isBookScreen = false
+                    }
                 }
             )
         } else {
