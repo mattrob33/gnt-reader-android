@@ -14,7 +14,9 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.util.AppConstants
 import com.mattrobertson.greek.reader.util.getAbsoluteChapterNumForBook
@@ -52,7 +54,9 @@ fun TableOfContents(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = if (isBookScreen) "" else book.title
+                text = if (isBookScreen) "" else book.title,
+                fontFamily = FontFamily.Serif,
+                fontSize = 20.sp
             )
         }
 
@@ -92,6 +96,8 @@ private fun TableOfContentsBooks(
         itemsIndexed(AppConstants.bookTitles) { index, title ->
             Text(
                 text = title,
+                fontFamily = FontFamily.Serif,
+                fontSize = 20.sp,
                 modifier = Modifier
                     .clickable {
                         onBookSelected(
@@ -121,6 +127,8 @@ private fun TableOfContentsChapters(
             item {
                 Text(
                     text = "Chapter ${chapterNum + 1}",
+                    fontFamily = FontFamily.Serif,
+                    fontSize = 20.sp,
                     modifier = Modifier
                         .clickable {
                             onChapterSelected(chapterNum)
