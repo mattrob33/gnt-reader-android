@@ -56,3 +56,13 @@ fun getReference(ref: VerseRef) = "${getBookTitle(ref.book)} ${ref.chapter}"
 fun getBookAbbrv(book: Book): String {
     return AppConstants.abbrvs[book.num]
 }
+
+fun getAbsoluteChapterNumForBook(book: Book): Int {
+    var absChapterNum = 0
+
+    for (i in 0 until book.num) {
+            absChapterNum += verses[i].size
+    }
+
+    return absChapterNum
+}
