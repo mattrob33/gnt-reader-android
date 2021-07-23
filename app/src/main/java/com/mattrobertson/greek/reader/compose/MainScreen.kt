@@ -23,10 +23,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
-import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
-import com.mattrobertson.greek.reader.util.getAbsoluteChapterNumForBook
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
@@ -89,10 +87,14 @@ fun MainScreen(
                 when (activeBottomNavItem) {
                     BottomNavItem.Contents -> {
                         TableOfContents(
-                            onSelected = { index ->
+                            onSelected = { position ->
                                 coroutineScope.launch {
-                                    val position = getAbsoluteChapterNumForBook(Book(index))
                                     listState.scrollToItem(position)
+                                    bottomSheetState.hide()
+                                }
+                            },
+                            onDismiss = {
+                                coroutineScope.launch {
                                     bottomSheetState.hide()
                                 }
                             }
