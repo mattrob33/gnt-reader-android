@@ -10,6 +10,13 @@ import com.mattrobertson.greek.reader.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+    h1 = TextStyle(
+        fontFamily = FontFamily(
+            Font(R.font.sblgreek, FontWeight.Normal)
+        ),
+        fontWeight = FontWeight.Normal,
+        fontSize = 36.sp
+    ),
     body1 = TextStyle(
         fontFamily = FontFamily(
             Font(R.font.sblgreek, FontWeight.Normal)
