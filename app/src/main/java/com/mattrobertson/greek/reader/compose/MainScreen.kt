@@ -41,6 +41,10 @@ fun MainScreen(
 
     var word by wordState
 
+    if (bottomSheetState.direction == 1f) {
+        word = null
+    }
+
     word?.let {
         if (!bottomSheetState.isVisible) {
             coroutineScope.launch {
@@ -48,6 +52,8 @@ fun MainScreen(
             }
         }
     }
+
+    bottomSheetState.currentValue
 
     AppTheme {
         val bottomNavItems = listOf(

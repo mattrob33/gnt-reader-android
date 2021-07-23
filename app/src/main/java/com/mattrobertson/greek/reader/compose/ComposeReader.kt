@@ -36,46 +36,12 @@ fun ComposeReader(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    var isTopBarVisible by remember { mutableStateOf(true) }
-
-    var lastScrollLocation by remember {
-        mutableStateOf(
-            Pair(
-                listState.firstVisibleItemIndex,
-                listState.firstVisibleItemScrollOffset
-            )
-        )
-    }
-
     Box {
-        val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
-
-        val title = "${getBookTitle(ref.book)} ${ref.chapter}"
-
-//        if (listState.isScrollInProgress) {
-//            val isScrollingDown = when {
-//                listState.firstVisibleItemIndex > lastScrollLocation.first -> true
-//                listState.firstVisibleItemIndex < lastScrollLocation.first -> false
-//                else -> {
-//                    listState.firstVisibleItemScrollOffset > lastScrollLocation.second
-//                }
-//            }
-//
-//            isTopBarVisible = ! isScrollingDown
-//
-//            if (isScrollingDown)
-//                ReaderPreviewBar(title = title)
-//
-//            lastScrollLocation = Pair(
-//                listState.firstVisibleItemIndex,
-//                listState.firstVisibleItemScrollOffset
-//            )
-//        }
-
-        isTopBarVisible = !listState.isScrollInProgress
-
-        if (isTopBarVisible)
-            ReaderTopBar(title)
+        if (listState.isScrollInProgress) {
+            val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
+            val title = "${getBookTitle(ref.book)} ${ref.chapter}"
+            ReaderPreviewBar(title)
+        }
 
         ReaderText(
             listState = listState,
@@ -108,25 +74,6 @@ fun ReaderPreviewBar(
             )
             Divider()
         }
-    }
-}
-
-@Composable
-fun ReaderTopBar(
-    title: String
-) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = 4.dp,
-        contentColor = MaterialTheme.colors.onSurface,
-        modifier = Modifier.zIndex(2f)
-    ) {
-        Text(
-            text = title,
-            textAlign = TextAlign.Center,
-            fontFamily = FontFamily.Serif,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
