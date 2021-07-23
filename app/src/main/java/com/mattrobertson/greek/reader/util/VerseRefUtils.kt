@@ -1,10 +1,7 @@
 package com.mattrobertson.greek.reader.util
 
-import android.content.Context
-import android.util.DisplayMetrics
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.VerseRef
-import kotlin.math.round
 
 
 val verses = arrayOf(
@@ -34,7 +31,7 @@ val verses = arrayOf(
         intArrayOf(13),
         intArrayOf(15),
         intArrayOf(25),
-        intArrayOf(20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 17, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21)
+        intArrayOf(20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 18, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21)
 )
 
 fun isSingleChapterBook(book: Book): Boolean {
