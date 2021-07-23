@@ -31,9 +31,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ComposeReader(
     verseRepo: VerseRepo,
+    listState: LazyListState,
     wordState: MutableState<Word?>
 ) {
-    val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     Box {
