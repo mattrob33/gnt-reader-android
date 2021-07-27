@@ -22,10 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.util.AppConstants
-import com.mattrobertson.greek.reader.util.getAbsoluteChapterNumForBook
-import com.mattrobertson.greek.reader.util.isSingleChapterBook
-import com.mattrobertson.greek.reader.util.verses
+import com.mattrobertson.greek.reader.util.*
 
 @ExperimentalFoundationApi
 @Composable
@@ -59,7 +56,7 @@ fun TableOfContents(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = if (isBookScreen) "" else book.title,
+                text = if (isBookScreen) "" else getBookTitle(book),
                 fontFamily = FontFamily.Serif,
                 fontSize = 20.sp
             )
@@ -151,28 +148,4 @@ private fun TableOfContentsChapters(
             }
         }
     }
-
-//    LazyColumn {
-//        val numChapters = verses[book.num].size
-//
-//        for (chapterNum in 0 until numChapters) {
-//            item {
-//                Text(
-//                    text = "Chapter ${chapterNum + 1}",
-//                    fontFamily = FontFamily.Serif,
-//                    fontSize = 20.sp,
-//                    modifier = Modifier
-//                        .clickable {
-//                            onChapterSelected(chapterNum)
-//                        }
-//                        .padding(
-//                            vertical = 8.dp,
-//                            horizontal = 16.dp
-//                        )
-//                        .fillMaxWidth()
-//                )
-//                Divider()
-//            }
-//        }
-//    }
 }
