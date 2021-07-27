@@ -1,5 +1,6 @@
 package com.mattrobertson.greek.reader.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import kotlinx.coroutines.launch
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
