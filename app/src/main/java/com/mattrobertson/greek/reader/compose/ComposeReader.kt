@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,9 +23,12 @@ import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @ExperimentalMaterialApi
 @Composable
@@ -34,6 +38,19 @@ fun ComposeReader(
     onWordSelected: (word: Word) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    SideEffect {
+        coroutineScope.launch {
+            context.scrollLocationDataStore.updateData { scrollLocation ->
+                scrollLocation.toBuilder()
+                    .setPosition(listState.firstVisibleItemIndex)
+                    .setOffset(listState.firstVisibleItemScrollOffset)
+                    .build()
+            }
+        }
+    }
 
     Box {
         if (listState.isScrollInProgress) {

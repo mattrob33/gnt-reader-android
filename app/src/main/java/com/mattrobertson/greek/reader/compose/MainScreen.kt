@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -26,7 +27,10 @@ import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -37,7 +41,14 @@ fun MainScreen(
     val navController = rememberNavController()
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-    val listState = rememberLazyListState()
+    val context = LocalContext.current
+
+    val scrollLocation = runBlocking { context.scrollLocationDataStore.data.first() }
+
+    val listState = rememberLazyListState(
+        initialFirstVisibleItemIndex = scrollLocation.position,
+        initialFirstVisibleItemScrollOffset = scrollLocation.offset
+    )
 
     val coroutineScope = rememberCoroutineScope()
 
