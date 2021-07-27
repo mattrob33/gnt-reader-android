@@ -1,8 +1,11 @@
 package com.mattrobertson.greek.reader.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -15,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.model.Book
@@ -23,6 +27,7 @@ import com.mattrobertson.greek.reader.util.getAbsoluteChapterNumForBook
 import com.mattrobertson.greek.reader.util.isSingleChapterBook
 import com.mattrobertson.greek.reader.util.verses
 
+@ExperimentalFoundationApi
 @Composable
 fun TableOfContents(
     onSelected: (index: Int) -> Unit,
@@ -115,20 +120,23 @@ private fun TableOfContentsBooks(
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 private fun TableOfContentsChapters(
     book: Book,
     onChapterSelected: (index: Int) -> Unit
 ) {
-    LazyColumn {
+
+    LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 80.dp)) {
         val numChapters = verses[book.num].size
 
         for (chapterNum in 0 until numChapters) {
             item {
                 Text(
-                    text = "Chapter ${chapterNum + 1}",
+                    text = "${chapterNum + 1}",
                     fontFamily = FontFamily.Serif,
                     fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             onChapterSelected(chapterNum)
@@ -143,4 +151,28 @@ private fun TableOfContentsChapters(
             }
         }
     }
+
+//    LazyColumn {
+//        val numChapters = verses[book.num].size
+//
+//        for (chapterNum in 0 until numChapters) {
+//            item {
+//                Text(
+//                    text = "Chapter ${chapterNum + 1}",
+//                    fontFamily = FontFamily.Serif,
+//                    fontSize = 20.sp,
+//                    modifier = Modifier
+//                        .clickable {
+//                            onChapterSelected(chapterNum)
+//                        }
+//                        .padding(
+//                            vertical = 8.dp,
+//                            horizontal = 16.dp
+//                        )
+//                        .fillMaxWidth()
+//                )
+//                Divider()
+//            }
+//        }
+//    }
 }

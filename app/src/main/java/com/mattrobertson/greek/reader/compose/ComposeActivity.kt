@@ -3,6 +3,7 @@ package com.mattrobertson.greek.reader.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -20,6 +21,7 @@ class ComposeActivity : ComponentActivity() {
 
     @Inject lateinit var verseRepo: VerseRepo
 
+    @ExperimentalFoundationApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
