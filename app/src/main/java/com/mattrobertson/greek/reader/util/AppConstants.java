@@ -1,10 +1,15 @@
 package com.mattrobertson.greek.reader.util;
 
-import android.content.*;
-import android.text.*;
-import android.text.method.*;
-import android.view.*;
-import android.widget.*;
+import android.content.Context;
+import android.text.Layout;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import com.mattrobertson.greek.reader.presentation.util.WordSpan;
 
@@ -44,8 +49,10 @@ public class AppConstants
 
 	public static final String[] abbrvs = {"Matt","Mark","Luke","John","Acts","Rom","1 Cor","2 Cor","Gal","Eph","Phil","Col","1 Thess","2 Thess","1 Tim","2 Tim","Titus","Phlm","Heb","James","1 Pet","2 Pet","1 John","2 John","3 John","Jude","Rev"};
 
-	public static final String[] bookTitles = {"Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"};
-	
+	public static final String[] bookEnglishTitles = {"Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"};
+
+	public static final String[] bookTitles = { "ΚΑΤΑ ΜΑΤΘΑΙΟΝ", "ΚΑΤΑ ΜΑΡΚΟΝ", "ΚΑΤΑ ΛΟΥΚΑΝ", "ΚΑΤΑ ΙΩΑΝΝΗΝ", "ΠΡΑΞΕΙΣ ΤΩΝ ΑΠΟΣΤΟΛΩΝ", "ΠΡΟΣ ΡΩΜΑΙΟΥΣ", "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Α΄", "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Β΄", "ΠΡΟΣ ΓΑΛΑΤΑΣ", "ΠΡΟΣ ΕΦΕΣΙΟΥΣ", "ΠΡΟΣ ΦΙΛΙΠΠΗΣΙΟΥΣ", "ΠΡΟΣ ΚΟΛΟΣΣΑΕΙΣ", "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Α΄", "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Β΄", "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Α΄", "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Β΄", "ΠΡΟΣ ΤΙΤΟΝ", "ΠΡΟΣ ΦΙΛΗΜΟΝΑ", "ΠΡΟΣ ΕΒΡΑΙΟΥΣ", "ΙΑΚΩΒΟΥ", "ΠΕΤΡΟΥ Α΄", "ΠΕΤΡΟΥ Β΄", "ΙΩΑΝΝΟΥ Α΄", "ΙΩΑΝΝΟΥ Β΄", "ΙΩΑΝΝΟΥ Γ΄", "ΙΟΥΔΑ", "ΑΠΟΚΑΛΥΨΙΣ ΙΩΑΝΝΟΥ" };
+
 	public static final String[] expertLevels = {"Beginner","Novice","Intermediate","Advanced","Expert","Mastery"};
 	
 	public static final int[] expertLevelVocabOcc = {50,30,20,15,10,5};
