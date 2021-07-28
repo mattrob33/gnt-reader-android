@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Read GNT</string>
+    <string name="app_name">GNT</string>
 
     <!-- Home tabs -->
     <string name="read">Read</string>
