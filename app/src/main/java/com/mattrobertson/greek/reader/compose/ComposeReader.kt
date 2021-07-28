@@ -50,17 +50,42 @@ fun ComposeReader(
     }
 
     Box {
+        // Top Preview Bar
         if (listState.isScrollInProgress) {
             val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
             val title = "${getBookTitle(ref.book)} ${ref.chapter}"
             ReaderPreviewBar(title)
         }
 
-        ComposeReaderText(
-            listState = listState,
-            onWordSelected = onWordSelected,
-            verseRepo = verseRepo
-        )
+        // Text
+        LazyColumn(state = listState) {
+            for (i in 0 until 260) {
+                item {
+                    val chapterRef = VerseRef.fromAbsoluteChapterNum(i)
+
+                    if (chapterRef.chapter == 1) {
+                        BookSpacer()
+                        BookTitle(title = getBookTitle(chapterRef.book))
+                    }
+
+                    var verses by remember { mutableStateOf(emptyList<Verse>()) }
+
+                    LaunchedEffect(key1 = chapterRef, block = {
+                        coroutineScope.launch {
+                            verses = verseRepo.getVersesForChapter(chapterRef)
+                        }
+                    })
+
+                    ChapterText(
+                        chapterRef = chapterRef,
+                        verses = verses,
+                        onWordSelected = onWordSelected
+                    )
+
+                    ChapterSpacer()
+                }
+            }
+        }
     }
 }
 
@@ -85,46 +110,6 @@ fun ReaderPreviewBar(
                     .padding(vertical = 4.dp)
             )
             Divider()
-        }
-    }
-}
-
-@Composable
-fun ComposeReaderText(
-    listState: LazyListState,
-    onWordSelected: (word: Word) -> Unit,
-    verseRepo: VerseRepo
-) {
-    val coroutineScope = rememberCoroutineScope()
-
-    LazyColumn(
-        state = listState
-    ) {
-        for (i in 0 until 260) {
-            item {
-                val chapterRef = VerseRef.fromAbsoluteChapterNum(i)
-
-                if (chapterRef.chapter == 1) {
-                    BookSpacer()
-                    BookTitle(title = getBookTitle(chapterRef.book))
-                }
-
-                var verses by remember { mutableStateOf(emptyList<Verse>()) }
-
-                LaunchedEffect(key1 = chapterRef, block = {
-                    coroutineScope.launch {
-                        verses = verseRepo.getVersesForChapter(chapterRef)
-                    }
-                })
-
-                ChapterText(
-                    chapterRef = chapterRef,
-                    verses = verses,
-                    onWordSelected = onWordSelected
-                )
-
-                ChapterSpacer()
-            }
         }
     }
 }
