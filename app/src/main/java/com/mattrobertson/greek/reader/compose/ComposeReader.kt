@@ -25,10 +25,7 @@ import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.util.getBookTitle
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @ExperimentalMaterialApi
 @Composable
@@ -59,11 +56,10 @@ fun ComposeReader(
             ReaderPreviewBar(title)
         }
 
-        ReaderText(
+        ComposeReaderText(
             listState = listState,
             onWordSelected = onWordSelected,
-            verseRepo = verseRepo,
-            coroutineScope = coroutineScope
+            verseRepo = verseRepo
         )
     }
 }
@@ -94,12 +90,13 @@ fun ReaderPreviewBar(
 }
 
 @Composable
-fun ReaderText(
+fun ComposeReaderText(
     listState: LazyListState,
     onWordSelected: (word: Word) -> Unit,
-    verseRepo: VerseRepo,
-    coroutineScope: CoroutineScope
+    verseRepo: VerseRepo
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(
         state = listState
     ) {
@@ -112,11 +109,18 @@ fun ReaderText(
                     BookTitle(title = getBookTitle(chapterRef.book))
                 }
 
+                var verses by remember { mutableStateOf(emptyList<Verse>()) }
+
+                LaunchedEffect(key1 = chapterRef, block = {
+                    coroutineScope.launch {
+                        verses = verseRepo.getVersesForChapter(chapterRef)
+                    }
+                })
+
                 ChapterText(
                     chapterRef = chapterRef,
-                    onWordSelected = onWordSelected,
-                    verseRepo = verseRepo,
-                    coroutineScope = coroutineScope
+                    verses = verses,
+                    onWordSelected = onWordSelected
                 )
 
                 ChapterSpacer()
@@ -142,28 +146,18 @@ fun BookTitle(title: String) {
 @Composable
 fun ChapterText(
     chapterRef: VerseRef,
-    onWordSelected: (word: Word) -> Unit,
-    verseRepo: VerseRepo,
-    coroutineScope: CoroutineScope
+    verses: List<Verse>,
+    onWordSelected: (word: Word) -> Unit
 ) {
-    var isLoading by remember { mutableStateOf(true) }
-
-    var verses by remember { mutableStateOf(listOf<Verse>()) }
     var chapterText by remember { mutableStateOf(AnnotatedString("")) }
-    var clickedIndex by remember { mutableStateOf(-1) }
 
     val wordMap by remember { mutableStateOf(mutableMapOf<Int, Word>()) }
 
-    LaunchedEffect(key1 = chapterRef, block = {
-        coroutineScope.launch {
-            verses = verseRepo.getVersesForChapter(chapterRef)
-            isLoading = false
-        }
-    })
+    var clickedIndex by remember { mutableStateOf(-1) }
 
     var offset = 0
 
-    if (isLoading) {
+    if (verses.isEmpty()) {
         // hack to speed up loading - this ensures only the first ChapterText is visible and
         // loaded, rather than trying to load all of them (since the initial height is ~0)
         //TODO find a better way of doing this
