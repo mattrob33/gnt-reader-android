@@ -22,4 +22,6 @@ class VerseRepo(private val versesDao: VersesDao) {
 
 	suspend fun getVersesForChapter(ref: VerseRef) = getVersesForChapter(ref.book, ref.chapter)
 
+	suspend fun getVerse(ref: VerseRef) = versesDao.getVerse(ref.book.num, ref.chapter, ref.verse)
+
 }
