@@ -163,7 +163,7 @@ fun MainScreen(
                                             textAlign = TextAlign.Center,
                                             text = buildAnnotatedString {
                                                 withStyle(
-                                                    style = ParagraphStyle(lineHeight = 28.sp)
+                                                    style = ParagraphStyle(lineHeight = 24.sp)
                                                 ) {
                                                     withStyle(
                                                         style = SpanStyle(
@@ -172,7 +172,17 @@ fun MainScreen(
                                                             fontWeight = FontWeight.Bold
                                                         )
                                                     ) {
-                                                        append("Concordance")
+                                                        append("Concordance\n")
+                                                    }
+
+                                                    withStyle(
+                                                        style = SpanStyle(
+                                                            fontSize = 16.sp,
+                                                            fontFamily = FontFamily.Serif,
+                                                            fontWeight = FontWeight.Normal
+                                                        )
+                                                    ) {
+                                                        append("(${concordanceList.size}x)")
                                                     }
                                                 }
                                             }
