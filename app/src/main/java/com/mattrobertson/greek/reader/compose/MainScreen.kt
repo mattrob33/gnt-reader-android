@@ -306,6 +306,8 @@ fun MainScreen(
                     listState = listState,
                     onWordSelected = {
                         word = it
+                        activeBottomNavItem = null
+
                         coroutineScope.launch {
                             bottomSheetState.show()
                         }
