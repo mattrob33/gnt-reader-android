@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -97,64 +100,87 @@ fun MainScreen(
                             val concordanceDao = VerseDatabase.getInstance(context).concordanceDao()
 
                             val concordanceList = runBlocking {
-                                concordanceDao.getConcordanceEntries(word.lexicalForm, 10)
+                                concordanceDao.getConcordanceEntries(word.lexicalForm)
                             }
 
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = buildAnnotatedString {
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 22.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = FontFamily(Font(R.font.sblgreek, FontWeight.Normal))
-                                        )
-                                    ) {
-                                        append("${word.lexicalForm}\n")
-                                    }
+                            Column {
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = buildAnnotatedString {
+                                        withStyle(
+                                            style = ParagraphStyle(lineHeight = 28.sp)
+                                        ) {
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 22.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontFamily = FontFamily(
+                                                        Font(
+                                                            R.font.sblgreek,
+                                                            FontWeight.Normal
+                                                        )
+                                                    )
+                                                )
+                                            ) {
+                                                append("${word.lexicalForm}\n")
+                                            }
 
 
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 18.sp,
-                                            fontFamily = FontFamily.SansSerif
-                                        )
-                                    ) {
-                                        append("${gloss}\n")
-                                    }
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 18.sp,
+                                                    fontFamily = FontFamily.SansSerif
+                                                )
+                                            ) {
+                                                append("${gloss}\n")
+                                            }
 
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 16.sp,
-                                            fontFamily = FontFamily.SansSerif
-                                        )
-                                    ) {
-                                        append("${word.parsing.humanReadable}\n\n")
-                                    }
-
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 14.sp,
-                                            fontFamily = FontFamily.SansSerif,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    ) {
-                                        append("Concordance\n")
-                                    }
-
-                                    withStyle(
-                                        style = SpanStyle(
-                                            fontSize = 14.sp,
-                                            fontFamily = FontFamily.SansSerif
-                                        )
-                                    ) {
-                                        concordanceList.forEachIndexed { index, entity ->
-                                            val bookTitle = getBookAbbrv(Book(entity.book))
-                                            append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 18.sp,
+                                                    fontFamily = FontFamily.SansSerif,
+                                                    fontStyle = Italic
+                                                )
+                                            ) {
+                                                append(word.parsing.humanReadable)
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+
+                                Divider()
+
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = buildAnnotatedString {
+                                        withStyle(
+                                            style = ParagraphStyle(lineHeight = 22.sp)
+                                        ) {
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 18.sp,
+                                                    fontFamily = FontFamily.Serif,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            ) {
+                                                append("Concordance\n")
+                                            }
+
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontSize = 16.sp,
+                                                    fontFamily = FontFamily.SansSerif
+                                                )
+                                            ) {
+                                                concordanceList.forEachIndexed { index, entity ->
+                                                    val bookTitle = getBookAbbrv(Book(entity.book))
+                                                    append("  ${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
+                                                }
+                                            }
+                                        }
+                                    }
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
