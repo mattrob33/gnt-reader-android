@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.data.VerseDatabase
-import com.mattrobertson.greek.reader.data.VersesDao
+import com.mattrobertson.greek.reader.data.dao.VersesDao
 import com.mattrobertson.greek.reader.html.HtmlGenerator
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import dagger.Module
