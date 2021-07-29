@@ -106,6 +106,13 @@ fun MainScreen(
                             }
 
                             Column {
+
+                                Spacer(
+                                    modifier = Modifier.height(12.dp)
+                                )
+
+                                DragHandle()
+
                                 Text(
                                     modifier = Modifier.padding(16.dp),
                                     text = buildAnnotatedString {
