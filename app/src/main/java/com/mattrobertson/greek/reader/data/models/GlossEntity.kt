@@ -1,13 +1,22 @@
 package com.mattrobertson.greek.reader.data.models
 
 import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.GLOSSES_TABLE
 
 @Entity(
-	tableName = GLOSSES_TABLE
+	tableName = GLOSSES_TABLE,
+	indices = [
+		Index(
+			name = "gloss_lex",
+			unique = false,
+			value = ["lex", "gloss", "occ"]
+		)
+	]
 )
 data class GlossEntity (
-	val lex: String,
+	@PrimaryKey val lex: String,
 	val gloss: String,
 	val occ: Int
 )
