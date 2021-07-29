@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -226,10 +226,34 @@ fun MainScreen(
                                                         verseRepo.getVerse(ref)
                                                     }
 
-                                                    val text =
-                                                        VerseTextDecoder.decodeAsString(verse.encodedText)
+                                                    val words = VerseTextDecoder.decode(verse.encodedText)
 
-                                                    append(text)
+                                                    words.forEach {
+                                                        val selected = (it.lexicalForm == word.lexicalForm)
+
+                                                        val weight =
+                                                            if (selected)
+                                                                FontWeight.Bold
+                                                            else
+                                                                FontWeight.Normal
+
+                                                        val decoration =
+                                                            if (selected)
+                                                                TextDecoration.Underline
+                                                            else
+                                                                TextDecoration.None
+
+                                                        withStyle(
+                                                            style = SpanStyle(
+                                                                fontWeight = weight,
+                                                                textDecoration = decoration
+                                                            )
+                                                        ) {
+                                                            append(it.text)
+                                                        }
+
+                                                        append(" ")
+                                                    }
                                                 }
                                             }
                                         )
