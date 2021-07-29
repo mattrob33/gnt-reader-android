@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.data.VerseDatabase
+import com.mattrobertson.greek.reader.mappers.VerseTextDecoder
 import com.mattrobertson.greek.reader.model.Book
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
@@ -154,7 +158,7 @@ fun MainScreen(
                                     modifier = Modifier.padding(16.dp),
                                     text = buildAnnotatedString {
                                         withStyle(
-                                            style = ParagraphStyle(lineHeight = 22.sp)
+                                            style = ParagraphStyle(lineHeight = 28.sp)
                                         ) {
                                             withStyle(
                                                 style = SpanStyle(
@@ -163,23 +167,52 @@ fun MainScreen(
                                                     fontWeight = FontWeight.Bold
                                                 )
                                             ) {
-                                                append("Concordance\n")
-                                            }
-
-                                            withStyle(
-                                                style = SpanStyle(
-                                                    fontSize = 16.sp,
-                                                    fontFamily = FontFamily.SansSerif
-                                                )
-                                            ) {
-                                                concordanceList.forEachIndexed { index, entity ->
-                                                    val bookTitle = getBookAbbrv(Book(entity.book))
-                                                    append("  ${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
-                                                }
+                                                append("Concordance")
                                             }
                                         }
                                     }
                                 )
+
+                                LazyColumn {
+                                    itemsIndexed(concordanceList) {index, entity ->
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                horizontal = 16.dp,
+                                                vertical = 16.dp
+                                            ),
+                                            fontSize = 20.sp,
+                                            fontFamily = FontFamily(
+                                                Font(
+                                                    R.font.sblgreek,
+                                                    FontWeight.Normal
+                                                )
+                                            ),
+                                            text = buildAnnotatedString {
+
+                                                val bookTitle = getBookAbbrv(Book(entity.book))
+                                                append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}")
+
+                                                withStyle(
+                                                    style = ParagraphStyle(
+                                                        textIndent = TextIndent(
+                                                            firstLine = 16.sp,
+                                                            restLine = 16.sp
+                                                        )
+                                                    )
+                                                ) {
+                                                    val ref = VerseRef(Book(entity.book), entity.chapter, entity.verse)
+                                                    val verse = runBlocking {
+                                                        verseRepo.getVerse(ref)
+                                                    }
+
+                                                    val text = VerseTextDecoder.decodeAsString(verse.encodedText)
+
+                                                    append(text)
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
                             }
                         }
 

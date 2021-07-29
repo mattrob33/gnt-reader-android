@@ -23,4 +23,16 @@ object VerseTextDecoder {
 
 		return words
 	}
+
+	fun decodeAsString(encodedText: String): String {
+		val sb = StringBuilder()
+		val encodedWordList = encodedText.split(" ")
+
+		encodedWordList.forEach { encodedWord ->
+			val wordParts = encodedWord.split("_")
+			sb.append(wordParts[0]).append(" ")
+		}
+
+		return sb.toString().trim()
+	}
 }
