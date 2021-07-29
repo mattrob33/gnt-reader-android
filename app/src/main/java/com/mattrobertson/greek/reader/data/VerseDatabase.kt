@@ -17,7 +17,10 @@ abstract class VerseDatabase: RoomDatabase() {
 
 	companion object {
 		private const val DATABASE_NAME = "gnt"
+
 		const val VERSES_TABLE = "verses"
+		const val GLOSSES_TABLE = "glosses"
+		const val CONCORDANCE_TABLE = "concordance"
 
 		@Volatile
 		private var instance: VerseDatabase? = null
@@ -30,7 +33,7 @@ abstract class VerseDatabase: RoomDatabase() {
 
 		private fun buildDatabase(context: Context): VerseDatabase {
 			return Room.databaseBuilder(context, VerseDatabase::class.java, DATABASE_NAME)
-				.createFromAsset("db/gnt.db")
+				.createFromAsset("db/gnt-app.db")
 				.build()
 		}
 	}
