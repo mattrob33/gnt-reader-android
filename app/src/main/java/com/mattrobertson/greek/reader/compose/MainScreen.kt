@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
@@ -84,6 +85,12 @@ fun MainScreen(
                         word?.let { word ->
                             activeBottomNavItem = null
 
+                            val glossesDao = VerseDatabase.getInstance(context).glossesDao()
+
+                            val gloss = runBlocking {
+                                glossesDao.getGloss(word.lexicalForm)
+                            }
+
                             Text(
                                 modifier = Modifier.padding(16.dp),
                                 text = buildAnnotatedString {
@@ -95,6 +102,15 @@ fun MainScreen(
                                         )
                                     ) {
                                         append("${word.lexicalForm}\n")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontSize = 18.sp,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    ) {
+                                        append("${gloss}\n")
                                     }
 
                                     withStyle(
