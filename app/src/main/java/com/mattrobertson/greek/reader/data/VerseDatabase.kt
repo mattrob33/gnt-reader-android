@@ -27,7 +27,7 @@ abstract class VerseDatabase: RoomDatabase() {
 	abstract fun concordanceDao(): ConcordanceDao
 
 	companion object {
-		private const val DATABASE_NAME = "gnt"
+		private const val DATABASE_NAME = "gnt-app"
 
 		const val VERSES_TABLE = "verses"
 		const val GLOSSES_TABLE = "glosses"

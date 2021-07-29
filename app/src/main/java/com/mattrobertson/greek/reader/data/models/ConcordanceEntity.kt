@@ -1,14 +1,22 @@
 package com.mattrobertson.greek.reader.data.models
 
 import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.CONCORDANCE_TABLE
 
 @Entity(
 	tableName = CONCORDANCE_TABLE,
-	primaryKeys = ["id"]
+	indices = [
+		Index(
+			name = "concordance_lex",
+			unique = false,
+			value = ["lex", "book", "chapter", "verse"]
+		)
+	]
 )
 data class ConcordanceEntity (
-	val id: Int,
+	@PrimaryKey val id: Int,
 	val lex: String,
 	val book: Int,
 	val chapter: Int,
