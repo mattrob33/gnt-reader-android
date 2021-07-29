@@ -180,32 +180,37 @@ fun MainScreen(
                                                 horizontal = 16.dp,
                                                 vertical = 16.dp
                                             ),
-                                            fontSize = 20.sp,
-                                            fontFamily = FontFamily(
-                                                Font(
-                                                    R.font.sblgreek,
-                                                    FontWeight.Normal
-                                                )
-                                            ),
+                                            fontSize = 18.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                            fontWeight = FontWeight.Bold,
                                             text = buildAnnotatedString {
 
                                                 val bookTitle = getBookAbbrv(Book(entity.book))
-                                                append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}")
+                                                append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
 
                                                 withStyle(
-                                                    style = ParagraphStyle(
-                                                        textIndent = TextIndent(
-                                                            firstLine = 16.sp,
-                                                            restLine = 16.sp
+                                                    style = SpanStyle(
+                                                        fontSize = 22.sp,
+                                                        fontWeight = FontWeight.Normal,
+                                                        fontFamily = FontFamily(
+                                                            Font(
+                                                                R.font.sblgreek,
+                                                                FontWeight.Normal
+                                                            )
                                                         )
                                                     )
                                                 ) {
-                                                    val ref = VerseRef(Book(entity.book), entity.chapter, entity.verse)
+                                                    val ref = VerseRef(
+                                                        Book(entity.book),
+                                                        entity.chapter,
+                                                        entity.verse
+                                                    )
                                                     val verse = runBlocking {
                                                         verseRepo.getVerse(ref)
                                                     }
 
-                                                    val text = VerseTextDecoder.decodeAsString(verse.encodedText)
+                                                    val text =
+                                                        VerseTextDecoder.decodeAsString(verse.encodedText)
 
                                                     append(text)
                                                 }
