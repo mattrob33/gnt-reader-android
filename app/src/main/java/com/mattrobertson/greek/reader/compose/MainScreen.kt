@@ -26,9 +26,12 @@ import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.data.VerseDatabase
+import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
+import com.mattrobertson.greek.reader.util.getBookAbbrv
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -91,6 +94,12 @@ fun MainScreen(
                                 glossesDao.getGloss(word.lexicalForm)
                             }
 
+                            val concordanceDao = VerseDatabase.getInstance(context).concordanceDao()
+
+                            val concordanceList = runBlocking {
+                                concordanceDao.getConcordanceEntries(word.lexicalForm, 10)
+                            }
+
                             Text(
                                 modifier = Modifier.padding(16.dp),
                                 text = buildAnnotatedString {
@@ -103,6 +112,7 @@ fun MainScreen(
                                     ) {
                                         append("${word.lexicalForm}\n")
                                     }
+
 
                                     withStyle(
                                         style = SpanStyle(
@@ -119,7 +129,29 @@ fun MainScreen(
                                             fontFamily = FontFamily.SansSerif
                                         )
                                     ) {
-                                        append(word.parsing.humanReadable)
+                                        append("${word.parsing.humanReadable}\n\n")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontSize = 14.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    ) {
+                                        append("Concordance\n")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontSize = 14.sp,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    ) {
+                                        concordanceList.forEachIndexed { index, entity ->
+                                            val bookTitle = getBookAbbrv(Book(entity.book))
+                                            append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
+                                        }
                                     }
                                 }
                             )
