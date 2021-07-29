@@ -1,10 +1,7 @@
 package com.mattrobertson.greek.reader.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -22,6 +19,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -154,26 +152,35 @@ fun MainScreen(
 
                                 Divider()
 
-                                Text(
-                                    modifier = Modifier.padding(16.dp),
-                                    text = buildAnnotatedString {
-                                        withStyle(
-                                            style = ParagraphStyle(lineHeight = 28.sp)
-                                        ) {
-                                            withStyle(
-                                                style = SpanStyle(
-                                                    fontSize = 18.sp,
-                                                    fontFamily = FontFamily.Serif,
-                                                    fontWeight = FontWeight.Bold
-                                                )
-                                            ) {
-                                                append("Concordance")
-                                            }
-                                        }
-                                    }
-                                )
-
                                 LazyColumn {
+                                    item {
+                                        Spacer(Modifier.height(16.dp))
+
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(horizontal = 16.dp)
+                                                .fillMaxWidth(),
+                                            textAlign = TextAlign.Center,
+                                            text = buildAnnotatedString {
+                                                withStyle(
+                                                    style = ParagraphStyle(lineHeight = 28.sp)
+                                                ) {
+                                                    withStyle(
+                                                        style = SpanStyle(
+                                                            fontSize = 18.sp,
+                                                            fontFamily = FontFamily.Serif,
+                                                            fontWeight = FontWeight.Bold
+                                                        )
+                                                    ) {
+                                                        append("Concordance")
+                                                    }
+                                                }
+                                            }
+                                        )
+
+                                        Spacer(Modifier.height(8.dp))
+                                    }
+
                                     itemsIndexed(concordanceList) {index, entity ->
                                         Text(
                                             modifier = Modifier.padding(
