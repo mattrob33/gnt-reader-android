@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -44,22 +45,30 @@ fun Chip(
     Surface(
         color = if (selected) Color(0xFF00DD00) else Color.Transparent,
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.clickable {
-            onSelected()
-        }.border(
-            width = 1.dp,
-            color = Color(0xFF009900),
-            shape = RoundedCornerShape(16.dp)
-        )
-    ) {
-        Text(
-            text = title,
-            fontSize = 14.sp,
-            modifier = Modifier.padding(
-                horizontal = 8.dp,
-                vertical = 4.dp
+        modifier = Modifier
+            .clickable {
+                onSelected()
+            }
+            .border(
+                width = 1.dp,
+                color = Color(0xFF009900),
+                shape = RoundedCornerShape(16.dp)
             )
-        )
+            .defaultMinSize(
+                minHeight = 24.dp,
+                minWidth = 48.dp
+            )
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = title,
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
     }
 }
 
