@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -40,10 +41,13 @@ fun DragHandle() {
 fun Chip(
     title: String,
     selected: Boolean,
-    onSelected: () -> Unit
+    onSelected: () -> Unit,
+    outlineColor: Color,
+    backgroundColor: Color,
+    textColor: Color
 ) {
     Surface(
-        color = if (selected) Color(0xFF00DD00) else Color.Transparent,
+        color = if (selected) backgroundColor else Color.Transparent,
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .clickable {
@@ -51,12 +55,12 @@ fun Chip(
             }
             .border(
                 width = 1.dp,
-                color = Color(0xFF009900),
+                color = outlineColor,
                 shape = RoundedCornerShape(16.dp)
             )
             .defaultMinSize(
-                minHeight = 24.dp,
-                minWidth = 48.dp
+                minHeight = 32.dp,
+                minWidth = 60.dp
             )
     ) {
         Box(
@@ -64,8 +68,10 @@ fun Chip(
         ) {
             Text(
                 text = title,
+                fontFamily = FontFamily.SansSerif,
+                color = textColor,
                 textAlign = TextAlign.Center,
-                fontSize = 12.sp,
+                fontSize = 16.sp,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -73,11 +79,12 @@ fun Chip(
 }
 
 @Composable
-@Preview(showBackground = true)
 fun ScrollableChipRow(
-    @PreviewParameter(FakeChipRowProvider::class)
     items: List<String>,
-    onItemSelected: (index: Int) -> Unit = {}
+    onItemSelected: (index: Int) -> Unit = {},
+    outlineColor: Color,
+    backgroundColor: Color,
+    textColor: Color
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 
@@ -91,9 +98,12 @@ fun ScrollableChipRow(
                 onSelected = {
                     selectedIndex = index
                     onItemSelected(index)
-                }
+                },
+                outlineColor = outlineColor,
+                backgroundColor = backgroundColor,
+                textColor = textColor
             )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }
