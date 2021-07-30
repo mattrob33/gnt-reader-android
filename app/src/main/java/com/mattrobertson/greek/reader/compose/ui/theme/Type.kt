@@ -17,6 +17,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 36.sp
     ),
+    h2 = TextStyle(
+        fontFamily = FontFamily.Serif,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp
+    ),
     body1 = TextStyle(
         fontFamily = FontFamily(
             Font(R.font.sblgreek, FontWeight.Normal)

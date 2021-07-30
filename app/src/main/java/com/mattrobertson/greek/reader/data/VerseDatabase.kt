@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.mattrobertson.greek.reader.data.dao.ConcordanceDao
 import com.mattrobertson.greek.reader.data.dao.GlossesDao
 import com.mattrobertson.greek.reader.data.dao.VersesDao
+import com.mattrobertson.greek.reader.data.dao.VocabDao
 import com.mattrobertson.greek.reader.data.models.ConcordanceEntity
 import com.mattrobertson.greek.reader.data.models.GlossEntity
 import com.mattrobertson.greek.reader.data.models.VerseEntity
@@ -25,6 +26,7 @@ abstract class VerseDatabase: RoomDatabase() {
 	abstract fun versesDao(): VersesDao
 	abstract fun glossesDao(): GlossesDao
 	abstract fun concordanceDao(): ConcordanceDao
+	abstract fun vocabDao(): VocabDao
 
 	companion object {
 		private const val DATABASE_NAME = "gnt-app"
