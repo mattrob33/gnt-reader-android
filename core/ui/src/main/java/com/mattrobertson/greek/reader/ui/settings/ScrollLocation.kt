@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose.settings
+package com.mattrobertson.greek.reader.ui.settings
 
 import android.content.Context
 import androidx.datastore.core.CorruptionException

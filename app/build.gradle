@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id "com.google.protobuf" version "0.8.12"
 }
 
 android {
@@ -104,10 +103,6 @@ dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
-    // Datastore
-    implementation  "com.google.protobuf:protobuf-javalite:3.10.0"
-    implementation "androidx.datastore:datastore:1.0.0"
-
     // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
 
@@ -137,23 +132,4 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
 
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-}
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.10.0"
-    }
-
-    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-    // for more information.
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option 'lite'
-                }
-            }
-        }
-    }
 }
