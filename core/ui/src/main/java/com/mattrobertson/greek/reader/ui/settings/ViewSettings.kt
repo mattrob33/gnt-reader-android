@@ -1,13 +1,13 @@
-package com.mattrobertson.greek.reader.compose.settings
+package com.mattrobertson.greek.reader.ui.settings
 
 data class ViewSettings(
-	var showVerseNumbers: Boolean = true,
-	var showVersesNewLines: Boolean = false,
-	var useDarkTheme: Boolean = true,
-	var pageMargins: PageMargins = PageMargins.MEDIUM,
-	var fontFamily: FontFamily = FontFamily.CARDO,
-	var fontSize: Int = 14,
-	var lineSpacing: Int = 180
+    var showVerseNumbers: Boolean = true,
+    var showVersesNewLines: Boolean = false,
+    var useDarkTheme: Boolean = true,
+    var pageMargins: PageMargins = PageMargins.MEDIUM,
+    var fontFamily: FontFamily = FontFamily.CARDO,
+    var fontSize: Int = 14,
+    var lineSpacing: Int = 180
 ) {
 
 	override fun equals(other: Any?): Boolean {
