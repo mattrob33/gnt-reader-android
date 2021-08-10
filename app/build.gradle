@@ -40,11 +40,9 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
     }
 
     buildFeatures {
-        viewBinding true
         compose true
     }
 
@@ -71,6 +69,7 @@ ext {
 dependencies {
     implementation project(":core:verseref")
     implementation project(":core:db")
+    implementation project(":core:ui")
 
     implementation project(":feature:audio")
     implementation project(":feature:gloss")

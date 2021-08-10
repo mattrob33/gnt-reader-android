@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose.ui.theme
+package com.mattrobertson.greek.reader.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
