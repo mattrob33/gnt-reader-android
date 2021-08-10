@@ -63,11 +63,12 @@ android {
 }
 
 ext {
-    roomVersion = "2.3.0"
-    navVersion = "2.4.0-alpha05"
+    exoPlayerVersion = "2.14.2"
+    hiltViewModelsVersion = "1.0.0-alpha03"
     jupiterVersion = "5.3.2"
     lifecycleVersion = "2.4.0-alpha02"
-    hiltViewModelsVersion = "1.0.0-alpha03"
+    navVersion = "2.4.0-alpha05"
+    roomVersion = "2.3.0"
 }
 
 dependencies {
@@ -120,6 +121,9 @@ dependencies {
     // Datastore
     implementation  "com.google.protobuf:protobuf-javalite:3.10.0"
     implementation "androidx.datastore:datastore:1.0.0-rc02"
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
 
     // Other
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
