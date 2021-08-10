@@ -3,14 +3,10 @@
     <string name="app_name">GNT</string>
 
     <!-- Home tabs -->
-    <string name="read">Read</string>
-    <string name="plans">Plans</string>
+    <string name="contents">Contents</string>
     <string name="vocab">Vocab</string>
-
+    <string name="audio">Audio</string>
     <string name="settings">Settings</string>
-    <string name="about">About</string>
-
-    <string name="speed_read_update">Improve reading fluency and speed. SpeedRead forces you to read like you do in English: one word at a time.\n\nLaunch SpeedRead by tapping the fast-forward arrow in the menu bar.\n\nTIP: Read the same passage repeatedly with SpeedRead and see how much easier it becomes to follow!</string>
 
     <string-array name="books">
         <item>Matthew</item>
@@ -42,64 +38,4 @@
         <item>Revelation</item>
     </string-array>
 
-    <string-array name="abrvs">
-        <item>mat</item>
-        <item>mrk</item>
-        <item>luk</item>
-        <item>joh</item>
-        <item>act</item>
-        <item>rom</item>
-        <item>1co</item>
-        <item>2co</item>
-        <item>gal</item>
-        <item>eph</item>
-        <item>phi</item>
-        <item>col</item>
-        <item>1th</item>
-        <item>2th</item>
-        <item>1ti</item>
-        <item>2ti</item>
-        <item>tit</item>
-        <item>phe</item>
-        <item>heb</item>
-        <item>jam</item>
-        <item>1pe</item>
-        <item>2pe</item>
-        <item>1jo</item>
-        <item>2jo</item>
-        <item>3jo</item>
-        <item>jud</item>
-        <item>rev</item>
-    </string-array>
-
-    <string-array name="expert_levels">
-        <item>Beginner (50+)</item>
-        <item>Novice (30+)</item>
-        <item>Intermediate (20+)</item>
-        <item>Advanced (15+)</item>
-        <item>Expert (10+)</item>
-        <item>Mastery (5+)</item>
-    </string-array>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="more">More</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="speed_read">Speed Read</string>
-    <string name="recents">Recents</string>
-    <string name="title_activity_compose">ComposeActivity</string>
-    <string name="audio">Audio</string>
-    <string name="contents">Contents</string>
 </resources>
