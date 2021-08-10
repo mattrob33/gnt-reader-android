@@ -2,7 +2,7 @@ package com.mattrobertson.greek.reader.data
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.VerseRef
 
 object Recents {
 

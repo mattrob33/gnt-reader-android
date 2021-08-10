@@ -2,9 +2,9 @@ package com.mattrobertson.greek.reader.repo
 
 import com.mattrobertson.greek.reader.data.dao.VersesDao
 import com.mattrobertson.greek.reader.mappers.VerseMapper
-import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.model.Verse
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.VerseRef
 
 class VerseRepo(private val versesDao: VersesDao) {
 

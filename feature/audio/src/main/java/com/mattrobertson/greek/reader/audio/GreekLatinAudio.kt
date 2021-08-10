@@ -1,7 +1,7 @@
 package com.mattrobertson.greek.reader.audio
 
-import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.Book
+import com.mattrobertson.greek.reader.verseref.VerseRef
 
 object GreekLatinAudio {
 

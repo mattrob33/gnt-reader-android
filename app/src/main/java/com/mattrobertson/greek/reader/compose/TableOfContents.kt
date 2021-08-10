@@ -21,8 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.util.*
+import com.mattrobertson.greek.reader.verseref.*
 
 @ExperimentalFoundationApi
 @Composable

@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.model
+package com.mattrobertson.greek.reader.verseref
 
 data class Book(val num: Int): Comparable<Book> {
 

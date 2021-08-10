@@ -5,7 +5,7 @@ import androidx.room.Query
 import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.CONCORDANCE_TABLE
 import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.GLOSSES_TABLE
 import com.mattrobertson.greek.reader.data.models.GlossEntity
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.VerseRef
 
 @Dao
 interface VocabDao {
