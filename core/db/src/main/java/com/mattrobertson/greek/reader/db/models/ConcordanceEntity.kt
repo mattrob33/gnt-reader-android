@@ -1,9 +1,9 @@
-package com.mattrobertson.greek.reader.data.models
+package com.mattrobertson.greek.reader.db.models
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.CONCORDANCE_TABLE
+import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.CONCORDANCE_TABLE
 
 @Entity(
 	tableName = CONCORDANCE_TABLE,

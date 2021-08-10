@@ -14,11 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.mattrobertson.greek.reader.compose.previews.FakeVerseRefProvider
-import com.mattrobertson.greek.reader.data.VerseDatabase
-import com.mattrobertson.greek.reader.data.models.GlossEntity
+import com.mattrobertson.greek.reader.db.models.GlossEntity
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
-import com.mattrobertson.greek.reader.verseref.getBookTitle
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -36,7 +34,7 @@ fun VocabScreen(
 
         var maxOcc by remember { mutableStateOf(100) }
 
-        val vocabDao = VerseDatabase.getInstance(LocalContext.current).vocabDao()
+        val vocabDao = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(LocalContext.current).vocabDao()
 
         words = runBlocking {
             vocabDao.getVocabWordsForChapter(ref, maxOcc)

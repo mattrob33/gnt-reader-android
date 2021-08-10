@@ -1,16 +1,16 @@
-package com.mattrobertson.greek.reader.data
+package com.mattrobertson.greek.reader.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mattrobertson.greek.reader.data.dao.ConcordanceDao
-import com.mattrobertson.greek.reader.data.dao.GlossesDao
-import com.mattrobertson.greek.reader.data.dao.VersesDao
-import com.mattrobertson.greek.reader.data.dao.VocabDao
-import com.mattrobertson.greek.reader.data.models.ConcordanceEntity
-import com.mattrobertson.greek.reader.data.models.GlossEntity
-import com.mattrobertson.greek.reader.data.models.VerseEntity
+import com.mattrobertson.greek.reader.db.dao.ConcordanceDao
+import com.mattrobertson.greek.reader.db.dao.GlossesDao
+import com.mattrobertson.greek.reader.db.dao.VersesDao
+import com.mattrobertson.greek.reader.db.dao.VocabDao
+import com.mattrobertson.greek.reader.db.models.ConcordanceEntity
+import com.mattrobertson.greek.reader.db.models.GlossEntity
+import com.mattrobertson.greek.reader.db.models.VerseEntity
 
 @Database(
 	entities = [

@@ -3,8 +3,8 @@ package com.mattrobertson.greek.reader.di
 import android.content.Context
 import android.net.ConnectivityManager
 import com.mattrobertson.greek.reader.data.Settings
-import com.mattrobertson.greek.reader.data.VerseDatabase
-import com.mattrobertson.greek.reader.data.dao.VersesDao
+import com.mattrobertson.greek.reader.db.VerseDatabase
+import com.mattrobertson.greek.reader.db.dao.VersesDao
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import dagger.Module
 import dagger.Provides
@@ -19,11 +19,11 @@ object ApplicationModule {
 
 	@Singleton
 	@Provides
-	fun provideDatabase(@ApplicationContext appContext: Context) = VerseDatabase.getInstance(appContext)
+	fun provideDatabase(@ApplicationContext appContext: Context) = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(appContext)
 
 	@Singleton
 	@Provides
-	fun provideVersesDao(db: VerseDatabase) = db.versesDao()
+	fun provideVersesDao(db: com.mattrobertson.greek.reader.db.VerseDatabase) = db.versesDao()
 
 	@Singleton
 	@Provides

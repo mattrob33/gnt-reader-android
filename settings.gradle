@@ -4,3 +4,4 @@ include ':core:verseref'
 
 include ':feature:audio'
 include ':feature:gloss'
+include ':core:db'

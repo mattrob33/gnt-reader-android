@@ -1,10 +1,10 @@
-package com.mattrobertson.greek.reader.data.dao
+package com.mattrobertson.greek.reader.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.CONCORDANCE_TABLE
-import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.GLOSSES_TABLE
-import com.mattrobertson.greek.reader.data.models.GlossEntity
+import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.CONCORDANCE_TABLE
+import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.GLOSSES_TABLE
+import com.mattrobertson.greek.reader.db.models.GlossEntity
 import com.mattrobertson.greek.reader.verseref.VerseRef
 
 @Dao

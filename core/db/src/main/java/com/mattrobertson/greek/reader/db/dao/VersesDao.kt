@@ -1,8 +1,8 @@
-package com.mattrobertson.greek.reader.data.dao
+package com.mattrobertson.greek.reader.db.dao
 
 import androidx.room.*
-import com.mattrobertson.greek.reader.data.VerseDatabase.Companion.VERSES_TABLE
-import com.mattrobertson.greek.reader.data.models.VerseEntity
+import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.VERSES_TABLE
+import com.mattrobertson.greek.reader.db.models.VerseEntity
 
 @Dao
 interface VersesDao {

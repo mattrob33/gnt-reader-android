@@ -3,7 +3,7 @@ package com.mattrobertson.greek.reader.audio
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 
-object GreekLatinAudio {
+internal object GreekLatinAudio {
 
 	fun getUrl(ref: VerseRef): String {
 		val strChap = if (ref.chapter < 10) "0${ref.chapter}" else ref.chapter.toString()
