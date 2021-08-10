@@ -95,7 +95,7 @@ private fun TableOfContentsBooks(
     onBookSelected: (book: Book) -> Unit
 ) {
     LazyColumn {
-        itemsIndexed(AppConstants.bookTitles) { index, title ->
+        itemsIndexed(bookTitles) { index, title ->
             Text(
                 text = title,
                 fontFamily = FontFamily.Serif,

@@ -23,7 +23,7 @@ import com.mattrobertson.greek.reader.model.Verse
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
-import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
+import com.mattrobertson.greek.reader.compose.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.util.getBookTitle
 import kotlinx.coroutines.launch
 

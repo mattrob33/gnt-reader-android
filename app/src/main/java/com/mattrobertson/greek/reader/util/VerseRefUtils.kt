@@ -34,6 +34,97 @@ val verses = arrayOf(
         intArrayOf(20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 18, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21)
 )
 
+val abbrvs = arrayOf(
+    "Matt",
+    "Mark",
+    "Luke",
+    "John",
+    "Acts",
+    "Rom",
+    "1 Cor",
+    "2 Cor",
+    "Gal",
+    "Eph",
+    "Phil",
+    "Col",
+    "1 Thess",
+    "2 Thess",
+    "1 Tim",
+    "2 Tim",
+    "Titus",
+    "Phlm",
+    "Heb",
+    "James",
+    "1 Pet",
+    "2 Pet",
+    "1 John",
+    "2 John",
+    "3 John",
+    "Jude",
+    "Rev"
+)
+
+val bookEnglishTitles = arrayOf(
+    "Matthew",
+    "Mark",
+    "Luke",
+    "John",
+    "Acts",
+    "Romans",
+    "1 Corinthians",
+    "2 Corinthians",
+    "Galatians",
+    "Ephesians",
+    "Philippians",
+    "Colossians",
+    "1 Thessalonians",
+    "2 Thessalonians",
+    "1 Timothy",
+    "2 Timothy",
+    "Titus",
+    "Philemon",
+    "Hebrews",
+    "James",
+    "1 Peter",
+    "2 Peter",
+    "1 John",
+    "2 John",
+    "3 John",
+    "Jude",
+    "Revelation"
+)
+
+val bookTitles = arrayOf(
+    "ΚΑΤΑ ΜΑΤΘΑΙΟΝ",
+    "ΚΑΤΑ ΜΑΡΚΟΝ",
+    "ΚΑΤΑ ΛΟΥΚΑΝ",
+    "ΚΑΤΑ ΙΩΑΝΝΗΝ",
+    "ΠΡΑΞΕΙΣ ΤΩΝ ΑΠΟΣΤΟΛΩΝ",
+    "ΠΡΟΣ ΡΩΜΑΙΟΥΣ",
+    "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Α΄",
+    "ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Β΄",
+    "ΠΡΟΣ ΓΑΛΑΤΑΣ",
+    "ΠΡΟΣ ΕΦΕΣΙΟΥΣ",
+    "ΠΡΟΣ ΦΙΛΙΠΠΗΣΙΟΥΣ",
+    "ΠΡΟΣ ΚΟΛΟΣΣΑΕΙΣ",
+    "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Α΄",
+    "ΠΡΟΣ ΘΕΣΣΑΛΟΝΙΚΕΙΣ Β΄",
+    "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Α΄",
+    "ΠΡΟΣ ΤΙΜΟΘΕΟΝ Β΄",
+    "ΠΡΟΣ ΤΙΤΟΝ",
+    "ΠΡΟΣ ΦΙΛΗΜΟΝΑ",
+    "ΠΡΟΣ ΕΒΡΑΙΟΥΣ",
+    "ΙΑΚΩΒΟΥ",
+    "ΠΕΤΡΟΥ Α΄",
+    "ΠΕΤΡΟΥ Β΄",
+    "ΙΩΑΝΝΟΥ Α΄",
+    "ΙΩΑΝΝΟΥ Β΄",
+    "ΙΩΑΝΝΟΥ Γ΄",
+    "ΙΟΥΔΑ",
+    "ΑΠΟΚΑΛΥΨΙΣ ΙΩΑΝΝΟΥ"
+)
+
+
 fun isSingleChapterBook(book: Book): Boolean {
     return numChaptersInBook(book) == 1
 }
@@ -48,13 +139,13 @@ fun numVersesInChapter(book: Book, chapter: Int): Int {
 }
 
 fun getBookTitle(book: Book): String {
-    return AppConstants.bookTitles[book.num]
+    return bookTitles[book.num]
 }
 
 fun getReference(ref: VerseRef) = "${getBookTitle(ref.book)} ${ref.chapter}"
 
 fun getBookAbbrv(book: Book): String {
-    return AppConstants.abbrvs[book.num]
+    return abbrvs[book.num]
 }
 
 fun getAbsoluteChapterNumForBook(book: Book): Int {

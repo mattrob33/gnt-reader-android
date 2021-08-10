@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".SblGntApplication"
@@ -27,33 +25,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.CoreActivity"
-            android:theme="@style/AppTheme"
-            />
-        <activity
-            android:name=".PlanReaderActivity"
-            android:label="Plan" />
-        <activity
-            android:name=".PlanCompletedActivity"
-            android:label="Plan Completed!" />
-        <activity
-            android:name=".ReaderActivity"
-            android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ChapterVocabActivity"
-            android:label="Vocab"
-            android:parentActivityName=".ReaderActivity" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

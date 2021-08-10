@@ -2,11 +2,9 @@ package com.mattrobertson.greek.reader.di
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.mattrobertson.greek.reader.data.DataBaseHelper
 import com.mattrobertson.greek.reader.data.Settings
 import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.data.dao.VersesDao
-import com.mattrobertson.greek.reader.html.HtmlGenerator
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import dagger.Module
 import dagger.Provides
@@ -25,19 +23,11 @@ object ApplicationModule {
 
 	@Singleton
 	@Provides
-	fun provideDatabaseHelper(@ApplicationContext appContext: Context) = DataBaseHelper(appContext)
-
-	@Singleton
-	@Provides
 	fun provideVersesDao(db: VerseDatabase) = db.versesDao()
 
 	@Singleton
 	@Provides
 	fun provideVerseRepo(versesDao: VersesDao) = VerseRepo(versesDao)
-
-	@Singleton
-	@Provides
-	fun provideHtmlGenerator(verseRepo: VerseRepo) = HtmlGenerator(verseRepo)
 
 	@Singleton
 	@Provides

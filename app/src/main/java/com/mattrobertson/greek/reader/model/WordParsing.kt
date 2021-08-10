@@ -1,14 +1,12 @@
 package com.mattrobertson.greek.reader.model
 
 class WordParsing private constructor(
-	val codedParsing: String,
 	val humanReadable: String
 ) {
 
 	companion object {
 
 		fun decode(codedParsing: String) = WordParsing (
-			codedParsing = codedParsing,
 			humanReadable = parse(codedParsing)
 		)
 
