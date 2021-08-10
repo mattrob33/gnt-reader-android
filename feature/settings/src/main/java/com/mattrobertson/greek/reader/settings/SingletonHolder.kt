@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.util
+package com.mattrobertson.greek.reader.settings
 
 open class SingletonHolder<out T: Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
