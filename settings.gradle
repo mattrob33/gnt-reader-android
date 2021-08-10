@@ -1,12 +1,12 @@
 include ':app'
 
 include ':core:verseref'
-
-include ':feature:audio'
-include ':feature:gloss'
 include ':core:db'
 include ':core:ui'
+
+include ':feature:audio'
 include ':feature:concordance'
-include ':feature:vocab'
-include ':feature:settings'
+include ':feature:gloss'
 include ':feature:reading'
+include ':feature:settings'
+include ':feature:vocab'
