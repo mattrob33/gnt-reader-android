@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose
+package com.mattrobertson.greek.reader.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

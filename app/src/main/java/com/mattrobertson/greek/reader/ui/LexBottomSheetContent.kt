@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose
+package com.mattrobertson.greek.reader.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose
+package com.mattrobertson.greek.reader.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +16,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.db.repo.VerseRepo
+import com.mattrobertson.greek.reader.reading.ui.ComposeReader
+import com.mattrobertson.greek.reader.reading.ui.TableOfContents
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.VerseRef

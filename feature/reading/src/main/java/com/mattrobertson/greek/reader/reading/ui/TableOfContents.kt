@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose
+package com.mattrobertson.greek.reader.reading.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
