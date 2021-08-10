@@ -1,7 +1,7 @@
-package com.mattrobertson.greek.reader.mappers
+package com.mattrobertson.greek.reader.verseref.mappers
 
-import com.mattrobertson.greek.reader.model.Word
-import com.mattrobertson.greek.reader.model.WordParsing
+import com.mattrobertson.greek.reader.verseref.Word
+import com.mattrobertson.greek.reader.verseref.WordParsing
 import java.util.*
 
 object VerseTextDecoder {

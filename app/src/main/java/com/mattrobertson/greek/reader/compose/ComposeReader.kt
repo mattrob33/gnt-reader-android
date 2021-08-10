@@ -19,10 +19,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.mattrobertson.greek.reader.model.Verse
+import com.mattrobertson.greek.reader.verseref.Verse
 import com.mattrobertson.greek.reader.verseref.VerseRef
-import com.mattrobertson.greek.reader.model.Word
-import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.verseref.Word
+import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import com.mattrobertson.greek.reader.compose.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.verseref.getBookTitle
 import kotlinx.coroutines.launch
