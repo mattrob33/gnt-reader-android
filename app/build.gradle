@@ -73,6 +73,7 @@ dependencies {
     implementation project(":feature:audio")
     implementation project(":feature:concordance")
     implementation project(":feature:gloss")
+    implementation project(":feature:reading")
     implementation project(":feature:settings")
     implementation project(":feature:vocab")
 
