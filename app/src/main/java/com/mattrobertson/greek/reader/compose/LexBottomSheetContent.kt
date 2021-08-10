@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -20,13 +19,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.db.VerseDatabase
 import com.mattrobertson.greek.reader.mappers.VerseTextDecoder
-import com.mattrobertson.greek.reader.verseref.Book
-import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.ui.theme.SblGreek
+import com.mattrobertson.greek.reader.verseref.Book
+import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
 import kotlinx.coroutines.runBlocking
 
@@ -37,13 +36,13 @@ fun LexBottomSheetContent(
 ) {
     val context = LocalContext.current
 
-    val glossesDao = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(context).glossesDao()
+    val glossesDao = VerseDatabase.getInstance(context).glossesDao()
 
     val gloss = runBlocking {
         glossesDao.getGloss(word.lexicalForm)
     }
 
-    val concordanceDao = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(context).concordanceDao()
+    val concordanceDao = VerseDatabase.getInstance(context).concordanceDao()
 
     val concordanceList = runBlocking {
         concordanceDao.getConcordanceEntries(word.lexicalForm)
@@ -67,12 +66,7 @@ fun LexBottomSheetContent(
                         style = SpanStyle(
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily(
-                                Font(
-                                    R.font.sblgreek,
-                                    FontWeight.Normal
-                                )
-                            )
+                            fontFamily = SblGreek
                         )
                     ) {
                         append("${word.lexicalForm}\n")
@@ -160,12 +154,7 @@ fun LexBottomSheetContent(
                             style = SpanStyle(
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Normal,
-                                fontFamily = FontFamily(
-                                    Font(
-                                        R.font.sblgreek,
-                                        FontWeight.Normal
-                                    )
-                                )
+                                fontFamily = SblGreek
                             )
                         ) {
                             val ref = VerseRef(

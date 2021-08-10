@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose.ui.theme
+package com.mattrobertson.greek.reader.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

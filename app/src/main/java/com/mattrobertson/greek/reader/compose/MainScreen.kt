@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
