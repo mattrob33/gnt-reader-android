@@ -1,13 +1,12 @@
-package com.mattrobertson.greek.reader.data
+package com.mattrobertson.greek.reader.verseref
 
-import com.mattrobertson.greek.reader.verseref.Book
-import com.mattrobertson.greek.reader.verseref.VerseRef
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class VerseRefTests {
+class VerseRefTest {
 
 	@Nested
 	@DisplayName("Given invalid reference:")
@@ -72,6 +71,21 @@ class VerseRefTests {
 				VerseRef(Book.MATTHEW, 1, 1) < VerseRef(Book.MATTHEW, 1, 2)
 			)
 		}
+	}
+
+	@Test
+	fun `parse from abs chapter is correct`() {
+		var ref = VerseRef.fromAbsoluteChapterNum(0)
+		assertEquals(VerseRef(Book.MATTHEW, 1), ref)
+
+		ref = VerseRef.fromAbsoluteChapterNum(1)
+		assertEquals(VerseRef(Book.MATTHEW, 2), ref)
+
+		ref = VerseRef.fromAbsoluteChapterNum(28)
+		assertEquals(VerseRef(Book.MARK, 1), ref)
+
+		ref = VerseRef.fromAbsoluteChapterNum(259)
+		assertEquals(VerseRef(Book.REVELATION, 22), ref)
 	}
 
 }

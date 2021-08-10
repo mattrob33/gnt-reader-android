@@ -1,8 +1,10 @@
-package com.mattrobertson.greek.reader.data
+package com.mattrobertson.greek.reader.verseref
 
-import com.mattrobertson.greek.reader.verseref.Book
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class BookTests {
 
