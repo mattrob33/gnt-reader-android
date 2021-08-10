@@ -66,11 +66,14 @@ ext {
     jupiterVersion = "5.3.2"
     lifecycleVersion = "2.4.0-alpha03"
     navVersion = "2.4.0-alpha05"
-    roomVersion = "2.3.0"
 }
 
 dependencies {
     implementation project(":core:verseref")
+    implementation project(":core:db")
+
+    implementation project(":feature:audio")
+    implementation project(":feature:gloss")
 
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -100,11 +103,6 @@ dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
-    // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-
     // Datastore
     implementation  "com.google.protobuf:protobuf-javalite:3.10.0"
     implementation "androidx.datastore:datastore:1.0.0"
@@ -131,8 +129,6 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'androidx.test:runner:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
-
-    testImplementation "androidx.room:room-testing:$roomVersion"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

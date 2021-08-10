@@ -1,6 +1,6 @@
 package com.mattrobertson.greek.reader.repo
 
-import com.mattrobertson.greek.reader.data.dao.VersesDao
+import com.mattrobertson.greek.reader.db.dao.VersesDao
 import com.mattrobertson.greek.reader.mappers.VerseMapper
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.model.Verse

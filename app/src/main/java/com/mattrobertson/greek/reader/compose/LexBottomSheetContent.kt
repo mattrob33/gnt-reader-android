@@ -21,7 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.R
-import com.mattrobertson.greek.reader.data.VerseDatabase
+import com.mattrobertson.greek.reader.db.VerseDatabase
 import com.mattrobertson.greek.reader.mappers.VerseTextDecoder
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
@@ -37,13 +37,13 @@ fun LexBottomSheetContent(
 ) {
     val context = LocalContext.current
 
-    val glossesDao = VerseDatabase.getInstance(context).glossesDao()
+    val glossesDao = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(context).glossesDao()
 
     val gloss = runBlocking {
         glossesDao.getGloss(word.lexicalForm)
     }
 
-    val concordanceDao = VerseDatabase.getInstance(context).concordanceDao()
+    val concordanceDao = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(context).concordanceDao()
 
     val concordanceList = runBlocking {
         concordanceDao.getConcordanceEntries(word.lexicalForm)
