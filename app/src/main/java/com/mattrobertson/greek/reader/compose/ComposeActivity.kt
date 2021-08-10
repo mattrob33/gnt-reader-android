@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import com.mattrobertson.greek.reader.repo.VerseRepo
+import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

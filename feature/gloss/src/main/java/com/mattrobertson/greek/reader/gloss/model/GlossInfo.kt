@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.model
+package com.mattrobertson.greek.reader.gloss.model
 
 data class GlossInfo (
         val lex: String,

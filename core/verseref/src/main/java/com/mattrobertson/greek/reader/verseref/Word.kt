@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.model
+package com.mattrobertson.greek.reader.verseref
 
 data class Word (
 	val text: String,

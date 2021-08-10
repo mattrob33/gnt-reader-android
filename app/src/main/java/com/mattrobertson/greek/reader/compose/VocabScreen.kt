@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.mattrobertson.greek.reader.compose.previews.FakeVerseRefProvider
 import com.mattrobertson.greek.reader.db.VerseDatabase
 import com.mattrobertson.greek.reader.db.models.GlossEntity
+import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
 import kotlinx.coroutines.runBlocking

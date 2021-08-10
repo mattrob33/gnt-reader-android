@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.model
+package com.mattrobertson.greek.reader.verseref
 
 class WordParsing private constructor(
 	val humanReadable: String

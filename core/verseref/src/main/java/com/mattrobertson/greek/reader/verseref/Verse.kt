@@ -1,6 +1,4 @@
-package com.mattrobertson.greek.reader.model
-
-import com.mattrobertson.greek.reader.verseref.VerseRef
+package com.mattrobertson.greek.reader.verseref
 
 /**
  * A decoded representation of a single verse.

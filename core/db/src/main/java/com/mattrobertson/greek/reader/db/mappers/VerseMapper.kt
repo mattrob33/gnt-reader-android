@@ -1,9 +1,10 @@
-package com.mattrobertson.greek.reader.mappers
+package com.mattrobertson.greek.reader.db.mappers
 
 import com.mattrobertson.greek.reader.db.models.VerseEntity
 import com.mattrobertson.greek.reader.verseref.Book
-import com.mattrobertson.greek.reader.model.Verse
+import com.mattrobertson.greek.reader.verseref.Verse
 import com.mattrobertson.greek.reader.verseref.VerseRef
+import com.mattrobertson.greek.reader.verseref.mappers.VerseTextDecoder
 
 object VerseMapper {
 	fun fromEntity(entity: VerseEntity): Verse {
