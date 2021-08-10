@@ -43,6 +43,10 @@ data class VerseRef (
 		require(verse <= numVersesInChapter(book, chapter)) {
 			"${book.title} $chapter does not have $verse verses"
 		}
+
+		require(verse == NO_VERSE || verse >= 1) {
+			"${book.title} $chapter does not have $verse verses"
+		}
 	}
 
 	override fun equals(other: Any?): Boolean {

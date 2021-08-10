@@ -20,7 +20,7 @@ class VerseRefTest {
 			}
 
 			assertThrows<IllegalArgumentException> {
-				VerseRef(Book.MATTHEW, 1, 0)
+				VerseRef(Book.MATTHEW, 1, -1)
 			}
 
 			assertThrows<IllegalArgumentException> {
