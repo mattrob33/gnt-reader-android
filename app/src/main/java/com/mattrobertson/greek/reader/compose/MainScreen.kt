@@ -19,7 +19,7 @@ import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.model.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
-import com.mattrobertson.greek.reader.settings.scrollLocationDataStore
+import com.mattrobertson.greek.reader.compose.settings.scrollLocationDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

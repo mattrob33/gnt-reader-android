@@ -5,13 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.mattrobertson.greek.reader.compose.ui.theme.AppTheme
-import com.mattrobertson.greek.reader.html.HtmlGenerator
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
