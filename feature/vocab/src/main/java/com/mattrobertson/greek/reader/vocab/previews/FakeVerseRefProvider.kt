@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose.previews
+package com.mattrobertson.greek.reader.vocab.previews
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.mattrobertson.greek.reader.verseref.Book

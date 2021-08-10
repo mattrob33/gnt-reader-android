@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.compose
+package com.mattrobertson.greek.reader.vocab.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,12 +13,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.mattrobertson.greek.reader.compose.previews.FakeVerseRefProvider
 import com.mattrobertson.greek.reader.db.VerseDatabase
 import com.mattrobertson.greek.reader.db.models.GlossEntity
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
+import com.mattrobertson.greek.reader.vocab.previews.FakeVerseRefProvider
 import kotlinx.coroutines.runBlocking
 
 @Composable

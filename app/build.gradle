@@ -74,6 +74,7 @@ dependencies {
     implementation project(":feature:audio")
     implementation project(":feature:gloss")
     implementation project(":feature:concordance")
+    implementation project(":feature:vocab")
 
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
