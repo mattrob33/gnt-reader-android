@@ -1,8 +1,7 @@
-package com.mattrobertson.greek.reader.data
+package com.mattrobertson.greek.reader.settings
 
 import android.content.Context
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
-import com.mattrobertson.greek.reader.util.SingletonHolder
 
 class Settings private constructor(applicationContext: Context) {
 

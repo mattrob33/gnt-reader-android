@@ -2,7 +2,7 @@ package com.mattrobertson.greek.reader.di
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.mattrobertson.greek.reader.data.Settings
+import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.db.dao.VersesDao
 import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import dagger.Module
@@ -14,23 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApplicationModule {
-
-	@Singleton
-	@Provides
-	fun provideDatabase(@ApplicationContext appContext: Context) = com.mattrobertson.greek.reader.db.VerseDatabase.getInstance(appContext)
-
-	@Singleton
-	@Provides
-	fun provideVersesDao(db: com.mattrobertson.greek.reader.db.VerseDatabase) = db.versesDao()
-
-	@Singleton
-	@Provides
-	fun provideVerseRepo(versesDao: VersesDao) = VerseRepo(versesDao)
-
-	@Singleton
-	@Provides
-	fun provideSettings(@ApplicationContext appContext: Context) = Settings.getInstance(appContext)
+object NetworkModule {
 
 	@Singleton
 	@Provides

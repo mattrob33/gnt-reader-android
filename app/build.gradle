@@ -71,8 +71,9 @@ dependencies {
     implementation project(":core:ui")
 
     implementation project(":feature:audio")
-    implementation project(":feature:gloss")
     implementation project(":feature:concordance")
+    implementation project(":feature:gloss")
+    implementation project(":feature:settings")
     implementation project(":feature:vocab")
 
     // Core
@@ -103,14 +104,8 @@ dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
-    // ExoPlayer
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
-
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.1.0'
-
-    implementation "androidx.preference:preference-ktx:1.1.1"
-    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Testing
     testImplementation "androidx.test:core-ktx:1.4.0"

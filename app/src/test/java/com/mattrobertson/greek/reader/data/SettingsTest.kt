@@ -3,6 +3,8 @@ package com.mattrobertson.greek.reader.data
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.mattrobertson.greek.reader.SblGntApplication
+import com.mattrobertson.greek.reader.settings.Recents
+import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import org.junit.Assert.assertEquals

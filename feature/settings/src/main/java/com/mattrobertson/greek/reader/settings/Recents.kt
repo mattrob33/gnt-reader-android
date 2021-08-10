@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.data
+package com.mattrobertson.greek.reader.settings
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
