@@ -50,7 +50,6 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.10'
     }
 
     testOptions {
@@ -71,6 +70,8 @@ ext {
 }
 
 dependencies {
+    implementation project(":core:verseref")
+
     // Core
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'

@@ -1,5 +1,7 @@
 package com.mattrobertson.greek.reader.model
 
+import com.mattrobertson.greek.reader.verseref.VerseRef
+
 /**
  * A decoded representation of a single verse.
  * @param verseRef validated verse reference (book, chapter, verse)

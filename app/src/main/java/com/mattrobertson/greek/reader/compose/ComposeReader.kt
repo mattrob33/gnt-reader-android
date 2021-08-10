@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.mattrobertson.greek.reader.model.Verse
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
 import com.mattrobertson.greek.reader.compose.settings.scrollLocationDataStore
-import com.mattrobertson.greek.reader.util.getBookTitle
+import com.mattrobertson.greek.reader.verseref.getBookTitle
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi

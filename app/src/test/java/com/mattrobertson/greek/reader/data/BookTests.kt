@@ -1,6 +1,6 @@
 package com.mattrobertson.greek.reader.data
 
-import com.mattrobertson.greek.reader.model.Book
+import com.mattrobertson.greek.reader.verseref.Book
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 

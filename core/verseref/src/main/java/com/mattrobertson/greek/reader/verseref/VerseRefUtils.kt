@@ -1,7 +1,4 @@
-package com.mattrobertson.greek.reader.util
-
-import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.model.VerseRef
+package com.mattrobertson.greek.reader.verseref
 
 
 val verses = arrayOf(

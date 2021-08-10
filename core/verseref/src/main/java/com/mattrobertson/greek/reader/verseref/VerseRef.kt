@@ -1,9 +1,4 @@
-package com.mattrobertson.greek.reader.model
-
-import com.mattrobertson.greek.reader.util.numChaptersInBook
-import com.mattrobertson.greek.reader.util.numVersesInChapter
-import com.mattrobertson.greek.reader.util.verses
-import java.lang.IllegalArgumentException
+package com.mattrobertson.greek.reader.verseref
 
 data class VerseRef (
 	val book: Book,

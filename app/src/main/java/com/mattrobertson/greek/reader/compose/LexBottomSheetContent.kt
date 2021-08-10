@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.R
 import com.mattrobertson.greek.reader.data.VerseDatabase
 import com.mattrobertson.greek.reader.mappers.VerseTextDecoder
-import com.mattrobertson.greek.reader.model.Book
-import com.mattrobertson.greek.reader.model.VerseRef
+import com.mattrobertson.greek.reader.verseref.Book
+import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.model.Word
 import com.mattrobertson.greek.reader.repo.VerseRepo
-import com.mattrobertson.greek.reader.util.getBookAbbrv
+import com.mattrobertson.greek.reader.verseref.getBookAbbrv
 import kotlinx.coroutines.runBlocking
 
 @Composable
