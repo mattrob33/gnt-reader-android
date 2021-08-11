@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,7 +19,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.db.VerseDatabase
+import com.mattrobertson.greek.reader.db.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import com.mattrobertson.greek.reader.ui.theme.SblGreek
 import com.mattrobertson.greek.reader.verseref.Book
@@ -32,14 +31,11 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun Concordance(
     word: Word,
-    verseRepo: VerseRepo
+    verseRepo: VerseRepo,
+    concordanceRepo: ConcordanceRepo
 ) {
-    val context = LocalContext.current
-
-    val concordanceDao = VerseDatabase.getInstance(context).concordanceDao()
-
     val concordanceList = runBlocking {
-        concordanceDao.getConcordanceEntries(word.lexicalForm)
+        concordanceRepo.getConcordanceEntries(word.lexicalForm)
     }
 
     LazyColumn {
