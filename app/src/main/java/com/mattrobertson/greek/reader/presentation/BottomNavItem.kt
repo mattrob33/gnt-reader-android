@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.ui
+package com.mattrobertson.greek.reader.presentation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

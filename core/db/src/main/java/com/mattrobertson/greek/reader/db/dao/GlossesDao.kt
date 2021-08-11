@@ -1,7 +1,7 @@
 package com.mattrobertson.greek.reader.db.dao
 
 import androidx.room.*
-import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.GLOSSES_TABLE
+import com.mattrobertson.greek.reader.db.GntDatabase.Companion.GLOSSES_TABLE
 import com.mattrobertson.greek.reader.db.models.GlossEntity
 
 @Dao

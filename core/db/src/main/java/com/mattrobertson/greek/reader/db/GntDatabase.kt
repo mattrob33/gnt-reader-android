@@ -21,7 +21,7 @@ import com.mattrobertson.greek.reader.db.models.VerseEntity
 	version = 1,
 	exportSchema = false
 )
-abstract class VerseDatabase: RoomDatabase() {
+abstract class GntDatabase: RoomDatabase() {
 
 	abstract fun versesDao(): VersesDao
 	abstract fun glossesDao(): GlossesDao
@@ -36,16 +36,16 @@ abstract class VerseDatabase: RoomDatabase() {
 		const val CONCORDANCE_TABLE = "concordance"
 
 		@Volatile
-		private var instance: VerseDatabase? = null
+		private var instance: GntDatabase? = null
 
-		fun getInstance(context: Context): VerseDatabase {
+		fun getInstance(context: Context): GntDatabase {
 			return instance ?: synchronized(this) {
 				instance ?: buildDatabase(context).also { instance = it }
 			}
 		}
 
-		private fun buildDatabase(context: Context): VerseDatabase {
-			return Room.databaseBuilder(context, VerseDatabase::class.java, DATABASE_NAME)
+		private fun buildDatabase(context: Context): GntDatabase {
+			return Room.databaseBuilder(context, GntDatabase::class.java, DATABASE_NAME)
 				.createFromAsset("db/gnt-app.db")
 				.build()
 		}

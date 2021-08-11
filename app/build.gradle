@@ -77,10 +77,12 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelsVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltViewModelsVersion"
 
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+
     // UI
     implementation "com.google.android.material:material:1.4.0"
 
     // Analytics
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.1.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
 }

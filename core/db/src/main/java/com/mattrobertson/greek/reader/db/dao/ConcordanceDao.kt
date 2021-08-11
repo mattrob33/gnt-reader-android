@@ -1,7 +1,7 @@
 package com.mattrobertson.greek.reader.db.dao
 
 import androidx.room.*
-import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.CONCORDANCE_TABLE
+import com.mattrobertson.greek.reader.db.GntDatabase.Companion.CONCORDANCE_TABLE
 import com.mattrobertson.greek.reader.db.models.ConcordanceEntity
 
 @Dao

@@ -2,7 +2,7 @@ package com.mattrobertson.greek.reader.db.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.mattrobertson.greek.reader.db.VerseDatabase.Companion.VERSES_TABLE
+import com.mattrobertson.greek.reader.db.GntDatabase.Companion.VERSES_TABLE
 
 @Entity(
 	tableName = VERSES_TABLE,

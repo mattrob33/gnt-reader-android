@@ -1,4 +1,4 @@
-package com.mattrobertson.greek.reader.ui
+package com.mattrobertson.greek.reader.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
@@ -31,7 +31,7 @@ import kotlinx.coroutines.runBlocking
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
-    verseRepo: VerseRepo
+    viewModel: MainViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -74,14 +74,14 @@ fun MainScreen(
                     }
                     BottomNavItem.Vocab -> {
                         val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
-                        VocabScreen(ref)
+                        VocabScreen(ref, viewModel.vocabRepo)
                     }
                     BottomNavItem.Audio -> {}
                     BottomNavItem.Settings -> {}
                     null -> {
                         word?.let { word ->
                             activeBottomNavItem = null
-                            LexBottomSheetContent(word, verseRepo)
+                            LexBottomSheetContent(word, viewModel.verseRepo, viewModel.glossesRepo, viewModel.concordanceRepo)
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -117,7 +117,7 @@ fun MainScreen(
                 }
             ) {
                 ComposeReader(
-                    verseRepo = verseRepo,
+                    verseRepo = viewModel.verseRepo,
                     listState = listState,
                     onWordSelected = {
                         word = it

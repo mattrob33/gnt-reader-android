@@ -8,24 +8,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.mattrobertson.greek.reader.db.VerseDatabase
 import com.mattrobertson.greek.reader.db.models.GlossEntity
+import com.mattrobertson.greek.reader.db.repo.VocabRepo
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
-import com.mattrobertson.greek.reader.vocab.previews.FakeVerseRefProvider
 import kotlinx.coroutines.runBlocking
 
 @Composable
-@Preview(name = "Vocab")
 fun VocabScreen(
-    @PreviewParameter(FakeVerseRefProvider::class)
-    ref: VerseRef
+    ref: VerseRef,
+    vocabRepo: VocabRepo
 ) {
     Column(
         modifier = Modifier
@@ -36,10 +31,8 @@ fun VocabScreen(
 
         var maxOcc by remember { mutableStateOf(100) }
 
-        val vocabDao = VerseDatabase.getInstance(LocalContext.current).vocabDao()
-
         words = runBlocking {
-            vocabDao.getVocabWordsForChapter(ref, maxOcc)
+            vocabRepo.getVocabWordsForChapter(ref, maxOcc)
         }
 
         Text(

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -14,22 +13,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.db.VerseDatabase
-import com.mattrobertson.greek.reader.gloss.model.GlossInfo
+import com.mattrobertson.greek.reader.db.repo.GlossesRepo
 import com.mattrobertson.greek.reader.ui.theme.SblGreek
 import com.mattrobertson.greek.reader.verseref.Word
 import kotlinx.coroutines.runBlocking
 
 @Composable
 fun Gloss(
-    word: Word
+    word: Word,
+    glossesRepo: GlossesRepo
 ) {
-    val context = LocalContext.current
-
-    val glossesDao = VerseDatabase.getInstance(context).glossesDao()
-
     val gloss = runBlocking {
-        glossesDao.getGloss(word.lexicalForm)
+        glossesRepo.getGloss(word.lexicalForm)
     }
 
     Text(
