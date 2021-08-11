@@ -8,8 +8,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.models.GlossEntity
 import com.mattrobertson.greek.reader.db.repo.VocabRepo
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
@@ -62,7 +67,18 @@ fun VocabScreen(
             }
 
             items(words) { word ->
-                Text(text = "${word.lex} - ${word.gloss} (${word.occ}x)")
+                Text(
+                    text = buildAnnotatedString {
+                        append("${word.lex} - ")
+
+                        withStyle(SpanStyle(
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 18.sp
+                        )) {
+                            append("${word.gloss} (${word.occ}x)")
+                        }
+                    }
+                )
             }
         }
     }
@@ -72,15 +88,15 @@ fun VocabScreen(
 fun VocabOccChipRow(
     onOccChanged: (count: Int) -> Unit
 ) {
-    val chips = listOf("100", "50", "30", "20", "15", "10", "5", "2", "1")
+    val chips = listOf(100, 50, 30, 20, 15, 10, 5, 2, 1)
 
     ScrollableChipRow(
-        items = chips,
+        items = chips.map { "${it}x" },
         backgroundColor = MaterialTheme.colors.primary,
         outlineColor = MaterialTheme.colors.primaryVariant,
         textColor = MaterialTheme.colors.onPrimary,
         onItemSelected = { index ->
-            val occ = chips[index].toInt()
+            val occ = chips[index]
             onOccChanged(occ)
         }
     )
