@@ -3,6 +3,10 @@ plugins {
     id 'kotlin-android'
 }
 
+ext {
+    compose_version = "1.0.1"
+}
+
 android {
     compileSdk 31
 

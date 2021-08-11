@@ -4,6 +4,10 @@ plugins {
     id "com.google.protobuf" version "0.8.12"
 }
 
+ext {
+    compose_version = "1.0.1"
+}
+
 android {
     compileSdk 31
 
