@@ -6,38 +6,36 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion("30.0.3")
+    compileSdk = Versions.compileSdk
+    buildToolsVersion = Versions.buildTools
 
     defaultConfig {
         applicationId = "com.mattrobertson.greek.reader"
 
-        minSdkVersion(21)
-        targetSdkVersion(30)
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
 
-        versionCode = 22
-        versionName = "7.1.2"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        versionCode = Versions.appVersionCode
+        versionName = Versions.appVersionName
     }
 
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
         }
+
         getByName("release") {
             isMinifyEnabled = false
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Versions.javaCompatibility
+        targetCompatibility = Versions.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Versions.jvmTarget
     }
 
     buildFeatures {
