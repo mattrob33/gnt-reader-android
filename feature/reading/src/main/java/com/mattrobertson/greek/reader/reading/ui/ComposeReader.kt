@@ -19,7 +19,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.mattrobertson.greek.reader.db.repo.VerseRepo
+import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.verseref.Verse
 import com.mattrobertson.greek.reader.verseref.VerseRef

@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.db.repo.GlossesRepo
+import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
 import com.mattrobertson.greek.reader.ui.theme.SblGreek
 import com.mattrobertson.greek.reader.verseref.Word
 import kotlinx.coroutines.runBlocking

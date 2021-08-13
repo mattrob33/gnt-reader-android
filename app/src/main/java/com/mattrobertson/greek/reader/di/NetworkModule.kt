@@ -2,9 +2,6 @@ package com.mattrobertson.greek.reader.di
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.mattrobertson.greek.reader.settings.Settings
-import com.mattrobertson.greek.reader.db.dao.VersesDao
-import com.mattrobertson.greek.reader.db.repo.VerseRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
