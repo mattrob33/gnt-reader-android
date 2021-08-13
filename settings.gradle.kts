@@ -1,7 +1,8 @@
 include(":app")
 
 include(":core:verseref")
-include(":core:db")
+include(":core:db-internal")
+include(":core:db-api")
 include(":core:ui")
 
 include(":feature:audio")

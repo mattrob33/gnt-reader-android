@@ -45,7 +45,7 @@ android {
 dependencies {
 
     implementation project(":core:verseref")
-    implementation project(":core:db")
+    implementation project(':core:db-api')
     implementation project(":core:ui")
 
     implementation 'androidx.core:core-ktx:1.6.0'

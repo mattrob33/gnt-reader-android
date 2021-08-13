@@ -15,8 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.db.models.GlossEntity
-import com.mattrobertson.greek.reader.db.repo.VocabRepo
+import com.mattrobertson.greek.reader.db.api.models.GlossModel
+import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookAbbrv
@@ -32,7 +32,7 @@ fun VocabScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        var words by remember { mutableStateOf(emptyList<GlossEntity>()) }
+        var words by remember { mutableStateOf(emptyList<GlossModel>()) }
 
         var maxOcc by remember { mutableStateOf(100) }
 

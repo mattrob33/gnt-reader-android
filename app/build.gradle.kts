@@ -49,7 +49,8 @@ android {
 
 dependencies {
     implementation(project(":core:verseref"))
-    implementation(project(":core:db"))
+    implementation(project(":core:db-internal"))
+    implementation(project(":core:db-api"))
     implementation(project(":core:ui"))
 
     implementation(project(":feature:audio"))
@@ -71,10 +72,9 @@ dependencies {
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltViewModels}")
     kapt("androidx.hilt:hilt-compiler:${Versions.hiltViewModels}")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-
     // UI
     implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
     // Analytics
     implementation("com.google.firebase:firebase-analytics:19.0.0")

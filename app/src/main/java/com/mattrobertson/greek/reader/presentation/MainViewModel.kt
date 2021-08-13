@@ -1,10 +1,10 @@
 package com.mattrobertson.greek.reader.presentation
 
 import androidx.lifecycle.ViewModel
-import com.mattrobertson.greek.reader.db.repo.ConcordanceRepo
-import com.mattrobertson.greek.reader.db.repo.GlossesRepo
-import com.mattrobertson.greek.reader.db.repo.VerseRepo
-import com.mattrobertson.greek.reader.db.repo.VocabRepo
+import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
+import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
+import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
+import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

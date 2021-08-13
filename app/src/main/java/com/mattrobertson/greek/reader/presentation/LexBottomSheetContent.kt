@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mattrobertson.greek.reader.concordance.ui.Concordance
-import com.mattrobertson.greek.reader.db.repo.ConcordanceRepo
-import com.mattrobertson.greek.reader.db.repo.GlossesRepo
-import com.mattrobertson.greek.reader.db.repo.VerseRepo
+import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
+import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
+import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.gloss.ui.Gloss
 import com.mattrobertson.greek.reader.ui.lib.DragHandle
 import com.mattrobertson.greek.reader.verseref.Word
