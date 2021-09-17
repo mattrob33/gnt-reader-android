@@ -1,16 +1,14 @@
 package com.mattrobertson.greek.reader.reading.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
@@ -33,7 +31,7 @@ fun TableOfContents(
     var book by remember { mutableStateOf(Book.MATTHEW) }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.surface)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -47,9 +45,9 @@ fun TableOfContents(
                 }
             ) {
                 if (isBookScreen)
-                    Icon(Icons.Rounded.Close, "Close")
+                    Icon(Icons.Rounded.Close, "Close", tint = MaterialTheme.colors.onSurface)
                 else
-                    Icon(Icons.Rounded.ArrowBack, "Back")
+                    Icon(Icons.Rounded.ArrowBack, "Back", tint = MaterialTheme.colors.onSurface)
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -57,7 +55,8 @@ fun TableOfContents(
             Text(
                 text = if (isBookScreen) "" else getBookTitle(book),
                 fontFamily = FontFamily.Serif,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = MaterialTheme.colors.onSurface
             )
         }
 
@@ -109,9 +108,9 @@ private fun TableOfContentsBooks(
                         vertical = 8.dp,
                         horizontal = 16.dp
                     )
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                color = MaterialTheme.colors.onSurface
             )
-            Divider()
         }
     }
 }
@@ -141,9 +140,9 @@ private fun TableOfContentsChapters(
                             vertical = 8.dp,
                             horizontal = 16.dp
                         )
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colors.onSurface
                 )
-                Divider()
             }
         }
     }

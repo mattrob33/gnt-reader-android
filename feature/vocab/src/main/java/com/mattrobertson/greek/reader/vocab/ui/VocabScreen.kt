@@ -1,11 +1,12 @@
 package com.mattrobertson.greek.reader.vocab.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -25,11 +26,13 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun VocabScreen(
     ref: VerseRef,
-    vocabRepo: VocabRepo
+    vocabRepo: VocabRepo,
+    onDismiss: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
             .padding(16.dp)
     ) {
         var words by remember { mutableStateOf(emptyList<GlossModel>()) }
@@ -40,11 +43,20 @@ fun VocabScreen(
             vocabRepo.getVocabWordsForChapter(ref, maxOcc)
         }
 
+        IconButton(
+            onClick = {
+                onDismiss()
+            }
+        ) {
+            Icon(Icons.Rounded.Close, "Close", tint = MaterialTheme.colors.onSurface)
+        }
+
         Text(
             text = "Vocabulary for ${getBookAbbrv(ref.book)} ${ref.chapter}",
             style = MaterialTheme.typography.h2,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            color = MaterialTheme.colors.onSurface
         )
 
         Divider()
@@ -77,7 +89,8 @@ fun VocabScreen(
                         )) {
                             append("${word.gloss} (${word.occ}x)")
                         }
-                    }
+                    },
+                    color = MaterialTheme.colors.onSurface
                 )
             }
         }

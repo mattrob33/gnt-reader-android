@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -72,16 +73,17 @@ fun ScrollableChipRow(
         modifier = Modifier.fillMaxWidth()
     ) {
         itemsIndexed(items) { index, item ->
+            val selected = (index == selectedIndex)
             Chip(
                 title = item,
-                selected = (index == selectedIndex),
+                selected = selected,
                 onSelected = {
                     selectedIndex = index
                     onItemSelected(index)
                 },
                 outlineColor = outlineColor,
                 backgroundColor = backgroundColor,
-                textColor = textColor
+                textColor = if (selected) textColor else MaterialTheme.colors.onSurface
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
