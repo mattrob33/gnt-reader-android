@@ -48,17 +48,17 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:verseref"))
-    implementation(project(":core:db-internal"))
-    implementation(project(":core:db-api"))
-    implementation(project(":core:ui"))
+    implementation(projects.core.verseref)
+    implementation(projects.core.dbInternal)
+    implementation(projects.core.dbApi)
+    implementation(projects.core.ui)
 
-    implementation(project(":feature:audio"))
-    implementation(project(":feature:concordance"))
-    implementation(project(":feature:gloss"))
-    implementation(project(":feature:reading"))
-    implementation(project(":feature:settings"))
-    implementation(project(":feature:vocab"))
+    implementation(projects.feature.audio)
+    implementation(projects.feature.concordance)
+    implementation(projects.feature.gloss)
+    implementation(projects.feature.reading)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.vocab)
 
     // Core
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
