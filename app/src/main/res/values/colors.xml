@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<item name="dark_blue" type="color">#0D47A1</item>
-	<item name="green" type="color">#2E7D32</item>
-	<item name="red" type="color">#B71C1C</item>
-	
 	<item name="primary" type="color">#111111</item>
 	<item name="primary_dark" type="color">@color/primary</item>
 	<item name="accent" type="color">@color/primary</item>
-
-	<color name="accentSurfaceColor">@color/accent</color>
-	<color name="accentSurfaceTextColor">#FFFFFF</color>
-
-	<color name="recentItemTextColor">@color/accent</color>
-
-	<color name="content_background">#FFFFFF</color>
-
-	<color name="textColor">#000000</color>
-
-	<color name="appbar_color">#FFFFFF</color>
-
-	<color name="bottom_nav_background">@color/appbar_color</color>
-	<color name="bottom_nav_icon_color_selected">#000000</color>
-	<color name="bottom_nav_icon_color_not_selected">#777777</color>
 </resources>
