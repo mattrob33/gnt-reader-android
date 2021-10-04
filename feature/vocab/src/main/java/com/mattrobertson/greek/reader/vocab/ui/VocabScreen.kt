@@ -38,7 +38,6 @@ fun VocabScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
-            .padding(16.dp)
     ) {
         var words by remember { mutableStateOf(emptyList<GlossModel>()) }
 
