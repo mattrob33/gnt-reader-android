@@ -1,5 +1,6 @@
 package com.mattrobertson.greek.reader.presentation
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
@@ -121,36 +123,38 @@ fun MainScreen(
                 }
             }
 
-            when (screen) {
-                Screen.Contents -> {
-                    TableOfContents(
-                        onSelected = { position ->
-                            coroutineScope.launch {
-                                bottomSheetState.hide()
-                                listState.scrollToItem(position)
-                            }
-                            screen = Screen.Reader
-                        },
-                        onDismiss = {
-                            screen = Screen.Reader
+            AnimatedVisibility(
+                visible = (screen == Screen.Contents),
+                enter = slideInVertically({ height -> height }) + fadeIn(),
+                exit = slideOutVertically({ height -> -height }) + fadeOut()
+            ) {
+                TableOfContents(
+                    onSelected = { position ->
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                            listState.scrollToItem(position)
                         }
-                    )
-                }
+                        screen = Screen.Reader
+                    },
+                    onDismiss = {
+                        screen = Screen.Reader
+                    }
+                )
+            }
 
-                Screen.Vocab -> {
-                    val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
-                    VocabScreen(
-                        ref,
-                        viewModel.vocabRepo,
-                        onDismiss = {
-                            screen = Screen.Reader
-                        }
-                    )
-                }
-
-                Screen.Settings -> {}
-
-                else -> {}
+            AnimatedVisibility(
+                visible = (screen == Screen.Vocab),
+                enter = slideInVertically({ height -> height }) + fadeIn(),
+                exit = slideOutVertically({ height -> -height }) + fadeOut()
+            ) {
+                val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
+                VocabScreen(
+                    ref,
+                    viewModel.vocabRepo,
+                    onDismiss = {
+                        screen = Screen.Reader
+                    }
+                )
             }
         }
     }
