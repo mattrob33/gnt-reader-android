@@ -78,44 +78,85 @@ private fun VocabScreenInternal(
 
         VSpacer(20.dp)
 
-        Text(
-            text = "${getBookTitleLocalized(ref.book)} ${ref.chapter}",
-            style = MaterialTheme.typography.h3,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth(),
-            color = MaterialTheme.colors.onSurface
-        )
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Text(
+                text = "${getBookTitleLocalized(ref.book)} ${ref.chapter}",
+                style = MaterialTheme.typography.h3,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                color = MaterialTheme.colors.onSurface
+            )
 
-        VSpacer(24.dp)
+            VSpacer(24.dp)
 
-        VocabOccChipRow(
-            onOccChanged = {
-                onChangeMaxOcc(it)
-            }
-        )
+            VocabOccChipRow(
+                onOccChanged = {
+                    onChangeMaxOcc(it)
+                }
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn {
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            LazyColumn {
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-            items(words) { word ->
-                Text(
-                    text = buildAnnotatedString {
-                        append("${word.lex} - ")
+                val mappedWords = words.groupBy {
+                    when (it.occ) {
+                        in 100..Int.MAX_VALUE -> "100+"
+                        in 50..99 -> "50-99x"
+                        in 30..49 -> "30-49x"
+                        in 20..29 -> "20-29x"
+                        in 15..19 -> "15-19x"
+                        in 10..14 -> "10-14x"
+                        in 5..9 -> "5-9x"
+                        in 1..4 -> "1-4x"
+                        else -> ""
+                    }
+                }
 
-                        withStyle(SpanStyle(
-                            fontFamily = FontFamily.Serif,
-                            fontSize = 18.sp
-                        )) {
-                            append("${word.gloss} (${word.occ}x)")
+                mappedWords.keys.forEach { occ ->
+                    if (occ.isNotBlank()) {
+                        val wordsForOcc = mappedWords[occ]
+
+                        if (wordsForOcc?.isNotEmpty() == true) {
+                            item {
+                                Text(
+                                    text = occ,
+                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                                    fontSize = 20.sp
+                                )
+                                Divider()
+                            }
+
+                            wordsForOcc.forEach { word ->
+                                item {
+                                    Text(
+                                        text = buildAnnotatedString {
+                                            append("${word.lex} - ")
+
+                                            withStyle(SpanStyle(
+                                                fontFamily = FontFamily.Serif,
+                                                fontSize = 18.sp
+                                            )) {
+                                                append("${word.gloss} (${word.occ}x)")
+                                            }
+                                        },
+                                        color = MaterialTheme.colors.onSurface
+                                    )
+                                }
+                            }
+
+                            item {
+                                VSpacer(40.dp)
+                            }
                         }
-                    },
-                    color = MaterialTheme.colors.onSurface
-                )
+                    }
+                }
             }
         }
     }
@@ -127,7 +168,15 @@ private fun VocabScreenPreview() {
     AppTheme {
         VocabScreenInternal(
             ref = VerseRef(Book.ROMANS, 5),
-            words = listOf(),
+            words = listOf(
+                GlossModel("lex", "gloss", 50),
+                GlossModel("lex", "gloss", 48),
+                GlossModel("lex", "gloss", 47),
+                GlossModel("lex", "gloss", 40),
+                GlossModel("lex", "gloss", 25),
+                GlossModel("lex", "gloss", 1),
+                GlossModel("lex", "gloss", 0),
+            ),
             onDismiss = {},
             onChangeMaxOcc = {}
         )
@@ -139,7 +188,7 @@ private fun VocabScreenPreview() {
 fun VocabOccChipRow(
     onOccChanged: (count: Int) -> Unit
 ) {
-    val chips = listOf(100, 50, 30, 20, 15, 10, 5, 2, 1)
+    val chips = listOf(100, 50, 30, 20, 15, 10, 5, 1)
 
     ScrollableChipRow(
         items = chips.map { "${it}x" },
