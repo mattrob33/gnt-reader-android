@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.ui.lib.DialogTopBar
+import com.mattrobertson.greek.reader.ui.lib.noRippleClickable
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.*
 
@@ -128,13 +129,13 @@ private fun TableOfContentsChapters(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .noRippleClickable {
+                    onBackSelected()
+                }
                 .padding(
                     vertical = 24.dp,
                     horizontal = 24.dp
                 )
-                .clickable {
-                    onBackSelected()
-                }
         ) {
             Icon(
                 Icons.Rounded.ArrowBackIos,
@@ -148,9 +149,6 @@ private fun TableOfContentsChapters(
                 fontFamily = FontFamily.Serif,
                 fontSize = 18.sp,
                 modifier = Modifier
-                    .clickable {
-
-                    }
                     .align(Alignment.CenterVertically),
                 color = MaterialTheme.colors.onSurface
             )
