@@ -106,14 +106,15 @@ private fun VocabScreenInternal(
 
                 val mappedWords = words.groupBy {
                     when (it.occ) {
-                        in 100..Int.MAX_VALUE -> "100+"
-                        in 50..99 -> "50-99x"
-                        in 30..49 -> "30-49x"
-                        in 20..29 -> "20-29x"
-                        in 15..19 -> "15-19x"
-                        in 10..14 -> "10-14x"
-                        in 5..9 -> "5-9x"
-                        in 1..4 -> "1-4x"
+                        in 101..Int.MAX_VALUE -> ">100"
+                        in 51..100 -> "51-100x"
+                        in 31..50 -> "31-50x"
+                        in 21..30 -> "21-30x"
+                        in 16..20 -> "16-20x"
+                        in 11..15 -> "11-15x"
+                        in 6..10 -> "6-10x"
+                        in 2..5 -> "2-5x"
+                        1 -> "1x"
                         else -> ""
                     }
                 }
