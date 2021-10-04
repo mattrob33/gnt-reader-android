@@ -8,19 +8,24 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.api.models.GlossModel
 import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
+import com.mattrobertson.greek.reader.ui.lib.DialogTopBar
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
-import com.mattrobertson.greek.reader.verseref.VerseRef
-import com.mattrobertson.greek.reader.verseref.getBookAbbrv
+import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.verseref.*
+import com.mattrobertson.greek.reader.verseref.getBookTitle
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -43,35 +48,54 @@ fun VocabScreen(
             vocabRepo.getVocabWordsForChapter(ref, maxOcc)
         }
 
-        IconButton(
-            onClick = {
-                onDismiss()
-            }
-        ) {
-            Icon(Icons.Rounded.Close, "Close", tint = MaterialTheme.colors.onSurface)
-        }
-
-        Text(
-            text = "Vocabulary for ${getBookAbbrv(ref.book)} ${ref.chapter}",
-            style = MaterialTheme.typography.h2,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            color = MaterialTheme.colors.onSurface
-        )
-
-        Divider()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        VocabOccChipRow(
-            onOccChanged = {
+        VocabScreenInternal(
+            ref = ref,
+            words = words,
+            onDismiss = onDismiss,
+            onChangeMaxOcc = {
                 maxOcc = it
             }
         )
+    }
+}
+
+@Composable
+private fun VocabScreenInternal(
+    ref: VerseRef,
+    words: List<GlossModel>,
+    onDismiss: () -> Unit,
+    onChangeMaxOcc: (max: Int) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
+    ) {
+        DialogTopBar(
+            title = "Vocabulary",
+            onDismiss = onDismiss
+        )
+
+        VSpacer(20.dp)
+
+        Text(
+            text = "${getBookTitleLocalized(ref.book)} ${ref.chapter}",
+            style = MaterialTheme.typography.h3,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth(),
+            color = MaterialTheme.colors.onSurface
+        )
+
+        VSpacer(24.dp)
+
+        VocabOccChipRow(
+            onOccChanged = {
+                onChangeMaxOcc(it)
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Divider()
 
         LazyColumn {
             item {
@@ -96,6 +120,20 @@ fun VocabScreen(
         }
     }
 }
+
+@Preview
+@Composable
+private fun VocabScreenPreview() {
+    AppTheme {
+        VocabScreenInternal(
+            ref = VerseRef(Book.ROMANS, 5),
+            words = listOf(),
+            onDismiss = {},
+            onChangeMaxOcc = {}
+        )
+    }
+}
+
 
 @Composable
 fun VocabOccChipRow(

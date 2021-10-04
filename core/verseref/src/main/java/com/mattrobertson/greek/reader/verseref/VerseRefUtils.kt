@@ -135,6 +135,10 @@ fun numVersesInChapter(book: Book, chapter: Int): Int {
     return verses[book.num][chapter - 1]
 }
 
+fun getBookTitleLocalized(book: Book): String {
+    return bookEnglishTitles[book.num]
+}
+
 fun getBookTitle(book: Book): String {
     return bookTitles[book.num]
 }
