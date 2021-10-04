@@ -11,15 +11,31 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mattrobertson.greek.reader.ui.lib.DialogTopBar
+import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.*
+
+@ExperimentalFoundationApi
+@Preview
+@Composable
+fun TableOfContentsPreview() {
+    AppTheme {
+        TableOfContents(
+            onSelected = {},
+            onDismiss = {}
+        )
+    }
+}
 
 @ExperimentalFoundationApi
 @Composable
@@ -31,36 +47,17 @@ fun TableOfContents(
     var book by remember { mutableStateOf(Book.MATTHEW) }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.surface)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = {
-                    if (isBookScreen)
-                        onDismiss()
-                    else
-                        isBookScreen = true
-                }
-            ) {
-                if (isBookScreen)
-                    Icon(Icons.Rounded.Close, "Close", tint = MaterialTheme.colors.onSurface)
-                else
-                    Icon(Icons.Rounded.ArrowBack, "Back", tint = MaterialTheme.colors.onSurface)
+        DialogTopBar(
+            title = "Contents",
+            onDismiss = {
+                onDismiss()
+                isBookScreen = true
             }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = if (isBookScreen) "" else getBookTitle(book),
-                fontFamily = FontFamily.Serif,
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onSurface
-            )
-        }
-
-        Divider()
+        )
 
         if (isBookScreen) {
             TableOfContentsBooks(
@@ -82,6 +79,9 @@ fun TableOfContents(
                     val absChapter = getAbsoluteChapterNumForBook(book) + selectedChapter
                     onSelected(absChapter)
                     isBookScreen = true
+                },
+                onBackSelected = {
+                    isBookScreen = true
                 }
             )
         }
@@ -92,7 +92,9 @@ fun TableOfContents(
 private fun TableOfContentsBooks(
     onBookSelected: (book: Book) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+    ) {
         itemsIndexed(bookTitles) { index, title ->
             Text(
                 text = title,
@@ -105,8 +107,7 @@ private fun TableOfContentsBooks(
                         )
                     }
                     .padding(
-                        vertical = 8.dp,
-                        horizontal = 16.dp
+                        vertical = 8.dp
                     )
                     .fillMaxWidth(),
                 color = MaterialTheme.colors.onSurface
@@ -119,30 +120,64 @@ private fun TableOfContentsBooks(
 @Composable
 private fun TableOfContentsChapters(
     book: Book,
-    onChapterSelected: (index: Int) -> Unit
+    onChapterSelected: (index: Int) -> Unit,
+    onBackSelected: () -> Unit
 ) {
 
-    LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 80.dp)) {
-        val numChapters = verses[book.num].size
-
-        for (chapterNum in 0 until numChapters) {
-            item {
-                Text(
-                    text = "${chapterNum + 1}",
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clickable {
-                            onChapterSelected(chapterNum)
-                        }
-                        .padding(
-                            vertical = 8.dp,
-                            horizontal = 16.dp
-                        )
-                        .fillMaxWidth(),
-                    color = MaterialTheme.colors.onSurface
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(
+                    vertical = 24.dp,
+                    horizontal = 24.dp
                 )
+                .clickable {
+                    onBackSelected()
+                }
+        ) {
+            Icon(
+                Icons.Rounded.ArrowBackIos,
+                "Back to books",
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.size(16.dp)
+            )
+
+            Text(
+                text = getBookTitle(book),
+                fontFamily = FontFamily.Serif,
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .clickable {
+
+                    }
+                    .align(Alignment.CenterVertically),
+                color = MaterialTheme.colors.onSurface
+            )
+        }
+
+        LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 80.dp)) {
+            val numChapters = verses[book.num].size
+
+            for (chapterNum in 0 until numChapters) {
+                item {
+                    Text(
+                        text = "${chapterNum + 1}",
+                        fontFamily = FontFamily.Serif,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .clickable {
+                                onChapterSelected(chapterNum)
+                            }
+                            .padding(
+                                vertical = 8.dp,
+                                horizontal = 16.dp
+                            )
+                            .fillMaxWidth(),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
             }
         }
     }
