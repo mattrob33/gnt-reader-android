@@ -1,7 +1,6 @@
 name: Release to Internal Play Store Track
 
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   release-internal:
@@ -9,9 +8,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.6'
+          ruby-version: 2.6
+
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'deployInternal'
