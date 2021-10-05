@@ -8,6 +8,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Write Play Store API Key to temp file
+      - shell: bash
+        env:
+          API_KEY: ${{ secrets.PLAY_STORE_API_KEY }}
+        run: |
+          echo "$API_KEY" >> play-store-api-key.json
 
       - uses: ruby/setup-ruby@v1
         with:
