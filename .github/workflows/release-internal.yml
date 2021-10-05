@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Write Play Store API Key to temp file
-      - shell: bash
+        shell: bash
         env:
           API_KEY: ${{ secrets.PLAY_STORE_API_KEY }}
         run: |
