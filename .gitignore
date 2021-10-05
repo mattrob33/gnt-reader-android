@@ -10,3 +10,4 @@
 /gradle/wrapper/
 /buildSrc/.gradle/
 /buildSrc/build/
+/play-store-api-key.json
