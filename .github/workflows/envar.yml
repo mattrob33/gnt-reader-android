@@ -1,0 +1,26 @@
+name: Envar test
+
+on: workflow_dispatch
+
+jobs:
+  print:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - shell: bash
+        env:
+          SECRET_NAME: ${{ secrets.SECRET_NAME }}
+        run: |
+          echo "Created SECRET_NAME"
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'envar'
+

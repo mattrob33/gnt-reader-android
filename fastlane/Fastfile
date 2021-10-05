@@ -16,6 +16,12 @@
 default_platform(:android)
 
 platform :android do
+
+  desc "Pass Github Secret to Fastlane"
+    lane :envar do
+      puts ENV["SECRET_NAME"]
+    end
+
   desc "Runs all the tests"
   lane :test do
     gradle(task: "test")
