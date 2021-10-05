@@ -1,0 +1,17 @@
+name: Release to Internal Play Store Track
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release-internal:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'deployInternal'
