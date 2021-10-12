@@ -8,7 +8,7 @@ on:
         required: true
       rollout:
         description: "Rollout %"
-        required: false
+        required: true
 
 jobs:
   release-internal:
