@@ -70,8 +70,10 @@ platform :android do
         rollout = rollout / 100.0
       end
 
-      puts "Simulate deploying to production at " + rollout.to_s
-
+      deployToPlayStore(
+          track: "production",
+          rollout: rollout
+      )
   end
 
   # This is intended for internal use by other lanes, which specify a track
