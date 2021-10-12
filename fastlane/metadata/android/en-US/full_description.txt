@@ -1,0 +1,29 @@
+A digital Reader's Edition of the Greek New Testament (SBLGNT).
+
+Features:
+- Text: full text of the SBLGNT
+- Glosses: quickly displays glosses and parsing for a word by touching it
+- Concordance: full concordance displayed by touching any word
+- Vocab: keep track of the vocab you need to learn for each chapter. Use the Vocab Wizard to automatically add words based on your reading level.
+- Audio: audio playback available for every chapter
+- SpeedRead: displays text one word at a time at an adjustable pace to improve your speed reading ability
+- Reading Plans: choose a reading plan to track your progress and encourage your reading!
+
+Design:
+- uses latest Android Material Design  principles
+- resizeable text
+- uses the SBL Greek font
+- night mode option
+- option to remove verse numbers
+- option to show verses on separate lines
+- quickly resume reading where you left off with one click from the home screen
+
+
+Scripture is from the SBL Greek New Testament
+Copyright © 2010 Society of Biblical Literature Logos Bible Software.
+
+The MorphGNT SBLGNT project is used as the text base to identify lexical forms.
+
+Mounce Concise Greek-English Dictionary
+Copyright 1993 All Rights Reserved
+www.teknia.com/greek-dictionary
