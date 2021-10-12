@@ -1,0 +1,56 @@
+name: Deploy to Firebase App Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: "Version Name"
+        required: true
+      releaseNotes:
+        description: "Release Notes"
+        required: false
+
+jobs:
+  release-internal:
+
+    env:
+      VERSION_CODE: ${{ github.run_number }}
+      VERSION_NAME: ${{ github.event.inputs.versionName }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Decode our base64-encoded keystore contents from Github Secrets and write it
+      # to a temp file that we'll use in Fastlane to sign our app bundle.
+      - name: Create upload keystore
+        shell: bash
+        env:
+          KEYSTORE_CONTENTS: ${{ secrets.UPLOAD_KEY_JKS_BASE_64 }}
+        run: |
+          echo "$KEYSTORE_CONTENTS" | base64 --decode > "$RUNNER_TEMP/upload-key.jks"
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - uses: maierj/fastlane-action@v2.0.1
+
+      - name: Intall Fastlane Firebase plugin
+        run: |
+          bundle exec fastlane add_plugin firebase_app_distribution
+
+      - name: Upload to Firebase App Distribution
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'firebaseAppDistribution'
+        env:
+          UPLOAD_KEY_DIR: "/home/runner/work/_temp/"
+          UPLOAD_KEY_FILENAME: "upload-key.jks"
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_API_KEY }}
+          RELEASE_NOTES: ${{ github.event.inputs.releaseNotes }}

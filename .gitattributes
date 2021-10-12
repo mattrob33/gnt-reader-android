@@ -1,0 +1,4 @@
+Gemfile linguist-vendored
+Gemfile.lock linguist-vendored
+fastlane/Fastfile linguist-vendored
+fastlane/Appfile linguist-vendored
