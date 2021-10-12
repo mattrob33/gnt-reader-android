@@ -27,7 +27,7 @@ platform :android do
       firebase_app_distribution(
           app: ENV["FIREBASE_APP_ID"],
           firebase_cli_token: ENV["FIREBASE_TOKEN"],
-          groups: "Alpha Testers",
+          groups: "alpha-testers",
           release_notes: ENV["RELEASE_NOTES"],
           android_artifact_type: "AAB"
       )
