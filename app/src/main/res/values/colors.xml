@@ -3,4 +3,7 @@
 	<item name="primary" type="color">#111111</item>
 	<item name="primary_dark" type="color">@color/primary</item>
 	<item name="accent" type="color">@color/primary</item>
+
+	<color name="content_background">#FFFFFF</color>
+	<color name="appbar_color">#FFFFFF</color>
 </resources>
