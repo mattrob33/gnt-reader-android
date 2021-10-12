@@ -38,6 +38,8 @@ jobs:
           lane: 'firebaseAppDistribution'
         env:
           VERSION_NAME: ${{ github.event.inputs.versionName }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_REFRESH_TOKEN }}
           UPLOAD_KEY_DIR: ${{ runner.temp }}
           UPLOAD_KEY_FILENAME: "upload-key.jks"
           SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
