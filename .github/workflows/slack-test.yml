@@ -1,0 +1,26 @@
+name: Send Slack Message
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message"
+        required: true
+
+jobs:
+  slack-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Send Slack message
+        uses: slackapi/slack-github-action@v1.15.0
+        with:
+          notification_title: 'Test Slack Message'
+          channel-id: 'C02HPF9D10A'
+          slack-message: ${{ github.event.inputs.message }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
