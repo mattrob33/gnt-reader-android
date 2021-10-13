@@ -19,5 +19,6 @@ jobs:
         with:
           channel-id: 'C02HPF9D10A'
           slack-message: ${{ github.event.inputs.message }}
+          payload: "{\"key\":\"value\",\"foo\":\"bar\"}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
