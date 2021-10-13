@@ -102,6 +102,11 @@ platform :android do
         skip_upload_screenshots: true,
         json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"]
       )
+
+      createGithubRelease(
+        releaseName: versionName,
+        description: ""
+      )
     end
 
   # Build a signed AAB, querying the Play Store to determine the correct version code.
@@ -189,5 +194,24 @@ platform :android do
     puts "Next version: " + nextVersionCode.to_s
 
     nextVersionCode
+  end
+
+  # Create a Github release from master
+  desc "Create Github release"
+  lane :createGithubRelease do |options|
+
+    aabPath = Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+
+    tagName = "v" + options[:releaseName]
+
+    set_github_release(
+      repository_name: "mattrob33/sblgnt-reader",
+      api_token: ENV["GITHUB_RELEASES_TOKEN"],
+      name: tagName,
+      tag_name: tagName,
+      description: options[:description],
+      commitish: "main",
+      upload_assets: [aabPath]
+    )
   end
 end
