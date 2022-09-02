@@ -7,8 +7,9 @@ import com.mattrobertson.greek.reader.verseref.Verse
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.Word
 import com.mattrobertson.greek.reader.verseref.mappers.VerseTextDecoder
+import javax.inject.Inject
 
-class VerseRepo(private val versesDao: VersesDao) {
+class VerseRepo @Inject constructor(private val versesDao: VersesDao) {
 
 	suspend fun getVersesForBook(book: Book): List<Verse> {
 		return versesDao.getVersesForBook(book.num).map { entity ->

@@ -4,8 +4,9 @@ import com.mattrobertson.greek.reader.db.api.mappers.mapGlossEntity
 import com.mattrobertson.greek.reader.db.api.models.GlossModel
 import com.mattrobertson.greek.reader.db.internal.dao.VocabDao
 import com.mattrobertson.greek.reader.verseref.VerseRef
+import javax.inject.Inject
 
-class VocabRepo(private val vocabDao: VocabDao) {
+class VocabRepo @Inject constructor(private val vocabDao: VocabDao) {
 
 	suspend fun getVocabWordsForChapter(ref: VerseRef, maxOcc: Int): List< GlossModel> {
 		return vocabDao.getVocabWordsForChapter(ref, maxOcc).map {
