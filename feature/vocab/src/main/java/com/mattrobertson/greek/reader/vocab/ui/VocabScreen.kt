@@ -71,89 +71,73 @@ private fun VocabScreenInternal(
             .background(MaterialTheme.colors.surface)
     ) {
         DialogTopBar(
-            title = "Vocabulary",
+            title = "${getBookTitleLocalized(ref.book)} ${ref.chapter}",
             onDismiss = onDismiss
         )
 
-        VSpacer(20.dp)
-
-        Column(
+        LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Text(
-                text = "${getBookTitleLocalized(ref.book)} ${ref.chapter}",
-                style = MaterialTheme.typography.h3,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                color = MaterialTheme.colors.onSurface
-            )
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            VSpacer(24.dp)
-
-            VocabOccChipRow(
-                onOccChanged = {
-                    onChangeMaxOcc(it)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                val mappedWords = words.groupBy {
-                    when (it.occ) {
-                        in 101..Int.MAX_VALUE -> ">100"
-                        in 51..100 -> "51-100x"
-                        in 31..50 -> "31-50x"
-                        in 21..30 -> "21-30x"
-                        in 16..20 -> "16-20x"
-                        in 11..15 -> "11-15x"
-                        in 6..10 -> "6-10x"
-                        in 2..5 -> "2-5x"
-                        1 -> "1x"
-                        else -> ""
+                VocabOccChipRow(
+                    onOccChanged = {
+                        onChangeMaxOcc(it)
                     }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            val mappedWords = words.groupBy {
+                when (it.occ) {
+                    in 101..Int.MAX_VALUE -> ">100"
+                    in 51..100 -> "51-100x"
+                    in 31..50 -> "31-50x"
+                    in 21..30 -> "21-30x"
+                    in 16..20 -> "16-20x"
+                    in 11..15 -> "11-15x"
+                    in 6..10 -> "6-10x"
+                    in 2..5 -> "2-5x"
+                    1 -> "1x"
+                    else -> ""
                 }
+            }
 
-                mappedWords.keys.forEach { occ ->
-                    if (occ.isNotBlank()) {
-                        val wordsForOcc = mappedWords[occ]
+            mappedWords.keys.forEach { occ ->
+                if (occ.isNotBlank()) {
+                    val wordsForOcc = mappedWords[occ]
 
-                        if (wordsForOcc?.isNotEmpty() == true) {
+                    if (wordsForOcc?.isNotEmpty() == true) {
+                        item {
+                            Text(
+                                text = occ,
+                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                                fontSize = 20.sp
+                            )
+                            Divider()
+                        }
+
+                        wordsForOcc.forEach { word ->
                             item {
                                 Text(
-                                    text = occ,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-                                    fontSize = 20.sp
+                                    text = buildAnnotatedString {
+                                        append("${word.lex} - ")
+
+                                        withStyle(SpanStyle(
+                                            fontFamily = FontFamily.Serif,
+                                            fontSize = 18.sp
+                                        )) {
+                                            append("${word.gloss} (${word.occ}x)")
+                                        }
+                                    },
+                                    color = MaterialTheme.colors.onSurface
                                 )
-                                Divider()
                             }
+                        }
 
-                            wordsForOcc.forEach { word ->
-                                item {
-                                    Text(
-                                        text = buildAnnotatedString {
-                                            append("${word.lex} - ")
-
-                                            withStyle(SpanStyle(
-                                                fontFamily = FontFamily.Serif,
-                                                fontSize = 18.sp
-                                            )) {
-                                                append("${word.gloss} (${word.occ}x)")
-                                            }
-                                        },
-                                        color = MaterialTheme.colors.onSurface
-                                    )
-                                }
-                            }
-
-                            item {
-                                VSpacer(40.dp)
-                            }
+                        item {
+                            VSpacer(40.dp)
                         }
                     }
                 }
@@ -193,7 +177,7 @@ fun VocabOccChipRow(
     ScrollableChipRow(
         items = chips.map { "${it}x" },
         backgroundColor = MaterialTheme.colors.primary,
-        outlineColor = MaterialTheme.colors.primaryVariant,
+        outlineColor = MaterialTheme.colors.primary,
         textColor = MaterialTheme.colors.onPrimary,
         onItemSelected = { index ->
             val occ = chips[index]
