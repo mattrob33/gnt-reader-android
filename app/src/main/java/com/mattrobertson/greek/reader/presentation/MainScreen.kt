@@ -10,15 +10,18 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.mattrobertson.greek.reader.audio.ui.AudioPanel
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
@@ -98,7 +101,7 @@ fun MainScreen(
                                                 screen = Screen.Vocab
                                             }
                                             BottomNavItem.Audio -> {
-                                                audioControlsVisible = true
+                                                audioControlsVisible = !audioControlsVisible
                                             }
                                             BottomNavItem.Settings -> {
                                                 screen = Screen.Settings
@@ -124,9 +127,20 @@ fun MainScreen(
             }
 
             AnimatedVisibility(
+                visible = audioControlsVisible,
+                enter = slideInVertically({ height -> height / 4 }) + fadeIn(),
+                exit = slideOutVertically({ height -> height }) + fadeOut(),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                AudioPanel(
+                    onDismiss = { audioControlsVisible = false }
+                )
+            }
+
+            AnimatedVisibility(
                 visible = (screen == Screen.Contents),
                 enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
+                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut()
             ) {
                 TableOfContents(
                     onSelected = { position ->
@@ -145,7 +159,7 @@ fun MainScreen(
             AnimatedVisibility(
                 visible = (screen == Screen.Vocab),
                 enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
+                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut()
             ) {
                 val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
                 VocabScreen(
@@ -157,5 +171,17 @@ fun MainScreen(
                 )
             }
         }
+    }
+}
+
+@OptIn(
+    ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalMaterialApi::class
+)
+@Preview
+@Composable fun MainScreen_Preview() {
+    AppTheme {
+        MainScreen()
     }
 }
