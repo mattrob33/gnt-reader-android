@@ -1,0 +1,85 @@
+[versions]
+
+agp = "7.2.2"
+kotlin = "1.7.0"
+
+activity = "1.5.1"
+androidCoreKtx = "1.6.0"
+androidPreference = "1.1.1"
+appcompat = "1.5.0"
+compose = "1.2.0"
+composeCompiler = "1.2.0"
+composeViewmodels = "2.5.1"
+datastore = "1.0.0"
+firebase-analytics = "19.0.0"
+firebase-crashlytics = "18.2.1"
+gson = "2.8.6"
+hilt = "2.43.2"
+hiltViewmodels = "1.0.0-alpha03"
+jUnit5 = "5.7.0"
+lifecycleRuntime = "2.5.1"
+material = "1.4.0"
+navigation = "2.4.0-alpha06"
+protobuf = "3.10.0"
+room = "2.4.3"
+
+
+[libraries]
+
+kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+androidCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidCoreKtx" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-viewmodels-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltViewmodels" }
+
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
+compose-ui = { module ="androidx.compose.ui:ui", version.ref = "compose" }
+compose-foundation = { module ="androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-material = { module ="androidx.compose.material:material", version.ref = "compose" }
+compose-material-icons-core = { module ="androidx.compose.material:material-icons-core", version.ref = "compose" }
+compose-material-icons-extended = { module ="androidx.compose.material:material-icons-extended", version.ref = "compose" }
+compose-tooling = { module ="androidx.compose.ui:ui-tooling", version.ref = "compose" }
+
+activity-compose = { module ="androidx.activity:activity-compose", version.ref = "activity" }
+navigation-compose = { module ="androidx.navigation:navigation-compose", version.ref = "navigation" }
+
+lifecycleRuntime = { module ="androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
+
+compose-viewmodels = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeViewmodels" }
+
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+androidPreferenceKtx = { module = "androidx.preference:preference-ktx", version.ref = "androidPreference" }
+
+protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+jUnit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jUnit5" }
+jUnit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "jUnit5" }
+jUnit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jUnit5" }
+jUnit5-vintageEngine = { module = "org.junit.jupiter:junit-vintage-engine", version.ref = "jUnit5" }
+
+
+[bundles]
+
+hilt = ["hilt-android", "hilt-android-compiler", "hilt-viewmodels-compiler"]
+compose = [ "compose-ui", "compose-foundation", "compose-material", "compose-material-icons-core", "compose-material-icons-extended", "compose-tooling", "activity-compose", "navigation-compose", "compose-viewmodels", "lifecycleRuntime" ]
+androidCore = [ "androidCoreKtx", "appcompat" ]
+
+[plugins]
+agp = { id = "com.android.tools.build:gradle", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }

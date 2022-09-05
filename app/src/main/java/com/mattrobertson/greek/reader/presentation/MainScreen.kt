@@ -125,8 +125,8 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = (screen == Screen.Contents),
-                enter = slideInVertically({ height -> height }) + fadeIn(),
-                exit = slideOutVertically({ height -> -height }) + fadeOut()
+                enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
             ) {
                 TableOfContents(
                     onSelected = { position ->
@@ -144,8 +144,8 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = (screen == Screen.Vocab),
-                enter = slideInVertically({ height -> height }) + fadeIn(),
-                exit = slideOutVertically({ height -> -height }) + fadeOut()
+                enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
             ) {
                 val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
                 VocabScreen(

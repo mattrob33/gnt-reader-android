@@ -5,9 +5,9 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.agp}")
-        classpath(kotlin("gradle-plugin", version = Versions.kotlin))
-        classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}")
+        classpath("com.android.tools.build:gradle:${libs.versions.agp.get()}")
+        classpath(kotlin("gradle-plugin", version = libs.versions.kotlin.get()))
+        classpath("com.google.dagger:hilt-android-gradle-plugin:${libs.versions.hilt.get()}")
     }
 }
 

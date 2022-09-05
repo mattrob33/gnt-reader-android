@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
         applicationId = "com.mattrobertson.greek.reader"
 
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
-        versionCode = Versions.appVersionCode
-        versionName = Versions.appVersionName
+        versionCode = AppConfig.appVersionCode
+        versionName = AppConfig.appVersionName
     }
 
     buildTypes {
@@ -30,12 +30,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
 
     buildFeatures {
@@ -43,11 +43,12 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
+
     implementation(projects.core.verseref)
     implementation(projects.core.dbInternal)
     implementation(projects.core.dbApi)
@@ -61,22 +62,20 @@ dependencies {
     implementation(projects.feature.vocab)
 
     // Core
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.activity:activity-ktx:1.3.1")
+    implementation(libs.kotlin)
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
+    implementation(libs.activity)
 
-    // Dependency Injection
-    implementation("com.google.dagger:hilt-android:${Versions.hilt}")
-    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltViewModels}")
-    kapt("androidx.hilt:hilt-compiler:${Versions.hiltViewModels}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.viewmodels.compiler)
 
     // UI
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+    implementation(libs.material)
+    implementation(libs.lifecycleRuntime)
 
     // Analytics
-    implementation("com.google.firebase:firebase-analytics:19.0.0")
-    implementation("com.google.firebase:firebase-crashlytics:18.2.1")
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 }

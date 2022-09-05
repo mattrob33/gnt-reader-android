@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,29 +22,29 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
 }
 
 dependencies {
-    implementation(project(":core:verseref"))
-    implementation(project(":core:db-internal"))
+    implementation(projects.core.verseref)
+    implementation(projects.core.dbInternal)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:${Versions.hilt}")
-    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     // Room
-    api("androidx.room:room-runtime:${Versions.room}")
-    api("androidx.room:room-ktx:${Versions.room}")
-    kapt("androidx.room:room-compiler:${Versions.room}")
+    api(libs.room.runtime)
+    api(libs.room.ktx)
+    kapt(libs.room.compiler)
 
     // Testing
-    testImplementation("androidx.room:room-testing:${Versions.room}")
-    testImplementation("junit:junit:${Versions.junit}")
+//    testImplementation("androidx.room:room-testing:${libs.versions.room.get()}")
+//    testImplementation("junit:junit:${Versions.junit}")
 }

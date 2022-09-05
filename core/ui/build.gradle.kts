@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,12 +25,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
     
     buildFeatures {
@@ -38,28 +38,18 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.3"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
 
-    // Core
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation(libs.bundles.androidCore)
 
-    // Compose
-    api("androidx.compose.ui:ui:1.0.3")
-    api("androidx.compose.material:material:1.0.3")
-    api("androidx.compose.material:material-icons-extended:1.0.3")
-    api("androidx.compose.ui:ui-tooling:1.0.3")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    api("androidx.activity:activity-compose:1.3.1")
-    api("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    api(libs.bundles.compose)
 
-    // Datastore
-    api( "com.google.protobuf:protobuf-javalite:3.10.0")
-    api("androidx.datastore:datastore:1.0.0")
+    api(libs.protobuf)
+    api(libs.datastore)
 
     // Testing
     testImplementation("junit:junit:4.13.2")
