@@ -42,4 +42,9 @@ android {
 dependencies {
     implementation(projects.core.verseref)
     implementation(projects.core.ui)
+
+    // Media 3
+    implementation(Dependencies.Media3.exoPlayer)
+    implementation(Dependencies.Media3.datasource)
+    implementation(Dependencies.Media3.session)
 }
