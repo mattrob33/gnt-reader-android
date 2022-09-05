@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,12 +21,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
 
     buildFeatures {
@@ -34,19 +34,18 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.3"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
-
     implementation(projects.core.verseref)
     implementation(projects.core.dbApi)
     implementation(projects.core.ui)
 
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("com.google.android.material:material:1.4.0")
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     testImplementation("junit:junit:4.+")
 }

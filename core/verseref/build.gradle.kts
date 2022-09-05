@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,12 +21,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
 
 //    testOptions {
@@ -38,8 +38,8 @@ android {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
+    testImplementation(libs.jUnit5.api)
+    testImplementation(libs.jUnit5.params)
+    testRuntimeOnly(libs.jUnit5.engine)
+    testRuntimeOnly(libs.jUnit5.vintageEngine)
 }

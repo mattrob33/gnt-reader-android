@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
-    buildToolsVersion = Versions.buildTools
+    compileSdk = AppConfig.compileSdk
+    buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,12 +21,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.javaCompatibility
-        targetCompatibility = Versions.javaCompatibility
+        sourceCompatibility = AppConfig.javaCompatibility
+        targetCompatibility = AppConfig.javaCompatibility
     }
 
     kotlinOptions {
-        jvmTarget = Versions.jvmTarget
+        jvmTarget = AppConfig.jvmTarget
     }
 }
 
@@ -34,11 +34,11 @@ dependencies {
 
     implementation(projects.core.verseref)
 
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
 
-    implementation("com.google.code.gson:gson:2.8.6")
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation(libs.gson)
+    implementation(libs.androidPreferenceKtx)
 
     testImplementation("androidx.test:core-ktx:1.4.0")
     testImplementation("org.robolectric:robolectric:4.3")
@@ -47,8 +47,8 @@ dependencies {
     testImplementation("androidx.test:runner:1.4.0")
     testImplementation("androidx.test:rules:1.4.0")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
+    testImplementation(libs.jUnit5.api)
+    testImplementation(libs.jUnit5.params)
+    testRuntimeOnly(libs.jUnit5.engine)
+    testRuntimeOnly(libs.jUnit5.vintageEngine)
 }
