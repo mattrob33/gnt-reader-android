@@ -1,7 +1,8 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotiln("kapt")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -40,11 +41,21 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.verseref)
     implementation(projects.core.ui)
+    implementation(projects.core.verseref)
+
+    // Core
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("com.google.android.material:material:1.4.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:${Versions.hilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 
     // Media 3
     implementation(Dependencies.Media3.exoPlayer)
     implementation(Dependencies.Media3.datasource)
     implementation(Dependencies.Media3.session)
+    implementation(Dependencies.Media3.ui)
 }
