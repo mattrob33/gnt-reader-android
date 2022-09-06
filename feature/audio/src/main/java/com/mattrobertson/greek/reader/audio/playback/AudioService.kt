@@ -1,5 +1,7 @@
 package com.mattrobertson.greek.reader.audio.playback
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.media3.common.MediaItem
@@ -14,11 +16,13 @@ import androidx.media3.session.SessionResult
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.mattrobertson.greek.reader.audio.R
 import com.mattrobertson.greek.reader.audio.data.AudioNarrator
 import com.mattrobertson.greek.reader.audio.data.AudioUrlProvider
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookTitleLocalized
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +35,14 @@ class AudioService: MediaSessionService() {
 
     // TODO - get this as an observable from settings
     private var narrator: AudioNarrator = AudioNarrator.ModernSblgnt
+
+    private val artwork by lazy {
+        val drawable = resources.getDrawable(R.drawable.ic_launcher)
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        stream.toByteArray()
+    }
 
     override fun onGetSession(controllerInfo: ControllerInfo) = mediaSession
 
@@ -67,10 +79,13 @@ class AudioService: MediaSessionService() {
                     .setDisplayTitle(humanReadableRef)
                     .setArtist("Greek New Testament")
                     .setSubtitle("Greek New Testament")
+                    .setArtworkData(artwork, MediaMetadata.PICTURE_TYPE_FRONT_COVER)
                     .build()
             )
             .build()
         setMediaItem(mediaItem)
+        playWhenReady = true
+        prepare()
     }
 
     private inner class MediaSessionCallback: MediaSession.Callback {

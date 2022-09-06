@@ -1,9 +1,10 @@
 package com.mattrobertson.greek.reader.audio.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
@@ -16,34 +17,51 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.audio.PlaybackState
 import com.mattrobertson.greek.reader.audio.PlaybackState.*
-import com.mattrobertson.greek.reader.ui.lib.HSpacer
-import com.mattrobertson.greek.reader.ui.lib.MaxWidthColumn
-import com.mattrobertson.greek.reader.ui.lib.MaxWidthRow
-import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.lib.*
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable private fun AudioPanel_PreviewLight() {
     AppTheme(darkTheme = false) {
-        AudioPanel(onDismiss = {})
+        AudioPanel(
+            playbackState = MutableStateFlow(Stopped),
+            onDismiss = {},
+            onTapPlayPause = {},
+            onTapSkipBack = {},
+            onTapSkipForward = {}
+        )
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0x222222)
 @Composable private fun AudioPanel_PreviewDark() {
     AppTheme(darkTheme = true) {
-        AudioPanel(onDismiss = {})
+        AudioPanel(
+            playbackState = MutableStateFlow(Stopped),
+            onDismiss = {},
+            onTapPlayPause = {},
+            onTapSkipBack = {},
+            onTapSkipForward = {}
+        )
     }
 }
 
 @Composable fun AudioPanel(
-    onDismiss: () -> Unit
+    playbackState: StateFlow<PlaybackState>,
+    onDismiss: () -> Unit,
+    onTapPlayPause: () -> Unit,
+    onTapSkipBack: () -> Unit,
+    onTapSkipForward: () -> Unit
 ) {
 
-    val playbackState by remember { mutableStateOf(Stopped) }
+    val state by playbackState.collectAsState()
 
     MaxWidthColumn(
-        modifier = Modifier.background(MaterialTheme.colors.background).clickable {}
+        modifier = Modifier
+            .background(MaterialTheme.colors.background)
+            .noRippleClickable {}
     ) {
 
         IconButton(
@@ -61,78 +79,80 @@ import com.mattrobertson.greek.reader.ui.theme.AppTheme
         }
 
         MaxWidthRow {
-            BackButton()
+            BackButton(onTapSkipBack)
             HSpacer(20.dp)
-            PlayPauseButton(playbackState)
+            PlayPauseButton(state, onTapPlayPause)
             HSpacer(20.dp)
-            ForwardButton()
+            ForwardButton(onTapSkipForward)
         }
 
-        VSpacer(10.dp)
+        VSpacer(4.dp)
         
         NarratorToggle()
 
-        VSpacer(20.dp)
+        VSpacer(24.dp)
     }
 }
 
 @Composable private fun PlayPauseButton(
-    playbackState: PlaybackState
+    playbackState: PlaybackState,
+    onTapPlayPause: () -> Unit
 ) {
     when (playbackState) {
-        Paused, Stopped -> PlayButton()
-        Playing -> PauseButton()
+        Paused, Stopped -> PlayButton(onTapPlayPause)
+        Playing -> PauseButton(onTapPlayPause)
         Buffering -> BufferingIcon()
     }
 }
 
-@Composable private fun PlayButton() {
+@Composable private fun PlayButton(onTap: () -> Unit) {
     Icon(
         Icons.Rounded.PlayArrow,
         "Play button",
         tint = MaterialTheme.colors.primary,
-        modifier = Modifier.size(72.dp)
+        modifier = Modifier
+            .size(100.dp)
+            .noRippleClickable { onTap() }
     )
 }
 
-@Composable private fun PauseButton() {
+@Composable private fun PauseButton(onTap: () -> Unit) {
     Icon(
         Icons.Rounded.Pause,
         "Pause button",
         tint = MaterialTheme.colors.primary,
-        modifier = Modifier.size(64.dp)
+        modifier = Modifier
+            .size(100.dp)
+            .padding(12.dp)
+            .noRippleClickable { onTap() }
     )
 }
 
 @Composable private fun BufferingIcon() {
     CircularProgressIndicator(
-        modifier = Modifier.size(72.dp),
+        modifier = Modifier.size(100.dp).padding(24.dp),
         color = MaterialTheme.colors.primary
     )
 }
 
-@Composable private fun BackButton() {
-    IconButton(
-        onClick = {}
-    ) {
+@Composable private fun BackButton(onTap: () -> Unit) {
+    IconButton(onClick = onTap) {
         Icon(
             Icons.Rounded.Replay10,
             "Skip back",
             tint = MaterialTheme.colors.primary,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(40.dp)
         )
     }
 }
 
-@Composable private fun ForwardButton() {
-    IconButton(
-        onClick = {}
-    ) {
+@Composable private fun ForwardButton(onTap: () -> Unit) {
+    IconButton(onClick = onTap) {
         Icon(
             Icons.Rounded.Forward10,
             "Skip forward",
             tint = MaterialTheme.colors.primary,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(40.dp)
         )
     }
 }
@@ -198,6 +218,8 @@ import com.mattrobertson.greek.reader.ui.theme.AppTheme
         style = MaterialTheme.typography.caption,
         fontSize = 16.sp,
         color = if (isActive) { activeTextColor } else { inActiveTextColor },
-        modifier = Modifier.clickable { onClick() }.padding(10.dp)
+        modifier = Modifier
+            .noRippleClickable { onClick() }
+            .padding(10.dp)
     )
 }
