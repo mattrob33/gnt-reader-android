@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -45,17 +47,14 @@ dependencies {
     implementation(projects.core.verseref)
 
     // Core
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("com.google.android.material:material:1.4.0")
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:${Versions.hilt}")
-    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     // Media 3
-    implementation(Dependencies.Media3.exoPlayer)
-    implementation(Dependencies.Media3.datasource)
-    implementation(Dependencies.Media3.session)
-    implementation(Dependencies.Media3.ui)
+    implementation(libs.bundles.media3)
 }
