@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
 }
 
 android {
@@ -32,19 +31,24 @@ android {
 }
 
 dependencies {
+
     implementation(projects.core.verseref)
-    implementation(projects.core.dbInternal)
 
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
 
-    // Room
-    api(libs.room.runtime)
-    api(libs.room.ktx)
-    kapt(libs.room.compiler)
+    implementation(libs.gson)
+    implementation(libs.androidPreferenceKtx)
 
-    // Testing
-//    testImplementation("androidx.room:room-testing:${libs.versions.room.get()}")
-//    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test:core-ktx:1.4.0")
+    testImplementation("org.robolectric:robolectric:4.3")
+
+    testImplementation("androidx.test.ext:junit:1.1.3")
+    testImplementation("androidx.test:runner:1.4.0")
+    testImplementation("androidx.test:rules:1.4.0")
+
+    testImplementation(libs.jUnit5.api)
+    testImplementation(libs.jUnit5.params)
+    testRuntimeOnly(libs.jUnit5.engine)
+    testRuntimeOnly(libs.jUnit5.vintageEngine)
 }

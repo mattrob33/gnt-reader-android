@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
-    kotlin("kapt")
+    id("kotlin-android")
 }
 
 android {
@@ -29,22 +28,18 @@ android {
     kotlinOptions {
         jvmTarget = AppConfig.jvmTarget
     }
+
+//    testOptions {
+//        unitTests.all {
+//            useJUnitPlatform()
+//        }
+//        unitTests.includeAndroidResources = true
+//    }
 }
 
 dependencies {
-    implementation(projects.core.verseref)
-    implementation(projects.core.dbInternal)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-
-    // Room
-    api(libs.room.runtime)
-    api(libs.room.ktx)
-    kapt(libs.room.compiler)
-
-    // Testing
-//    testImplementation("androidx.room:room-testing:${libs.versions.room.get()}")
-//    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation(libs.jUnit5.api)
+    testImplementation(libs.jUnit5.params)
+    testRuntimeOnly(libs.jUnit5.engine)
+    testRuntimeOnly(libs.jUnit5.vintageEngine)
 }

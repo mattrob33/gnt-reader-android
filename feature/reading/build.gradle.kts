@@ -1,8 +1,6 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -10,20 +8,13 @@ android {
     buildToolsVersion = AppConfig.buildTools
 
     defaultConfig {
-        applicationId = "com.mattrobertson.greek.reader"
-
         minSdk = AppConfig.minSdk
         targetSdk = AppConfig.targetSdk
 
-        versionCode = AppConfig.appVersionCode
-        versionName = AppConfig.appVersionName
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = false
-        }
-
         getByName("release") {
             isMinifyEnabled = false
         }
@@ -50,32 +41,15 @@ android {
 dependencies {
 
     implementation(projects.core.verseref)
-    implementation(projects.core.dbInternal)
     implementation(projects.core.dbApi)
     implementation(projects.core.ui)
 
-    implementation(projects.feature.audio)
-    implementation(projects.feature.concordance)
-    implementation(projects.feature.gloss)
-    implementation(projects.feature.reading)
-    implementation(projects.feature.settings)
-    implementation(projects.feature.vocab)
-
-    // Core
-    implementation(libs.kotlin)
     implementation(libs.androidCoreKtx)
     implementation(libs.appcompat)
-    implementation(libs.activity)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.viewmodels.compiler)
-
-    // UI
     implementation(libs.material)
+
+    implementation(libs.bundles.compose)
     implementation(libs.lifecycleRuntime)
 
-    // Analytics
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    testImplementation("junit:junit:4.+")
 }

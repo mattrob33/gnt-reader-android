@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
 }
 
 android {
@@ -29,22 +28,25 @@ android {
     kotlinOptions {
         jvmTarget = AppConfig.jvmTarget
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
+
     implementation(projects.core.verseref)
-    implementation(projects.core.dbInternal)
+    implementation(projects.core.dbApi)
+    implementation(projects.core.ui)
 
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidCoreKtx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
-    // Room
-    api(libs.room.runtime)
-    api(libs.room.ktx)
-    kapt(libs.room.compiler)
-
-    // Testing
-//    testImplementation("androidx.room:room-testing:${libs.versions.room.get()}")
-//    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("junit:junit:4.+")
 }
