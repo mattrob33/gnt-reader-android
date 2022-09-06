@@ -33,7 +33,7 @@ class AudioServiceConnection @Inject constructor(
     private val listener = Listener()
 
     private var _state = MutableStateFlow(Stopped)
-    var state: StateFlow<PlaybackState> = _state
+    var playbackState: StateFlow<PlaybackState> = _state
 
     init {
         controllerFuture.addListener({

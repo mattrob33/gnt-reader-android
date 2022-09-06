@@ -52,6 +52,11 @@ fun MainScreen(
         initialFirstVisibleItemScrollOffset = scrollLocation.offset
     )
 
+    SideEffect {
+        val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
+        viewModel.onChangeVerseRef(ref)
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
     var screen by remember { mutableStateOf(Screen.Reader) }
@@ -133,7 +138,11 @@ fun MainScreen(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 AudioPanel(
-                    onDismiss = { audioControlsVisible = false }
+                    playbackState = viewModel.audioPlaybackState,
+                    onDismiss = { audioControlsVisible = false },
+                    onTapPlayPause = viewModel::onTapPlayPauseAudio,
+                    onTapSkipBack = viewModel::onTapSkipBack,
+                    onTapSkipForward = viewModel::onTapSkipForward
                 )
             }
 
