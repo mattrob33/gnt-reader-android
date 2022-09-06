@@ -1,10 +1,7 @@
 package com.mattrobertson.greek.reader.audio.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
@@ -12,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,9 +64,7 @@ import kotlinx.coroutines.flow.StateFlow
 
         IconButton(
             onClick = onDismiss,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(end = 8.dp)
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Icon(
                 Icons.Rounded.ExpandMore,
@@ -78,6 +74,8 @@ import kotlinx.coroutines.flow.StateFlow
             )
         }
 
+        VSpacer(12.dp)
+
         MaxWidthRow {
             BackButton(onTapSkipBack)
             HSpacer(20.dp)
@@ -86,11 +84,15 @@ import kotlinx.coroutines.flow.StateFlow
             ForwardButton(onTapSkipForward)
         }
 
-        VSpacer(4.dp)
-        
+        VSpacer(12.dp)
+
+        PlaybackSpeedSlider()
+
+        VSpacer(16.dp)
+
         NarratorToggle()
 
-        VSpacer(24.dp)
+        VSpacer(32.dp)
     }
 }
 
@@ -130,7 +132,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable private fun BufferingIcon() {
     CircularProgressIndicator(
-        modifier = Modifier.size(100.dp).padding(24.dp),
+        modifier = Modifier
+            .size(100.dp)
+            .padding(24.dp),
         color = MaterialTheme.colors.primary
     )
 }
@@ -222,4 +226,52 @@ import kotlinx.coroutines.flow.StateFlow
             .noRippleClickable { onClick() }
             .padding(10.dp)
     )
+}
+
+@Composable fun PlaybackSpeedSlider() {
+
+    var playbackSpeed by remember { mutableStateOf(1.0f) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Speed",
+                style = MaterialTheme.typography.caption,
+                fontSize = 14.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                text = "${String.format("%.1f", playbackSpeed)}x",
+                style = MaterialTheme.typography.caption,
+                fontSize = 14.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+        }
+        
+        HSpacer(width = 4.dp)
+
+        Slider(
+            value = playbackSpeed,
+            onValueChange = { newSpeed ->
+                playbackSpeed = newSpeed
+            },
+            valueRange = 0.5f..2.0f,
+            steps = 16,
+            colors = SliderDefaults.colors(
+                thumbColor = MaterialTheme.colors.primary,
+                activeTrackColor = MaterialTheme.colors.primary,
+                activeTickColor = MaterialTheme.colors.primary,
+                inactiveTrackColor = Color.LightGray,
+                inactiveTickColor = Color.LightGray
+            )
+        )
+    }
 }
