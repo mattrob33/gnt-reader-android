@@ -128,8 +128,8 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = audioControlsVisible,
-                enter = slideInVertically({ height -> height / 4 }) + fadeIn(),
-                exit = slideOutVertically({ height -> height }) + fadeOut(),
+                enter = slideInVertically(initialOffsetY = { height -> height / 4 }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut(),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 AudioPanel(
