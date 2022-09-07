@@ -1,10 +1,13 @@
 package com.mattrobertson.greek.reader.verseref
 
+import android.os.Parcel
+import android.os.Parcelable
+
 data class VerseRef (
 	val book: Book,
 	val chapter: Int,
 	val verse: Int = NO_VERSE
-) : Comparable<VerseRef> {
+) : Comparable<VerseRef>, Parcelable {
 
 	companion object {
 		const val NO_VERSE = 0
@@ -25,6 +28,16 @@ data class VerseRef (
 			}
 
 			throw IllegalArgumentException("Invalid absolute chapter num: $absChapterNum")
+		}
+
+		@JvmField val CREATOR : Parcelable.Creator<VerseRef> = object: Parcelable.Creator<VerseRef> {
+			override fun createFromParcel(parcel: Parcel): VerseRef {
+				return VerseRef(parcel)
+			}
+
+			override fun newArray(size: Int): Array<VerseRef?> {
+				return arrayOfNulls(size)
+			}
 		}
 	}
 
@@ -48,6 +61,12 @@ data class VerseRef (
 			"${book.title} $chapter does not have $verse verses"
 		}
 	}
+
+	constructor(parcel: Parcel) : this(
+		Book(parcel.readInt()),
+		parcel.readInt(),
+		parcel.readInt()
+	)
 
 	override fun equals(other: Any?): Boolean {
 		if (other !is VerseRef) return false
@@ -81,5 +100,15 @@ data class VerseRef (
 		result = 31 * result + chapter
 		result = 31 * result + verse
 		return result
+	}
+
+	override fun writeToParcel(parcel: Parcel, flags: Int) {
+		parcel.writeInt(book.num)
+		parcel.writeInt(chapter)
+		parcel.writeInt(verse)
+	}
+
+	override fun describeContents(): Int {
+		return 0
 	}
 }
