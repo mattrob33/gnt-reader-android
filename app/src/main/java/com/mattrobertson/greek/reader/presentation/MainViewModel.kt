@@ -1,7 +1,10 @@
 package com.mattrobertson.greek.reader.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mattrobertson.greek.reader.audio.PlaybackState.*
+import com.mattrobertson.greek.reader.audio.data.AudioNarrator
+import com.mattrobertson.greek.reader.audio.data.AudioSettings
 import com.mattrobertson.greek.reader.audio.playback.AudioServiceConnection
 import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
@@ -10,9 +13,8 @@ import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +23,8 @@ class MainViewModel @Inject constructor(
     val glossesRepo: GlossesRepo,
     val concordanceRepo: ConcordanceRepo,
     val vocabRepo: VocabRepo,
-    private val audioService: AudioServiceConnection
+    private val audioService: AudioServiceConnection,
+    private val audioSettings: AudioSettings
 ): ViewModel() {
 
     private val _currentRef = MutableStateFlow(VerseRef(Book.MATTHEW, 1, 1))
@@ -29,8 +32,25 @@ class MainViewModel @Inject constructor(
 
     val audioPlaybackState = audioService.playbackState
 
+    val audioPlaybackSpeed = audioSettings.playbackSpeed
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            1.0f
+        )
+
+    val audioNarrator = audioSettings.narrator
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            AudioNarrator.ErasmianPhemister
+        )
+
     fun onChangeVerseRef(ref: VerseRef) {
         _currentRef.update { ref }
+        if (audioPlaybackState.value == Playing) {
+            audioService.stop()
+        }
     }
 
     fun onTapPlayPauseAudio() {
@@ -48,5 +68,17 @@ class MainViewModel @Inject constructor(
 
     fun onTapSkipForward() {
         audioService.skipForward()
+    }
+
+    fun setPlaybackSpeed(speed: Float) {
+        viewModelScope.launch {
+            audioSettings.setPlaybackSpeed(speed)
+        }
+    }
+
+    fun setNarrator(narrator: AudioNarrator) {
+        viewModelScope.launch {
+            audioSettings.setNarrator(narrator)
+        }
     }
 }

@@ -18,10 +18,13 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.mattrobertson.greek.reader.audio.R
 import com.mattrobertson.greek.reader.audio.data.AudioNarrator
+import com.mattrobertson.greek.reader.audio.data.AudioSettings
 import com.mattrobertson.greek.reader.audio.data.AudioUrlProvider
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookTitleLocalized
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -30,11 +33,14 @@ class AudioService: MediaSessionService() {
 
     @Inject lateinit var urlProvider: AudioUrlProvider
 
+    @Inject lateinit var audioSettings: AudioSettings
+
     lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaSession
 
-    // TODO - get this as an observable from settings
-    private var narrator: AudioNarrator = AudioNarrator.ModernSblgnt
+    private var narrator: AudioNarrator = AudioNarrator.ErasmianPhemister
+
+    private var currentRef: VerseRef? = null
 
     private val artwork by lazy {
         val drawable = resources.getDrawable(R.drawable.ic_launcher)
@@ -43,6 +49,9 @@ class AudioService: MediaSessionService() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         stream.toByteArray()
     }
+
+    private val serviceJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     override fun onGetSession(controllerInfo: ControllerInfo) = mediaSession
 
@@ -57,15 +66,37 @@ class AudioService: MediaSessionService() {
         mediaSession = MediaSession.Builder(this, player)
             .setCallback(MediaSessionCallback())
             .build()
+
+        serviceScope.launch {
+            audioSettings.narrator.collect {
+                if (narrator != it) {
+                    narrator = it
+                    if (player.isPlaying) {
+                        currentRef?.let { currentRef ->
+                            player.play(currentRef)
+                        }
+                    }
+                }
+            }
+        }
+
+        serviceScope.launch {
+            audioSettings.playbackSpeed.collect { playbackSpeed ->
+                player.setPlaybackSpeed(playbackSpeed)
+            }
+        }
     }
 
     override fun onDestroy() {
         player.release()
         mediaSession.release()
+        serviceJob.cancel()
         super.onDestroy()
     }
 
     private fun ExoPlayer.play(ref: VerseRef) {
+
+        currentRef = ref
 
         val humanReadableRef = "${getBookTitleLocalized(ref.book)} ${ref.chapter}"
 

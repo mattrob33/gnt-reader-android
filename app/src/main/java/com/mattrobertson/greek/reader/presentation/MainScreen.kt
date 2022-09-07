@@ -139,10 +139,14 @@ fun MainScreen(
             ) {
                 AudioPanel(
                     playbackState = viewModel.audioPlaybackState,
+                    startingPlaybackSpeedValue = viewModel.audioPlaybackSpeed,
+                    startingNarratorValue = viewModel.audioNarrator,
                     onDismiss = { audioControlsVisible = false },
                     onTapPlayPause = viewModel::onTapPlayPauseAudio,
                     onTapSkipBack = viewModel::onTapSkipBack,
-                    onTapSkipForward = viewModel::onTapSkipForward
+                    onTapSkipForward = viewModel::onTapSkipForward,
+                    onChangePlaybackSpeed = viewModel::setPlaybackSpeed,
+                    onChangeNarrator = viewModel::setNarrator
                 )
             }
 
@@ -158,6 +162,9 @@ fun MainScreen(
                             listState.scrollToItem(position)
                         }
                         screen = Screen.Reader
+
+                        val ref = VerseRef.fromAbsoluteChapterNum(position)
+                        viewModel.onChangeVerseRef(ref)
                     },
                     onDismiss = {
                         screen = Screen.Reader

@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.audio.PlaybackState
 import com.mattrobertson.greek.reader.audio.PlaybackState.*
+import com.mattrobertson.greek.reader.audio.data.AudioNarrator
+import com.mattrobertson.greek.reader.audio.data.AudioNarrator.ErasmianPhemister
+import com.mattrobertson.greek.reader.audio.data.AudioNarrator.ModernSblgnt
 import com.mattrobertson.greek.reader.ui.lib.*
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,10 +28,14 @@ import kotlinx.coroutines.flow.StateFlow
     AppTheme(darkTheme = false) {
         AudioPanel(
             playbackState = MutableStateFlow(Stopped),
+            startingPlaybackSpeedValue = MutableStateFlow(1.0f),
+            startingNarratorValue = MutableStateFlow(ErasmianPhemister),
             onDismiss = {},
             onTapPlayPause = {},
             onTapSkipBack = {},
-            onTapSkipForward = {}
+            onTapSkipForward = {},
+            onChangePlaybackSpeed = {},
+            onChangeNarrator = {},
         )
     }
 }
@@ -38,23 +45,33 @@ import kotlinx.coroutines.flow.StateFlow
     AppTheme(darkTheme = true) {
         AudioPanel(
             playbackState = MutableStateFlow(Stopped),
+            startingPlaybackSpeedValue = MutableStateFlow(1.0f),
+            startingNarratorValue = MutableStateFlow(ErasmianPhemister),
             onDismiss = {},
             onTapPlayPause = {},
             onTapSkipBack = {},
-            onTapSkipForward = {}
+            onTapSkipForward = {},
+            onChangePlaybackSpeed = {},
+            onChangeNarrator = {},
         )
     }
 }
 
 @Composable fun AudioPanel(
     playbackState: StateFlow<PlaybackState>,
+    startingPlaybackSpeedValue: StateFlow<Float>,
+    startingNarratorValue: StateFlow<AudioNarrator>,
     onDismiss: () -> Unit,
     onTapPlayPause: () -> Unit,
     onTapSkipBack: () -> Unit,
-    onTapSkipForward: () -> Unit
+    onTapSkipForward: () -> Unit,
+    onChangePlaybackSpeed: (speed: Float) -> Unit,
+    onChangeNarrator: (narrator: AudioNarrator) -> Unit,
 ) {
 
     val state by playbackState.collectAsState()
+    val startingPlaybackSpeed by startingPlaybackSpeedValue.collectAsState()
+    val startingNarrator by startingNarratorValue.collectAsState()
 
     MaxWidthColumn(
         modifier = Modifier
@@ -86,11 +103,17 @@ import kotlinx.coroutines.flow.StateFlow
 
         VSpacer(12.dp)
 
-        PlaybackSpeedSlider()
+        PlaybackSpeedSlider(
+            startingPlaybackSpeed,
+            onChangePlaybackSpeed
+        )
 
         VSpacer(16.dp)
 
-        NarratorToggle()
+        NarratorToggle(
+            startingNarrator,
+            onChangeNarrator
+        )
 
         VSpacer(32.dp)
     }
@@ -161,8 +184,11 @@ import kotlinx.coroutines.flow.StateFlow
     }
 }
 
-@Composable private fun NarratorToggle() {
-    var isChecked by remember { mutableStateOf(false) }
+@Composable private fun NarratorToggle(
+    startingValue: AudioNarrator,
+    onChangeNarrator: (narrator: AudioNarrator) -> Unit
+) {
+    var isChecked by remember { mutableStateOf(startingValue == ModernSblgnt) }
     
     val switchColor = MaterialTheme.colors.primary
 
@@ -194,7 +220,12 @@ import kotlinx.coroutines.flow.StateFlow
 
         Switch(
             checked = isChecked,
-            onCheckedChange = { checked -> isChecked = checked },
+            onCheckedChange = { checked ->
+                isChecked = checked
+                onChangeNarrator(
+                    if (isChecked) ModernSblgnt else ErasmianPhemister
+                )
+            },
             colors = switchColors,
             modifier = Modifier
                 .padding(horizontal = 32.dp)
@@ -228,9 +259,12 @@ import kotlinx.coroutines.flow.StateFlow
     )
 }
 
-@Composable fun PlaybackSpeedSlider() {
+@Composable fun PlaybackSpeedSlider(
+    startingValue: Float,
+    onChangePlaybackSpeed: (speed: Float) -> Unit
+) {
 
-    var playbackSpeed by remember { mutableStateOf(1.0f) }
+    var playbackSpeed by remember { mutableStateOf(startingValue) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -262,6 +296,7 @@ import kotlinx.coroutines.flow.StateFlow
             value = playbackSpeed,
             onValueChange = { newSpeed ->
                 playbackSpeed = newSpeed
+                onChangePlaybackSpeed(newSpeed)
             },
             valueRange = 0.5f..2.0f,
             steps = 16,

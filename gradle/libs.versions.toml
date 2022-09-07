@@ -64,6 +64,7 @@ androidPreferenceKtx = { module = "androidx.preference:preference-ktx", version.
 
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastorePreferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
