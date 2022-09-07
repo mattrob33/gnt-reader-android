@@ -57,4 +57,6 @@ dependencies {
 
     // Media 3
     implementation(libs.bundles.media3)
+
+    implementation(libs.datastorePreferences)
 }
