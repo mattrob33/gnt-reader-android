@@ -10,6 +10,8 @@ import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
+import com.mattrobertson.greek.reader.settings.Settings
+import com.mattrobertson.greek.reader.settings.SettingsState
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,11 +26,18 @@ class MainViewModel @Inject constructor(
     val concordanceRepo: ConcordanceRepo,
     val vocabRepo: VocabRepo,
     private val audioService: AudioServiceConnection,
-    private val audioSettings: AudioSettings
+    private val audioSettings: AudioSettings,
+    _settings: Settings
 ): ViewModel() {
 
     private val _currentRef = MutableStateFlow(VerseRef(Book.MATTHEW, 1, 1))
     val currentRef = _currentRef.asStateFlow()
+
+    val settings = _settings.settingsState.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        SettingsState.default
+    )
 
     val audioPlaybackState = audioService.playbackState
 

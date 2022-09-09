@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id("kotlin-android")
+    kotlin("kapt")
 }
 
 android {
@@ -32,23 +35,15 @@ android {
 
 dependencies {
 
-    implementation(projects.core.verseref)
+    implementation(projects.core.ui)
 
     implementation(libs.androidCoreKtx)
-    implementation(libs.appcompat)
 
-    implementation(libs.gson)
-    implementation(libs.androidPreferenceKtx)
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.viewmodels.compiler)
 
-    testImplementation("androidx.test:core-ktx:1.4.0")
-    testImplementation("org.robolectric:robolectric:4.3")
+    implementation(libs.datastorePreferences)
 
-    testImplementation("androidx.test.ext:junit:1.1.3")
-    testImplementation("androidx.test:runner:1.4.0")
-    testImplementation("androidx.test:rules:1.4.0")
-
-    testImplementation(libs.jUnit5.api)
-    testImplementation(libs.jUnit5.params)
-    testRuntimeOnly(libs.jUnit5.engine)
-    testRuntimeOnly(libs.jUnit5.vintageEngine)
 }
