@@ -49,16 +49,17 @@ android {
 
 dependencies {
 
-    implementation(projects.core.verseref)
-    implementation(projects.core.dbInternal)
     implementation(projects.core.dbApi)
+    implementation(projects.core.dbInternal)
+    implementation(projects.core.settings)
     implementation(projects.core.ui)
+    implementation(projects.core.verseref)
 
     implementation(projects.feature.audio)
     implementation(projects.feature.concordance)
     implementation(projects.feature.gloss)
     implementation(projects.feature.reading)
-    implementation(projects.feature.settings)
+    implementation(projects.feature.settingsUi)
     implementation(projects.feature.vocab)
 
     // Core
