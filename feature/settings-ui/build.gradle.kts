@@ -1,6 +1,8 @@
+
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -28,28 +30,30 @@ android {
     kotlinOptions {
         jvmTarget = AppConfig.jvmTarget
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
 
     implementation(projects.core.settings)
-    implementation(projects.core.verseref)
+    implementation(projects.core.ui)
 
     implementation(libs.androidCoreKtx)
     implementation(libs.appcompat)
 
-    implementation(libs.gson)
     implementation(libs.androidPreferenceKtx)
 
-    testImplementation("androidx.test:core-ktx:1.4.0")
-    testImplementation("org.robolectric:robolectric:4.3")
+    implementation(libs.lifecycleRuntime)
 
-    testImplementation("androidx.test.ext:junit:1.1.3")
-    testImplementation("androidx.test:runner:1.4.0")
-    testImplementation("androidx.test:rules:1.4.0")
-
-    testImplementation(libs.jUnit5.api)
-    testImplementation(libs.jUnit5.params)
-    testRuntimeOnly(libs.jUnit5.engine)
-    testRuntimeOnly(libs.jUnit5.vintageEngine)
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.viewmodels.compiler)
 }
