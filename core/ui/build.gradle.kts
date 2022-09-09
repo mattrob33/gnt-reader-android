@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.bundles.androidCore)
 
     api(libs.bundles.compose)
+    api(libs.lifecycleRuntime)
 
     // Fix for issue with Compose previews not rendering
     // https://stackoverflow.com/questions/71812710/can-no-longer-view-jetpack-compose-previews-failed-to-instantiate-one-or-more-c
