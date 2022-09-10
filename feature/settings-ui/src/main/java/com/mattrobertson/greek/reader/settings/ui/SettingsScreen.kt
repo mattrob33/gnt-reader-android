@@ -43,8 +43,10 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
 
         MaxSizeColumn(verticalArrangement = Arrangement.Top) {
 
-            TopBar(onBack = onBack)
-            Divider()
+            DialogTopBar(
+                title = "Settings",
+                onDismiss = onBack
+            )
             VSpacer(40.dp)
 
             MaxWidthColumn {
@@ -100,33 +102,6 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
                 onDismiss = { fontChooserVisible = false }
             )
         }
-    }
-}
-
-@Composable private fun TopBar(onBack: () -> Unit) {
-    MaxWidthBox(
-        modifier = Modifier.height(60.dp)
-    ) {
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .size(60.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.h1,
-            fontSize = 24.sp,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
 
