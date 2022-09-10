@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
-import com.mattrobertson.greek.reader.ui.theme.SblGreek
+import com.mattrobertson.greek.reader.ui.theme.Fonts.SblGreek
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.Word

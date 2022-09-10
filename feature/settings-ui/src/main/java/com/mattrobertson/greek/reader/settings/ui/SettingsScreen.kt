@@ -1,17 +1,13 @@
 package com.mattrobertson.greek.reader.settings.ui
 
-import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,9 +48,13 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
 
             MaxWidthColumn {
                 ReaderPreview(settings)
+
                 VSpacer(30.dp)
+
                 FontSizeRow()
+
                 LineSpacingRow()
+
                 FontFamilyRow(
                     font = settings.font,
                     onClick = {
