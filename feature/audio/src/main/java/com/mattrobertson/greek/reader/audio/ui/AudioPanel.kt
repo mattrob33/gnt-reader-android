@@ -79,6 +79,8 @@ import kotlinx.coroutines.flow.StateFlow
             .noRippleClickable {}
     ) {
 
+        Divider()
+
         IconButton(
             onClick = onDismiss,
             modifier = Modifier.align(Alignment.CenterHorizontally)
