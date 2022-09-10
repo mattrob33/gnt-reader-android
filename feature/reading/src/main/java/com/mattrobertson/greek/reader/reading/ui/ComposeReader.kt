@@ -8,18 +8,18 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
+import com.mattrobertson.greek.reader.settings.Settings
+import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.verseref.Verse
 import com.mattrobertson.greek.reader.verseref.VerseRef
@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun ComposeReader(
+    settings: Settings,
     verseRepo: VerseRepo,
     listState: LazyListState,
     onWordSelected: (word: Word) -> Unit
@@ -65,7 +66,7 @@ fun ComposeReader(
 
                     if (chapterRef.chapter == 1) {
                         BookSpacer()
-                        BookTitle(title = getBookTitle(chapterRef.book))
+                        BookTitle(title = getBookTitle(chapterRef.book), settings)
                     }
 
                     var verses by remember { mutableStateOf(emptyList<Verse>()) }
@@ -77,6 +78,7 @@ fun ComposeReader(
                     })
 
                     ChapterText(
+                        settings = settings,
                         chapterRef = chapterRef,
                         verses = verses,
                         onWordSelected = onWordSelected
@@ -115,11 +117,16 @@ fun ReaderPreviewBar(
 }
 
 @Composable
-fun BookTitle(title: String) {
+fun BookTitle(
+    title: String,
+    settings: Settings
+) {
     Column {
         Text(
             text = title,
-            style = MaterialTheme.typography.h1,
+            style = MaterialTheme.typography.h1.copy(
+                fontSize = settings.fontSize * 1.5
+            ),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
@@ -130,6 +137,7 @@ fun BookTitle(title: String) {
 
 @Composable
 fun ChapterText(
+    settings: Settings,
     chapterRef: VerseRef,
     verses: List<Verse>,
     onWordSelected: (word: Word) -> Unit
@@ -140,27 +148,70 @@ fun ChapterText(
 
     var clickedIndex by remember { mutableStateOf(-1) }
 
-    var offset = 0
-
     if (verses.isEmpty()) {
         // hack to speed up loading - this ensures only the first ChapterText is visible and
         // loaded, rather than trying to load all of them (since the initial height is ~0)
         //TODO find a better way of doing this
-        Spacer(
-            modifier = Modifier.height(1200.dp)
+        VSpacer(1200.dp)
+        return
+    }
+
+    chapterText = buildChapterText(
+        settings = settings,
+        chapterRef = chapterRef,
+        verses = verses,
+        wordMap = wordMap,
+        clickedIndex = clickedIndex
+    )
+
+    Column {
+        ClickableText(
+            text = chapterText,
+            style = TextStyle(
+                color = MaterialTheme.colors.onSurface,
+                fontFamily =  settings.font.getComposeFontFamily(),
+                fontSize = settings.fontSize,
+                lineHeight = settings.fontSize * settings.lineSpacing
+            ),
+            modifier = Modifier.padding(horizontal = 20.dp),
+            onClick = { clickOffset ->
+                wordMap.forEach { entry ->
+                    val wordOffset = entry.key
+                    val word = entry.value
+
+                    clickedIndex = clickOffset
+
+                    if (wordOffset > clickOffset)
+                        return@forEach
+
+                    onWordSelected(word)
+                }
+            }
         )
     }
-    else {
-        chapterText = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(fontSize = 48.sp)
-            ) {
-                val text = " ${chapterRef.chapter} "
-                offset += text.length
-                append(text)
-            }
+}
 
-            verses.forEach {
+@Composable private fun buildChapterText(
+    settings: Settings,
+    chapterRef: VerseRef,
+    verses: List<Verse>,
+    wordMap: MutableMap<Int, Word>,
+    clickedIndex: Int
+): AnnotatedString {
+
+    var offset = 0
+
+    return buildAnnotatedString {
+        withStyle(
+            style = SpanStyle(fontSize = settings.fontSize * 1.5)
+        ) {
+            val text = " ${chapterRef.chapter} "
+            offset += text.length
+            append(text)
+        }
+
+        verses.forEach {
+            if (settings.showVerseNumbers) {
                 withStyle(
                     style = SpanStyle(
                         fontSize = 16.sp,
@@ -171,46 +222,29 @@ fun ChapterText(
                     offset += text.length
                     append(text)
                 }
+            }
 
-                it.words.forEach { word ->
-                    wordMap[offset] = word
-                    val oldOffset = offset
-                    offset += word.text.length + 1
+            it.words.forEach { word ->
+                wordMap[offset] = word
+                val oldOffset = offset
+                offset += word.text.length + 1
 
-                    val isClicked = clickedIndex in oldOffset..offset
+                val isClicked = clickedIndex in oldOffset..offset
 
-                    val wordFontWeight =
-                        if (isClicked)
-                            FontWeight.Bold
-                        else
-                            FontWeight.Normal
+                val wordFontWeight =
+                    if (isClicked)
+                        FontWeight.Bold
+                    else
+                        FontWeight.Normal
 
-                    withStyle(style = SpanStyle(fontWeight = wordFontWeight)) {
-                        append("${word.text} ")
-                    }
+                withStyle(style = SpanStyle(fontWeight = wordFontWeight)) {
+                    append("${word.text} ")
                 }
             }
-        }
 
-        Column {
-            ClickableText(
-                text = chapterText,
-                style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
-                modifier = Modifier.padding(horizontal = 20.dp),
-                onClick = { clickOffset ->
-                    wordMap.forEach { entry ->
-                        val wordOffset = entry.key
-                        val word = entry.value
-
-                        clickedIndex = clickOffset
-
-                        if (wordOffset > clickOffset)
-                            return@forEach
-
-                        onWordSelected(word)
-                    }
-                }
-            )
+            if (settings.versesOnNewLines) {
+                append("\n")
+            }
         }
     }
 }

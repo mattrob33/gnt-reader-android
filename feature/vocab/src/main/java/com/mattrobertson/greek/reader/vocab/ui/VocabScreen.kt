@@ -3,35 +3,35 @@ package com.mattrobertson.greek.reader.vocab.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.api.models.GlossModel
 import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
+import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.ui.lib.DialogTopBar
 import com.mattrobertson.greek.reader.ui.lib.ScrollableChipRow
 import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
-import com.mattrobertson.greek.reader.verseref.*
-import com.mattrobertson.greek.reader.verseref.getBookTitle
+import com.mattrobertson.greek.reader.verseref.Book
+import com.mattrobertson.greek.reader.verseref.VerseRef
+import com.mattrobertson.greek.reader.verseref.getBookTitleLocalized
 import kotlinx.coroutines.runBlocking
 
 @Composable
 fun VocabScreen(
     ref: VerseRef,
     vocabRepo: VocabRepo,
+    settings: Settings,
     onDismiss: () -> Unit
 ) {
     Column(
@@ -51,6 +51,7 @@ fun VocabScreen(
             ref = ref,
             words = words,
             onDismiss = onDismiss,
+            settings = settings,
             onChangeMaxOcc = {
                 maxOcc = it
             }
@@ -62,9 +63,12 @@ fun VocabScreen(
 private fun VocabScreenInternal(
     ref: VerseRef,
     words: List<GlossModel>,
+    settings: Settings,
     onDismiss: () -> Unit,
     onChangeMaxOcc: (max: Int) -> Unit
 ) {
+    val labelColor = MaterialTheme.colors.primary.copy(alpha = 0.8f)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,9 +79,7 @@ private fun VocabScreenInternal(
             onDismiss = onDismiss
         )
 
-        LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
+        LazyColumn {
             item {
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -112,26 +114,37 @@ private fun VocabScreenInternal(
                         item {
                             Text(
                                 text = occ,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-                                fontSize = 20.sp
+                                color = labelColor,
+                                fontFamily = FontFamily.Serif,
+                                fontSize = settings.fontSize * 0.8,
+                                modifier = Modifier.padding(horizontal = 16.dp)
                             )
-                            Divider()
+                            Divider(
+                                color = labelColor,
+                                modifier = Modifier.padding(horizontal = 14.dp)
+                            )
                         }
 
                         wordsForOcc.forEach { word ->
                             item {
                                 Text(
                                     text = buildAnnotatedString {
-                                        append("${word.lex} - ")
+                                        withStyle(SpanStyle(
+                                            fontFamily = settings.font.getComposeFontFamily(),
+                                            fontSize = settings.fontSize
+                                        )) {
+                                            append("${word.lex} - ")
+                                        }
 
                                         withStyle(SpanStyle(
                                             fontFamily = FontFamily.Serif,
-                                            fontSize = 18.sp
+                                            fontSize = settings.fontSize * 0.8
                                         )) {
                                             append("${word.gloss} (${word.occ}x)")
                                         }
                                     },
-                                    color = MaterialTheme.colors.onSurface
+                                    color = MaterialTheme.colors.onSurface,
+                                    modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                             }
                         }
@@ -161,6 +174,7 @@ private fun VocabScreenPreview() {
                 GlossModel("lex", "gloss", 1),
                 GlossModel("lex", "gloss", 0),
             ),
+            settings = Settings.default,
             onDismiss = {},
             onChangeMaxOcc = {}
         )
@@ -178,7 +192,7 @@ fun VocabOccChipRow(
         items = chips.map { "${it}x" },
         backgroundColor = MaterialTheme.colors.primary,
         outlineColor = MaterialTheme.colors.primary,
-        textColor = MaterialTheme.colors.onPrimary,
+        textColor = MaterialTheme.colors.primary,
         onItemSelected = { index ->
             val occ = chips[index]
             onOccChanged(occ)

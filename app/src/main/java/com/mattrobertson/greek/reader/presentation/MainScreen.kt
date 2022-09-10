@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.audio.ui.AudioPanel
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
+import com.mattrobertson.greek.reader.settings.ui.SettingsScreen
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.VerseRef
@@ -65,6 +66,8 @@ fun MainScreen(
 
     var word by remember { mutableStateOf<Word?>(null) }
 
+    val settings by viewModel.settings.collectAsState()
+
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             ModalBottomSheetLayout(
@@ -74,7 +77,8 @@ fun MainScreen(
                             word,
                             viewModel.verseRepo,
                             viewModel.glossesRepo,
-                            viewModel.concordanceRepo
+                            viewModel.concordanceRepo,
+                            settings
                         )
                     }
 
@@ -119,6 +123,7 @@ fun MainScreen(
                     }
                 ) {
                     ComposeReader(
+                        settings = settings,
                         verseRepo = viewModel.verseRepo,
                         listState = listState,
                         onWordSelected = {
@@ -133,8 +138,8 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = audioControlsVisible,
-                enter = slideInVertically(initialOffsetY = { height -> height / 4 }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut(),
+                enter = slideInVertically(initialOffsetY = { height -> height / 4 }),
+                exit = slideOutVertically(targetOffsetY = { height -> height }),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 AudioPanel(
@@ -152,8 +157,8 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = (screen == Screen.Contents),
-                enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut()
+                enter = slideInVertically(initialOffsetY = { height -> height }),
+                exit = slideOutVertically(targetOffsetY = { height -> height })
             ) {
                 TableOfContents(
                     onSelected = { position ->
@@ -174,14 +179,27 @@ fun MainScreen(
 
             AnimatedVisibility(
                 visible = (screen == Screen.Vocab),
-                enter = slideInVertically(initialOffsetY = { height -> height }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { height -> height }) + fadeOut()
+                enter = slideInVertically(initialOffsetY = { height -> height }),
+                exit = slideOutVertically(targetOffsetY = { height -> height })
             ) {
                 val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
                 VocabScreen(
                     ref,
                     viewModel.vocabRepo,
+                    settings = settings,
                     onDismiss = {
+                        screen = Screen.Reader
+                    }
+                )
+            }
+
+            AnimatedVisibility(
+                visible = (screen == Screen.Settings),
+                enter = slideInVertically(initialOffsetY = { height -> height }),
+                exit = slideOutVertically(targetOffsetY = { height -> height })
+            ) {
+                SettingsScreen(
+                    onBack = {
                         screen = Screen.Reader
                     }
                 )
