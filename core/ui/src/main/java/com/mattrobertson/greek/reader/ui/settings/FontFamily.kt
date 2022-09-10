@@ -1,5 +1,7 @@
 package com.mattrobertson.greek.reader.ui.settings
 
+import com.mattrobertson.greek.reader.ui.theme.SblGreek
+
 sealed class FontFamily(
 	val id: String,
 	val displayName: String
@@ -65,3 +67,7 @@ sealed class FontFamily(
 	}
 }
 
+fun FontFamily.getComposeFontFamily(): androidx.compose.ui.text.font.FontFamily {
+	return SblGreek
+//	TODO()
+}

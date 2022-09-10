@@ -51,7 +51,7 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
             VSpacer(40.dp)
 
             MaxWidthColumn {
-                ReaderPreview()
+                ReaderPreview(settings)
                 VSpacer(30.dp)
                 FontSizeRow()
                 LineSpacingRow()
@@ -117,22 +117,22 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
     }
 }
 
-@Composable private fun ReaderPreview() {
-    MaxWidthBox(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .border(2.dp, MaterialTheme.colors.onBackground)
-    ) {
-        Text(
-            text = "Reader Preview",
-            style = MaterialTheme.typography.h3,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(80.dp)
-        )
-    }
-}
+//@Composable private fun ReaderPreview() {
+//    MaxWidthBox(
+//        modifier = Modifier
+//            .padding(horizontal = 20.dp)
+//            .border(2.dp, MaterialTheme.colors.onBackground)
+//    ) {
+//        Text(
+//            text = "Reader Preview",
+//            style = MaterialTheme.typography.h3,
+//            color = MaterialTheme.colors.onBackground,
+//            modifier = Modifier
+//                .align(Alignment.Center)
+//                .padding(80.dp)
+//        )
+//    }
+//}
 
 @Composable private fun FontSizeRow() {
     SettingsRow {
@@ -250,101 +250,3 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
     )
 }
 
-@Composable private fun FontChooser(
-    fonts: List<FontFamily>,
-    selectedFont: FontFamily,
-    onSelectFont: (font: FontFamily) -> Unit,
-    onDismiss: () -> Unit
-) {
-    MaxWidthColumn(
-        modifier = Modifier
-            .background(MaterialTheme.colors.background)
-            .heightIn(200.dp, 400.dp)
-            .noRippleClickable {}
-    ) {
-        Divider()
-        FontChooserTopBar(onDismiss = onDismiss)
-        Divider()
-
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 8.dp)
-        ) {
-            items(fonts) { font ->
-                FontItem(
-                    font = font,
-                    isSelected = (selectedFont.id == font.id),
-                    onSelect = { onSelectFont(font) }
-                )
-            }
-        }
-    }
-}
-
-@Composable private fun FontItem(
-    font: FontFamily,
-    isSelected: Boolean,
-    onSelect: () -> Unit
-) {
-   MaxWidthRow(
-       horizontalArrangement = Arrangement.Start,
-       modifier = Modifier
-           .clickable { onSelect() }
-           .padding(vertical = 8.dp)
-   ) {
-
-       HSpacer(20.dp)
-
-       if (isSelected) {
-           Icon(
-               imageVector = Icons.Rounded.Check,
-               contentDescription = null,
-               tint = MaterialTheme.colors.onBackground,
-               modifier = Modifier.size(20.dp)
-           )
-       }
-       else {
-           HSpacer(20.dp)
-       }
-
-       HSpacer(20.dp)
-
-       Text(
-           text = font.displayName,
-           fontFamily = DefaultMaterialFont,
-           fontSize = 20.sp,
-           color = MaterialTheme.colors.onBackground
-       )
-   }
-}
-
-@Composable private fun FontChooserTopBar(
-    onDismiss: () -> Unit
-) {
-    MaxWidthBox(
-        modifier = Modifier
-            .height(40.dp)
-            .noRippleClickable {}
-    ) {
-        Text(
-            text = "Font",
-            style = MaterialTheme.typography.h1,
-            fontSize = 24.sp,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        IconButton(
-            onClick = onDismiss,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .height(40.dp)
-                .width(60.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = "Close font chooser",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-    }
-}
