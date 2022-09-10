@@ -35,6 +35,7 @@ sealed class FontFamily(
 		val default = Cardo
 
 		val allFonts = listOf(
+			Cardo,
 			Andika,
 			Artemisia,
 			Bodoni,

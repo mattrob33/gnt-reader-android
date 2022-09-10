@@ -3,8 +3,8 @@ package com.mattrobertson.greek.reader.settings.ui
 import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mattrobertson.greek.reader.settings.SettingsStore
 import com.mattrobertson.greek.reader.settings.Settings
-import com.mattrobertson.greek.reader.settings.SettingsState
 import com.mattrobertson.greek.reader.ui.settings.FontFamily
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,22 +13,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val _settings: Settings
+    private val settingsStore: SettingsStore
 ): ViewModel() {
 
-    val settings = _settings.settingsState.stateIn(
+    val settings = settingsStore.settings.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        SettingsState.default
+        Settings.default
     )
 
-    fun setFont(font: FontFamily) = _settings.setFont(font)
+    fun setFont(font: FontFamily) = settingsStore.setFont(font)
 
-    fun setFontSize(sp: TextUnit) = _settings.setFontSize(sp)
+    fun setFontSize(sp: TextUnit) = settingsStore.setFontSize(sp)
 
-    fun setLineSpacing(sp: TextUnit) = _settings.setLineSpacing(sp)
+    fun setLineSpacingMultiplier(multiplier: Float) = settingsStore.setLineSpacingMultiplier(multiplier)
 
-    fun setShowVerseNumbers(show: Boolean) = _settings.setShowVerseNumbers(show)
+    fun setShowVerseNumbers(show: Boolean) = settingsStore.setShowVerseNumbers(show)
 
-    fun setVersesOnNewLines(show: Boolean) = _settings.setVersesOnNewLines(show)
+    fun setVersesOnNewLines(show: Boolean) = settingsStore.setVersesOnNewLines(show)
 }
