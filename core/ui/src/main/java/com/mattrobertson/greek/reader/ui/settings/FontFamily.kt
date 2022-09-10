@@ -1,6 +1,7 @@
 package com.mattrobertson.greek.reader.ui.settings
 
-import com.mattrobertson.greek.reader.ui.theme.SblGreek
+import com.mattrobertson.greek.reader.ui.settings.FontFamily.*
+import com.mattrobertson.greek.reader.ui.theme.Fonts
 
 sealed class FontFamily(
 	val id: String,
@@ -31,15 +32,13 @@ sealed class FontFamily(
 	object Philostratos: FontFamily("philostratos", "Philostratos")
 
 	companion object {
-		val default = SblGreek
+		val default = Cardo
 
 		val allFonts = listOf(
-			SblGreek,
 			Andika,
 			Artemisia,
 			Bodoni,
 			Brill,
-			Cardo,
 			Charis,
 			DidotClassic,
 			Doulos,
@@ -54,6 +53,7 @@ sealed class FontFamily(
 			Orpheus,
 			Philostratos,
 			Porson,
+			SblGreek,
 		)
 
 		fun fromId(id: String): FontFamily {
@@ -68,6 +68,26 @@ sealed class FontFamily(
 }
 
 fun FontFamily.getComposeFontFamily(): androidx.compose.ui.text.font.FontFamily {
-	return SblGreek
-//	TODO()
+	return when (this) {
+		Andika -> Fonts.Andika
+		Artemisia -> Fonts.Artemisia
+		Bodoni -> Fonts.Bodoni
+		Brill -> Fonts.Brill
+		Cardo -> Fonts.Cardo
+		Charis -> Fonts.Charis
+		DidotClassic -> Fonts.DidotClassic
+		Doulos -> Fonts.Doulos
+		Elpis -> Fonts.Elpis
+		Galatea -> Fonts.Galatea
+		Galatia -> Fonts.Galatia
+		Gentium -> Fonts.Gentium
+		Heraklit -> Fonts.Heraklit
+		Lato -> Fonts.Lato
+		NeoHellenic -> Fonts.NeoHellenic
+		Olga -> Fonts.Olga
+		Orpheus -> Fonts.Orpheus
+		Philostratos -> Fonts.Philostratos
+		Porson -> Fonts.Porson
+		SblGreek -> Fonts.SblGreek
+	}
 }
