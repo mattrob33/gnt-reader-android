@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,9 +52,21 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
 
                 VSpacer(30.dp)
 
-                FontSizeRow()
+                FontSizeRow(
+                    fontSize = settings.fontSize,
+                    onChange = { size ->
+                        viewModel.setFontSize(size)
+                    }
+                )
 
-                LineSpacingRow()
+                VSpacer(16.dp)
+
+                LineSpacingRow(
+                    lineSpacing = settings.lineSpacing,
+                    onChange = { lineSpacing ->
+                        viewModel.setLineSpacingMultiplier(lineSpacing)
+                    }
+                )
 
                 FontFamilyRow(
                     font = settings.font,
@@ -117,37 +130,50 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
     }
 }
 
-//@Composable private fun ReaderPreview() {
-//    MaxWidthBox(
-//        modifier = Modifier
-//            .padding(horizontal = 20.dp)
-//            .border(2.dp, MaterialTheme.colors.onBackground)
-//    ) {
-//        Text(
-//            text = "Reader Preview",
-//            style = MaterialTheme.typography.h3,
-//            color = MaterialTheme.colors.onBackground,
-//            modifier = Modifier
-//                .align(Alignment.Center)
-//                .padding(80.dp)
-//        )
-//    }
-//}
+@Composable private fun FontSizeRow(
+    fontSize: TextUnit,
+    onChange: (size: TextUnit) -> Unit
+) {
+    var sliderValue by remember { mutableStateOf(fontSize.value) }
 
-@Composable private fun FontSizeRow() {
-    SettingsRow {
+    SettingsColumnRow {
         SettingsLabel(
             text = "Font size",
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.Start)
+        )
+
+        Slider(
+            value = sliderValue,
+            onValueChange = {
+                sliderValue = it
+                onChange(it.sp)
+            },
+            valueRange = 14f..30f,
+            steps = 9
         )
     }
 }
 
-@Composable private fun LineSpacingRow() {
-    SettingsRow {
+@Composable private fun LineSpacingRow(
+    lineSpacing: Float,
+    onChange: (spacingMultiplier: Float) -> Unit
+) {
+    var sliderValue by remember { mutableStateOf(lineSpacing) }
+
+    SettingsColumnRow {
         SettingsLabel(
             text = "Line spacing",
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.Start)
+        )
+
+        Slider(
+            value = sliderValue,
+            onValueChange = {
+                sliderValue = it
+                onChange(it)
+            },
+            valueRange = 1.0f..2.0f,
+            steps = 6
         )
     }
 }
@@ -221,6 +247,18 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
             modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
+}
+
+@Composable private fun SettingsColumnRow(
+    onClick: () -> Unit = {},
+    content: @Composable ColumnScope.() -> Unit
+) {
+    MaxWidthColumn(
+        content = content,
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(horizontal = 24.dp)
+    )
 }
 
 @Composable private fun SettingsRow(

@@ -11,18 +11,18 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mattrobertson.greek.reader.settings.SettingsState
+import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 
 @Composable fun ReaderPreview(
-    settings: SettingsState
+    settings: Settings
 ) {
     val text = getPreviewText(settings)
 
     Text(
         text = text,
         modifier = Modifier
-            .height(200.dp)
+            .height(250.dp)
             .padding(horizontal = 20.dp)
             .border(0.5.dp, MaterialTheme.colors.onBackground)
             .padding(horizontal = 20.dp)
@@ -30,12 +30,12 @@ import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
     )
 }
 
-@Composable private fun getPreviewText(settings: SettingsState): AnnotatedString {
+@Composable private fun getPreviewText(settings: Settings): AnnotatedString {
 
     val color = MaterialTheme.colors.onBackground
 
     return buildAnnotatedString {
-        withStyle(ParagraphStyle(lineHeight = settings.lineSpacing)) {
+        withStyle(ParagraphStyle(lineHeight = settings.fontSize * settings.lineSpacing)) {
             withStyle(
                 SpanStyle(
                     color = color,
@@ -46,7 +46,7 @@ import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
                 for (verse in previewVerses) {
                     if (settings.showVerseNumbers) {
                         withStyle(SpanStyle(fontSize = 16.sp, baselineShift = BaselineShift.Superscript)) {
-                            append(verse.verseNum.toString())
+                            append("${verse.verseNum} ")
                         }
                     }
 
