@@ -1,19 +1,17 @@
 package com.mattrobertson.greek.reader.ui.lib
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowBackIos
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 
 @Composable
@@ -21,134 +19,54 @@ fun DialogTopBar(
     title: String,
     onDismiss: () -> Unit
 ) {
-    DialogTopBarCloseRight(title, onDismiss)
-}
-
-@Composable
-fun DialogTopBarCloseRight(
-    title: String,
-    onDismiss: () -> Unit
-) {
-    Surface(
-        color = MaterialTheme.colors.surface,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp),
-        elevation = 4.dp
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
+    MaxWidthColumn {
+        MaxWidthBox(
+            modifier = Modifier.height(60.dp)
         ) {
             IconButton(
-                onClick = {
-                    onDismiss()
-                },
-                modifier = Modifier.align(Alignment.CenterEnd)
+                onClick = onDismiss,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .size(60.dp)
             ) {
-                Icon(Icons.Rounded.Close, "Close", tint = MaterialTheme.colors.onSurface)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Dismiss",
+                    tint = MaterialTheme.colors.onBackground
+                )
             }
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.h2,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(vertical = 8.dp),
-                color = MaterialTheme.colors.onSurface
+                fontFamily = FontFamily.Serif,
+                fontSize = 22.sp,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
+        Divider()
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun DialogTopBarCloseRightPreview() {
+fun DialogTopBar_Preview_Light() {
     AppTheme {
-        DialogTopBarCloseRight(
+        DialogTopBar(
             title = "Vocabulary",
             onDismiss = {}
         )
     }
 }
 
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF222222
+)
 @Composable
-fun DialogTopBarCloseLeft(
-    title: String,
-    onDismiss: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.surface),
-    ) {
-        IconButton(
-            onClick = {
-                onDismiss()
-            },
-            modifier = Modifier.align(Alignment.CenterStart)
-        ) {
-            Icon(Icons.Rounded.ArrowBack, "Close", tint = MaterialTheme.colors.onSurface)
-        }
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h2,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(vertical = 8.dp),
-            color = MaterialTheme.colors.onSurface
-        )
-    }
-}
-
-@Preview
-@Composable
-fun DialogTopBarCloseLeftPreview() {
-    AppTheme {
-        DialogTopBarCloseLeft(
-            title = "Vocabulary",
-            onDismiss = {}
-        )
-    }
-}
-
-@Composable
-fun DialogTopBarAllLeft(
-    title: String,
-    onDismiss: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.surface),
-    ) {
-        IconButton(
-            onClick = {
-                onDismiss()
-            }
-        ) {
-            Icon(Icons.Rounded.ArrowBack, "Close", tint = MaterialTheme.colors.onSurface)
-        }
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h2,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(vertical = 8.dp),
-            color = MaterialTheme.colors.onSurface
-        )
-    }
-}
-
-@Preview
-@Composable
-fun DialogTopBarAllLeftPreview() {
-    AppTheme {
-        DialogTopBarAllLeft(
+fun DialogTopBar_Preview_Dark() {
+    AppTheme(darkTheme = true) {
+        DialogTopBar(
             title = "Vocabulary",
             onDismiss = {}
         )
