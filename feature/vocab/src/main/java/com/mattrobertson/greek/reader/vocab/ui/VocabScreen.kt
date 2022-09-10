@@ -67,6 +67,8 @@ private fun VocabScreenInternal(
     onDismiss: () -> Unit,
     onChangeMaxOcc: (max: Int) -> Unit
 ) {
+    val labelColor = MaterialTheme.colors.primary.copy(alpha = 0.8f)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -112,12 +114,13 @@ private fun VocabScreenInternal(
                         item {
                             Text(
                                 text = occ,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                                color = labelColor,
                                 fontFamily = FontFamily.Serif,
                                 fontSize = settings.fontSize * 0.8,
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
                             Divider(
+                                color = labelColor,
                                 modifier = Modifier.padding(horizontal = 14.dp)
                             )
                         }
