@@ -11,6 +11,7 @@ import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.gloss.ui.Gloss
+import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.ui.lib.DragHandle
 import com.mattrobertson.greek.reader.verseref.Word
 
@@ -19,18 +20,15 @@ fun LexBottomSheetContent(
     word: Word,
     verseRepo: VerseRepo,
     glossesRepo: GlossesRepo,
-    concordanceRepo: ConcordanceRepo
+    concordanceRepo: ConcordanceRepo,
+    settings: Settings
 ) {
     Column(
         modifier = Modifier.padding(top = 12.dp)
     ) {
-
         DragHandle()
-
-        Gloss(word, glossesRepo)
-
+        Gloss(word, glossesRepo, settings)
         Divider()
-
-        Concordance(word, verseRepo, concordanceRepo)
+        Concordance(word, verseRepo, concordanceRepo, settings)
     }
 }

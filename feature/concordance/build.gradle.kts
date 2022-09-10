@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation(projects.core.verseref)
     implementation(projects.core.dbApi)
+    implementation(projects.core.settings)
     implementation(projects.core.ui)
 
     implementation(libs.androidCoreKtx)
