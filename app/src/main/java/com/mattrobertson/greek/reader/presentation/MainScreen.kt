@@ -119,7 +119,10 @@ fun MainScreen(
                         }
                     }
                 ) {
+                    val settings by viewModel.settings.collectAsState()
+
                     ComposeReader(
+                        settings = settings,
                         verseRepo = viewModel.verseRepo,
                         listState = listState,
                         onWordSelected = {
