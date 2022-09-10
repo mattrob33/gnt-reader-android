@@ -66,6 +66,8 @@ fun MainScreen(
 
     var word by remember { mutableStateOf<Word?>(null) }
 
+    val settings by viewModel.settings.collectAsState()
+
     AppTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             ModalBottomSheetLayout(
@@ -75,7 +77,8 @@ fun MainScreen(
                             word,
                             viewModel.verseRepo,
                             viewModel.glossesRepo,
-                            viewModel.concordanceRepo
+                            viewModel.concordanceRepo,
+                            settings
                         )
                     }
 
@@ -119,8 +122,6 @@ fun MainScreen(
                         }
                     }
                 ) {
-                    val settings by viewModel.settings.collectAsState()
-
                     ComposeReader(
                         settings = settings,
                         verseRepo = viewModel.verseRepo,
@@ -185,6 +186,7 @@ fun MainScreen(
                 VocabScreen(
                     ref,
                     viewModel.vocabRepo,
+                    settings = settings,
                     onDismiss = {
                         screen = Screen.Reader
                     }

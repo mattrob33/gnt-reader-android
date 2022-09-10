@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
+import com.mattrobertson.greek.reader.settings.Settings
+import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 import com.mattrobertson.greek.reader.ui.theme.Fonts.SblGreek
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
@@ -32,7 +34,8 @@ import kotlinx.coroutines.runBlocking
 fun Concordance(
     word: Word,
     verseRepo: VerseRepo,
-    concordanceRepo: ConcordanceRepo
+    concordanceRepo: ConcordanceRepo,
+    settings: Settings
 ) {
     val concordanceList = runBlocking {
         concordanceRepo.getConcordanceEntries(word.lexicalForm)
@@ -53,7 +56,7 @@ fun Concordance(
                     ) {
                         withStyle(
                             style = SpanStyle(
-                                fontSize = 18.sp,
+                                fontSize = settings.fontSize * 0.9,
                                 fontFamily = FontFamily.Serif,
                                 fontWeight = FontWeight.Bold
                             )
@@ -63,7 +66,7 @@ fun Concordance(
 
                         withStyle(
                             style = SpanStyle(
-                                fontSize = 16.sp,
+                                fontSize = settings.fontSize * 0.8,
                                 fontFamily = FontFamily.Serif,
                                 fontWeight = FontWeight.Normal
                             )
@@ -83,7 +86,7 @@ fun Concordance(
                     horizontal = 16.dp,
                     vertical = 16.dp
                 ),
-                fontSize = 18.sp,
+                fontSize = settings.fontSize * 0.9,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
                 text = buildAnnotatedString {
@@ -93,9 +96,9 @@ fun Concordance(
 
                     withStyle(
                         style = SpanStyle(
-                            fontSize = 22.sp,
+                            fontSize = settings.fontSize,
                             fontWeight = FontWeight.Normal,
-                            fontFamily = SblGreek
+                            fontFamily = settings.font.getComposeFontFamily()
                         )
                     ) {
                         val ref = VerseRef(

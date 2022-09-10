@@ -14,14 +14,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
-import com.mattrobertson.greek.reader.ui.theme.Fonts.SblGreek
+import com.mattrobertson.greek.reader.settings.Settings
+import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 import com.mattrobertson.greek.reader.verseref.Word
 import kotlinx.coroutines.runBlocking
 
 @Composable
 fun Gloss(
     word: Word,
-    glossesRepo: GlossesRepo
+    glossesRepo: GlossesRepo,
+    settings: Settings
 ) {
     val gloss = runBlocking {
         glossesRepo.getGloss(word.lexicalForm)
@@ -31,13 +33,13 @@ fun Gloss(
         modifier = Modifier.padding(16.dp),
         text = buildAnnotatedString {
             withStyle(
-                style = ParagraphStyle(lineHeight = 28.sp)
+                style = ParagraphStyle(lineHeight = settings.fontSize * 1.2)
             ) {
                 withStyle(
                     style = SpanStyle(
-                        fontSize = 22.sp,
+                        fontSize = settings.fontSize,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = SblGreek
+                        fontFamily = settings.font.getComposeFontFamily()
                     )
                 ) {
                     append("${word.lexicalForm}\n")
@@ -46,7 +48,7 @@ fun Gloss(
 
                 withStyle(
                     style = SpanStyle(
-                        fontSize = 18.sp,
+                        fontSize = settings.fontSize * 0.8,
                         fontFamily = FontFamily.SansSerif
                     )
                 ) {
@@ -55,7 +57,7 @@ fun Gloss(
 
                 withStyle(
                     style = SpanStyle(
-                        fontSize = 18.sp,
+                        fontSize = settings.fontSize * 0.8,
                         fontFamily = FontFamily.SansSerif,
                         fontStyle = FontStyle.Italic
                     )
