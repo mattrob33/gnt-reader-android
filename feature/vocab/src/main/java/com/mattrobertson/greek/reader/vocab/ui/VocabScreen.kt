@@ -3,16 +3,19 @@ package com.mattrobertson.greek.reader.vocab.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mattrobertson.greek.reader.db.api.models.GlossModel
 import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
@@ -117,11 +120,11 @@ private fun VocabScreenInternal(
                                 color = labelColor,
                                 fontFamily = FontFamily.Serif,
                                 fontSize = settings.fontSize * 0.8,
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
-                            Divider(
-                                color = labelColor,
                                 modifier = Modifier.padding(horizontal = 14.dp)
+                            )
+                            GradientDivider(
+                                color = labelColor,
+                                modifier = Modifier.padding(start = 14.dp)
                             )
                         }
 
@@ -197,5 +200,37 @@ fun VocabOccChipRow(
             val occ = chips[index]
             onOccChanged(occ)
         }
+    )
+}
+
+@Composable
+fun GradientDivider(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colors.onSurface,
+    thickness: Dp = 1.dp,
+    startIndent: Dp = 0.dp
+) {
+    val indentMod = if (startIndent.value != 0f) {
+        Modifier.padding(start = startIndent)
+    } else {
+        Modifier
+    }
+    val targetThickness = if (thickness == Dp.Hairline) {
+        (1f / LocalDensity.current.density).dp
+    } else {
+        thickness
+    }
+    Box(
+        modifier.then(indentMod)
+            .fillMaxWidth()
+            .height(targetThickness)
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        color,
+                        color.copy(alpha = 0.2f)
+                    )
+                )
+            )
     )
 }
