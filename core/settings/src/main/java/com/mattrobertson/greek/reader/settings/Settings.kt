@@ -14,7 +14,7 @@ data class Settings(
     companion object {
         val default = Settings(
             FontFamily.default,
-            16.sp,
+            22.sp,
             1.5f,
             showVerseNumbers = true,
             versesOnNewLines = false
