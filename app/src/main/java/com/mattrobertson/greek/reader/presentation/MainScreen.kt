@@ -25,6 +25,7 @@ import com.mattrobertson.greek.reader.audio.ui.AudioPanel
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
 import com.mattrobertson.greek.reader.settings.ui.SettingsScreen
+import com.mattrobertson.greek.reader.ui.lib.MaxWidthColumn
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import com.mattrobertson.greek.reader.verseref.VerseRef
@@ -69,140 +70,159 @@ fun MainScreen(
     val settings by viewModel.settings.collectAsState()
 
     AppTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
-            ModalBottomSheetLayout(
-                sheetContent = {
-                    word?.let { word ->
-                        LexBottomSheetContent(
-                            word,
-                            viewModel.verseRepo,
-                            viewModel.glossesRepo,
-                            viewModel.concordanceRepo,
-                            settings
-                        )
-                    }
+        CompositionLocalProvider(LocalElevationOverlay provides null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                ModalBottomSheetLayout(
+                    sheetContent = {
+                        word?.let { word ->
+                            LexBottomSheetContent(
+                                word,
+                                viewModel.verseRepo,
+                                viewModel.glossesRepo,
+                                viewModel.concordanceRepo,
+                                settings
+                            )
+                        }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-                },
-                sheetState = bottomSheetState,
-                sheetShape = RoundedCornerShape(8.dp),
-                scrimColor = Color.Unspecified,
-            ) {
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigation(
-                            backgroundColor = MaterialTheme.colors.surface,
-                            contentColor = MaterialTheme.colors.onSurface,
-                        ) {
-                            val navBackStackEntry by navController.currentBackStackEntryAsState()
-                            val currentDestination = navBackStackEntry?.destination
-                            bottomNavItems.forEach { bottomNavItem ->
-                                BottomNavigationItem(
-                                    icon = { Icon(bottomNavItem.icon, contentDescription = null) },
-                                    label = { Text(stringResource(bottomNavItem.label)) },
-                                    selected = currentDestination?.hierarchy?.any { it.route == bottomNavItem.route } == true,
-                                    onClick = {
-                                        when (bottomNavItem) {
-                                            BottomNavItem.Contents -> {
-                                                screen = Screen.Contents
-                                            }
-                                            BottomNavItem.Vocab -> {
-                                                screen = Screen.Vocab
-                                            }
-                                            BottomNavItem.Audio -> {
-                                                audioControlsVisible = !audioControlsVisible
-                                            }
-                                            BottomNavItem.Settings -> {
-                                                screen = Screen.Settings
-                                            }
-                                        }
-                                    }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    },
+                    sheetState = bottomSheetState,
+                    sheetShape = RoundedCornerShape(8.dp),
+                    scrimColor = Color.Unspecified,
+                ) {
+                    Scaffold(
+                        bottomBar = {
+                            MaxWidthColumn {
+
+                                Divider(
+                                    thickness = 1.5.dp,
+                                    color = MaterialTheme.colors.onBackground.copy(
+                                        red = MaterialTheme.colors.onBackground.red * 0.5f,
+                                        blue = MaterialTheme.colors.onBackground.blue * 0.5f,
+                                        green = MaterialTheme.colors.onBackground.green * 0.5f
+                                    )
                                 )
+
+                                BottomNavigation(
+                                    backgroundColor = MaterialTheme.colors.background,
+                                    contentColor = MaterialTheme.colors.onBackground,
+                                ) {
+                                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                    val currentDestination = navBackStackEntry?.destination
+                                    bottomNavItems.forEach { bottomNavItem ->
+                                        BottomNavigationItem(
+                                            icon = {
+                                                Icon(
+                                                    bottomNavItem.icon,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colors.onBackground
+                                                )
+                                            },
+                                            selected = currentDestination?.hierarchy?.any { it.route == bottomNavItem.route } == true,
+                                            onClick = {
+                                                when (bottomNavItem) {
+                                                    BottomNavItem.Contents -> {
+                                                        screen = Screen.Contents
+                                                    }
+                                                    BottomNavItem.Vocab -> {
+                                                        screen = Screen.Vocab
+                                                    }
+                                                    BottomNavItem.Audio -> {
+                                                        audioControlsVisible = !audioControlsVisible
+                                                    }
+                                                    BottomNavItem.Settings -> {
+                                                        screen = Screen.Settings
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
                             }
                         }
-                    }
-                ) {
-                    ComposeReader(
-                        settings = settings,
-                        verseRepo = viewModel.verseRepo,
-                        listState = listState,
-                        onWordSelected = {
-                            word = it
-                            coroutineScope.launch {
-                                bottomSheetState.show()
+                    ) {
+                        ComposeReader(
+                            settings = settings,
+                            verseRepo = viewModel.verseRepo,
+                            listState = listState,
+                            onWordSelected = {
+                                word = it
+                                coroutineScope.launch {
+                                    bottomSheetState.show()
+                                }
                             }
+                        )
+                    }
+                }
+
+                AnimatedVisibility(
+                    visible = audioControlsVisible,
+                    enter = slideInVertically(initialOffsetY = { height -> height / 4 }),
+                    exit = slideOutVertically(targetOffsetY = { height -> height }),
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) {
+                    AudioPanel(
+                        playbackState = viewModel.audioPlaybackState,
+                        startingPlaybackSpeedValue = viewModel.audioPlaybackSpeed,
+                        startingNarratorValue = viewModel.audioNarrator,
+                        onDismiss = { audioControlsVisible = false },
+                        onTapPlayPause = viewModel::onTapPlayPauseAudio,
+                        onTapSkipBack = viewModel::onTapSkipBack,
+                        onTapSkipForward = viewModel::onTapSkipForward,
+                        onChangePlaybackSpeed = viewModel::setPlaybackSpeed,
+                        onChangeNarrator = viewModel::setNarrator
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = (screen == Screen.Contents),
+                    enter = slideInVertically(initialOffsetY = { height -> height }),
+                    exit = slideOutVertically(targetOffsetY = { height -> height })
+                ) {
+                    TableOfContents(
+                        onSelected = { position ->
+                            coroutineScope.launch {
+                                bottomSheetState.hide()
+                                listState.scrollToItem(position)
+                            }
+                            screen = Screen.Reader
+
+                            val ref = VerseRef.fromAbsoluteChapterNum(position)
+                            viewModel.onChangeVerseRef(ref)
+                        },
+                        onDismiss = {
+                            screen = Screen.Reader
                         }
                     )
                 }
-            }
 
-            AnimatedVisibility(
-                visible = audioControlsVisible,
-                enter = slideInVertically(initialOffsetY = { height -> height / 4 }),
-                exit = slideOutVertically(targetOffsetY = { height -> height }),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-                AudioPanel(
-                    playbackState = viewModel.audioPlaybackState,
-                    startingPlaybackSpeedValue = viewModel.audioPlaybackSpeed,
-                    startingNarratorValue = viewModel.audioNarrator,
-                    onDismiss = { audioControlsVisible = false },
-                    onTapPlayPause = viewModel::onTapPlayPauseAudio,
-                    onTapSkipBack = viewModel::onTapSkipBack,
-                    onTapSkipForward = viewModel::onTapSkipForward,
-                    onChangePlaybackSpeed = viewModel::setPlaybackSpeed,
-                    onChangeNarrator = viewModel::setNarrator
-                )
-            }
-
-            AnimatedVisibility(
-                visible = (screen == Screen.Contents),
-                enter = slideInVertically(initialOffsetY = { height -> height }),
-                exit = slideOutVertically(targetOffsetY = { height -> height })
-            ) {
-                TableOfContents(
-                    onSelected = { position ->
-                        coroutineScope.launch {
-                            bottomSheetState.hide()
-                            listState.scrollToItem(position)
+                AnimatedVisibility(
+                    visible = (screen == Screen.Vocab),
+                    enter = slideInVertically(initialOffsetY = { height -> height }),
+                    exit = slideOutVertically(targetOffsetY = { height -> height })
+                ) {
+                    val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
+                    VocabScreen(
+                        ref,
+                        viewModel.vocabRepo,
+                        settings = settings,
+                        onDismiss = {
+                            screen = Screen.Reader
                         }
-                        screen = Screen.Reader
+                    )
+                }
 
-                        val ref = VerseRef.fromAbsoluteChapterNum(position)
-                        viewModel.onChangeVerseRef(ref)
-                    },
-                    onDismiss = {
-                        screen = Screen.Reader
-                    }
-                )
-            }
-
-            AnimatedVisibility(
-                visible = (screen == Screen.Vocab),
-                enter = slideInVertically(initialOffsetY = { height -> height }),
-                exit = slideOutVertically(targetOffsetY = { height -> height })
-            ) {
-                val ref = VerseRef.fromAbsoluteChapterNum(listState.firstVisibleItemIndex)
-                VocabScreen(
-                    ref,
-                    viewModel.vocabRepo,
-                    settings = settings,
-                    onDismiss = {
-                        screen = Screen.Reader
-                    }
-                )
-            }
-
-            AnimatedVisibility(
-                visible = (screen == Screen.Settings),
-                enter = slideInVertically(initialOffsetY = { height -> height }),
-                exit = slideOutVertically(targetOffsetY = { height -> height })
-            ) {
-                SettingsScreen(
-                    onBack = {
-                        screen = Screen.Reader
-                    }
-                )
+                AnimatedVisibility(
+                    visible = (screen == Screen.Settings),
+                    enter = slideInVertically(initialOffsetY = { height -> height }),
+                    exit = slideOutVertically(targetOffsetY = { height -> height })
+                ) {
+                    SettingsScreen(
+                        onBack = {
+                            screen = Screen.Reader
+                        }
+                    )
+                }
             }
         }
     }
