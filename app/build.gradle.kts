@@ -60,6 +60,7 @@ dependencies {
     implementation(projects.feature.gloss)
     implementation(projects.feature.reading)
     implementation(projects.feature.settingsUi)
+    implementation(projects.feature.tutorial)
     implementation(projects.feature.vocab)
 
     // Core
