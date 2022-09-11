@@ -1,6 +1,11 @@
 package com.mattrobertson.greek.reader.presentation
 
-import androidx.compose.animation.*
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -25,6 +30,7 @@ import com.mattrobertson.greek.reader.audio.ui.AudioPanel
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
 import com.mattrobertson.greek.reader.settings.ui.SettingsScreen
+import com.mattrobertson.greek.reader.tutorial.TutorialScreen
 import com.mattrobertson.greek.reader.ui.lib.MaxWidthColumn
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
@@ -61,7 +67,9 @@ fun MainScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    var screen by remember { mutableStateOf(Screen.Reader) }
+    val startingScreen = startingScreen()
+
+    var screen by remember { mutableStateOf(startingScreen) }
 
     var audioControlsVisible by remember { mutableStateOf(false) }
 
@@ -223,6 +231,11 @@ fun MainScreen(
                         }
                     )
                 }
+
+                if (screen == Screen.Tutorial) {
+                    sharedPrefs().edit { putBoolean("has_shown_tutorial", true) }
+                    TutorialScreen(onDismiss = { screen = Screen.Reader })
+                }
             }
         }
     }
@@ -238,4 +251,17 @@ fun MainScreen(
     AppTheme {
         MainScreen()
     }
+}
+
+
+@Composable private fun startingScreen(): Screen {
+    return if (sharedPrefs().getBoolean("has_shown_tutorial", false)) {
+        Screen.Reader
+    } else {
+        Screen.Tutorial
+    }
+}
+
+@Composable private fun sharedPrefs(): SharedPreferences {
+    return LocalContext.current.getSharedPreferences("settings", Context.MODE_PRIVATE)
 }

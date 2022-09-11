@@ -4,5 +4,6 @@ enum class Screen {
     Reader,
     Contents,
     Vocab,
-    Settings
+    Settings,
+    Tutorial
 }
