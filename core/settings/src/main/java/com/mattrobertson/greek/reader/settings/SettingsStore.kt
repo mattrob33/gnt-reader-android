@@ -30,7 +30,7 @@ class SettingsStore @Inject constructor(
     val font: Flow<FontFamily> = getDataStoreItem(Font, FontFamily.default.id).map { FontFamily.fromId(it) }
     fun setFont(font: FontFamily) = setDataStoreItem(Font, font.id)
 
-    val fontSize: Flow<TextUnit> = getDataStoreItem(FontSize, 16f).map { it.sp }
+    val fontSize: Flow<TextUnit> = getDataStoreItem(FontSize, 22f).map { it.sp }
     fun setFontSize(sp: TextUnit) = setDataStoreItem(FontSize, sp.value)
 
     val lineSpacing: Flow<Float> = getDataStoreItem(LineSpacing, 1.5f).map { it }
