@@ -91,8 +91,16 @@ fun Concordance(
                 fontWeight = FontWeight.Bold,
                 text = buildAnnotatedString {
 
-                    val bookTitle = getBookAbbrv(Book(entity.book))
-                    append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = settings.fontSize * 0.7f,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = FontFamily.Default
+                        )
+                    ) {
+                        val bookTitle = getBookAbbrv(Book(entity.book))
+                        append("${index + 1}. $bookTitle ${entity.chapter}:${entity.verse}\n")
+                    }
 
                     withStyle(
                         style = SpanStyle(
