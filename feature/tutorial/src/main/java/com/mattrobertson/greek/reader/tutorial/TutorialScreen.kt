@@ -3,28 +3,23 @@ package com.mattrobertson.greek.reader.tutorial
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -40,6 +35,10 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.mattrobertson.greek.reader.ui.lib.MaxSizeBox
+import com.mattrobertson.greek.reader.ui.lib.MaxSizeColumn
+import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.lib.sideMargins
+import com.mattrobertson.greek.reader.ui.theme.Fonts
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable fun TutorialScreen(
@@ -48,11 +47,6 @@ import com.mattrobertson.greek.reader.ui.lib.MaxSizeBox
 
     val pages = remember {
         listOf(
-            TutorialPageData(
-                title = "GNT Reader",
-                description = "Meet the new and improved GNT Reader. Swipe to learn more. →",
-                gif = R.drawable.tutorial_gloss
-            ),
             TutorialPageData(
                 title = "Word Insights",
                 description = "Tap on a word to see its gloss and parsing, plus a list of all occurrences.",
@@ -83,16 +77,26 @@ import com.mattrobertson.greek.reader.ui.lib.MaxSizeBox
 
     val pagerState = rememberPagerState()
 
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage == pagerState.pageCount - 1) {
+            onDismiss()
+        }
+    }
 
     MaxSizeBox {
         HorizontalPager(
-            count = pages.size,
+            count = pages.size + 2,
             state = pagerState,
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(bottom = 20.dp)
         ) { pageNum ->
-            TutorialPage(pages[pageNum])
+            when (pageNum) {
+                0 -> TutorialStartPage()
+                pages.size -> TutorialEndPage()
+                pages.size + 1 -> FinishTutorial()
+                else -> TutorialPage(pages[pageNum])
+            }
         }
 
         IconButton(
@@ -118,6 +122,95 @@ import com.mattrobertson.greek.reader.ui.lib.MaxSizeBox
                 .padding(bottom = 20.dp)
         )
     }
+}
+
+@Composable private fun TutorialStartPage() {
+    MaxSizeColumn(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .background(MaterialTheme.colors.background)
+            .padding(horizontal = sideMargins() * 3)
+    ) {
+
+        Text(
+            text = "GNT",
+            fontFamily = Fonts.Cardo,
+            fontSize = 60.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.onBackground
+        )
+
+        Text(
+            text = "Reader",
+            fontFamily = Fonts.Cardo,
+            fontSize = 36.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.onBackground
+        )
+
+        VSpacer(100.dp)
+
+        Text(
+            text = buildAnnotatedString {
+                append("Meet the new and improved GNT Reader.\n\nSwipe to learn more.")
+                withStyle(
+                    SpanStyle(
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                ) {
+                    append("→")
+                }
+            },
+            fontFamily = FontFamily.Default,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.onBackground
+        )
+    }
+}
+
+@Composable private fun TutorialEndPage() {
+    MaxSizeColumn(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .background(MaterialTheme.colors.background)
+            .padding(horizontal = sideMargins() * 3)
+    ) {
+        Text(
+            text = buildAnnotatedString {
+                append("Read")
+                withStyle(
+                    SpanStyle(
+                        fontSize = 48.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                ) {
+                    append(" →")
+                }
+            },
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Bold,
+            fontSize = 40.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(
+                top = 0.dp,
+                bottom = 8.dp,
+                start = 16.dp,
+                end = 8.dp
+            )
+        )
+    }
+}
+
+
+@Composable private fun FinishTutorial() {
+    MaxSizeColumn(
+        modifier = Modifier.background(MaterialTheme.colors.background)
+    ) {}
 }
 
 @Composable private fun TutorialPage(
@@ -215,12 +308,13 @@ import com.mattrobertson.greek.reader.ui.lib.MaxSizeBox
                 .build(),
             contentDescription = null,
             modifier = modifier.then(
-                Modifier.background(
-                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.05f),
-                    shape = RoundedCornerShape(4.dp)
-                )
-                .padding(20.dp)
-                .clip(RoundedCornerShape(4.dp))
+                Modifier
+                    .background(
+                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.05f),
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .padding(20.dp)
+                    .clip(RoundedCornerShape(4.dp))
             )
         )
     }

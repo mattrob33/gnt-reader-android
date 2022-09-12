@@ -14,13 +14,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.settings.Settings
 import com.mattrobertson.greek.reader.ui.lib.VSpacer
+import com.mattrobertson.greek.reader.ui.lib.sideMargins
 import com.mattrobertson.greek.reader.ui.settings.getComposeFontFamily
 import com.mattrobertson.greek.reader.ui.settings.scrollLocationDataStore
 import com.mattrobertson.greek.reader.verseref.Verse
@@ -191,17 +191,6 @@ fun ChapterText(
             }
         )
     }
-}
-
-@Composable private fun sideMargins(): Dp {
-    return when (smallestScreenWidthDp()) {
-        in 0..599 -> 20.dp
-        else -> 60.dp
-    }
-}
-
-@Composable private fun smallestScreenWidthDp(): Int {
-    return LocalContext.current.resources.configuration.smallestScreenWidthDp
 }
 
 @Composable private fun buildChapterText(

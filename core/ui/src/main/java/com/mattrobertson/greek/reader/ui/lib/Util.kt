@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -29,5 +30,16 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
         }
     ) {
         onClick()
+    }
+}
+
+@Composable fun smallestScreenWidthDp(): Int {
+    return LocalContext.current.resources.configuration.smallestScreenWidthDp
+}
+
+@Composable fun sideMargins(): Dp {
+    return when (smallestScreenWidthDp()) {
+        in 0..599 -> 20.dp
+        else -> 60.dp
     }
 }
