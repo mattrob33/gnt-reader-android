@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -174,7 +175,7 @@ fun ChapterText(
                 fontSize = settings.fontSize,
                 lineHeight = settings.fontSize * settings.lineSpacing
             ),
-            modifier = Modifier.padding(horizontal = 20.dp),
+            modifier = Modifier.padding(horizontal = sideMargins()),
             onClick = { clickOffset ->
                 wordMap.forEach { entry ->
                     val wordOffset = entry.key
@@ -190,6 +191,17 @@ fun ChapterText(
             }
         )
     }
+}
+
+@Composable private fun sideMargins(): Dp {
+    return when (smallestScreenWidthDp()) {
+        in 0..599 -> 20.dp
+        else -> 60.dp
+    }
+}
+
+@Composable private fun smallestScreenWidthDp(): Int {
+    return LocalContext.current.resources.configuration.smallestScreenWidthDp
 }
 
 @Composable private fun buildChapterText(
