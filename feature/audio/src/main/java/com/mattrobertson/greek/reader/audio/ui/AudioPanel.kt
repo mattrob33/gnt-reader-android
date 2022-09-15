@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mattrobertson.greek.reader.audio.PlaybackState
 import com.mattrobertson.greek.reader.audio.PlaybackState.*
-import com.mattrobertson.greek.reader.audio.data.AudioNarrator
-import com.mattrobertson.greek.reader.audio.data.AudioNarrator.ErasmianPhemister
-import com.mattrobertson.greek.reader.audio.data.AudioNarrator.ModernSblgnt
+import com.mattrobertson.greek.reader.audio.data.Pronunciation
+import com.mattrobertson.greek.reader.audio.data.Pronunciation.Erasmian
+import com.mattrobertson.greek.reader.audio.data.Pronunciation.Modern
 import com.mattrobertson.greek.reader.ui.lib.*
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,13 +29,13 @@ import kotlinx.coroutines.flow.StateFlow
         AudioPanel(
             playbackState = MutableStateFlow(Stopped),
             startingPlaybackSpeedValue = MutableStateFlow(1.0f),
-            startingNarratorValue = MutableStateFlow(ErasmianPhemister),
+            startingPronunciationValue = MutableStateFlow(Modern),
             onDismiss = {},
             onTapPlayPause = {},
             onTapSkipBack = {},
             onTapSkipForward = {},
             onChangePlaybackSpeed = {},
-            onChangeNarrator = {},
+            onChangePronunciation = {},
         )
     }
 }
@@ -46,13 +46,13 @@ import kotlinx.coroutines.flow.StateFlow
         AudioPanel(
             playbackState = MutableStateFlow(Stopped),
             startingPlaybackSpeedValue = MutableStateFlow(1.0f),
-            startingNarratorValue = MutableStateFlow(ErasmianPhemister),
+            startingPronunciationValue = MutableStateFlow(Modern),
             onDismiss = {},
             onTapPlayPause = {},
             onTapSkipBack = {},
             onTapSkipForward = {},
             onChangePlaybackSpeed = {},
-            onChangeNarrator = {},
+            onChangePronunciation = {},
         )
     }
 }
@@ -60,18 +60,18 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable fun AudioPanel(
     playbackState: StateFlow<PlaybackState>,
     startingPlaybackSpeedValue: StateFlow<Float>,
-    startingNarratorValue: StateFlow<AudioNarrator>,
+    startingPronunciationValue: StateFlow<Pronunciation>,
     onDismiss: () -> Unit,
     onTapPlayPause: () -> Unit,
     onTapSkipBack: () -> Unit,
     onTapSkipForward: () -> Unit,
     onChangePlaybackSpeed: (speed: Float) -> Unit,
-    onChangeNarrator: (narrator: AudioNarrator) -> Unit,
+    onChangePronunciation: (pronunciation: Pronunciation) -> Unit,
 ) {
 
     val state by playbackState.collectAsState()
     val startingPlaybackSpeed by startingPlaybackSpeedValue.collectAsState()
-    val startingNarrator by startingNarratorValue.collectAsState()
+    val startingPronunciation by startingPronunciationValue.collectAsState()
 
     MaxWidthColumn(
         modifier = Modifier
@@ -112,9 +112,9 @@ import kotlinx.coroutines.flow.StateFlow
 
         VSpacer(16.dp)
 
-        NarratorToggle(
-            startingNarrator,
-            onChangeNarrator
+        PronunciationToggle(
+            startingPronunciation,
+            onChangePronunciation
         )
 
         VSpacer(32.dp)
@@ -186,11 +186,11 @@ import kotlinx.coroutines.flow.StateFlow
     }
 }
 
-@Composable private fun NarratorToggle(
-    startingValue: AudioNarrator,
-    onChangeNarrator: (narrator: AudioNarrator) -> Unit
+@Composable private fun PronunciationToggle(
+    startingValue: Pronunciation,
+    onChangePronunciation: (pronunciation: Pronunciation) -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(startingValue == ModernSblgnt) }
+    var isChecked by remember { mutableStateOf(startingValue == Modern) }
     
     val switchColor = MaterialTheme.colors.primary
 
@@ -214,7 +214,7 @@ import kotlinx.coroutines.flow.StateFlow
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
-        NarratorToggleLabel(
+        PronunciationToggleLabel(
             text = "Erasmian",
             isActive = !isChecked,
             onClick = { isChecked = false }
@@ -224,8 +224,8 @@ import kotlinx.coroutines.flow.StateFlow
             checked = isChecked,
             onCheckedChange = { checked ->
                 isChecked = checked
-                onChangeNarrator(
-                    if (isChecked) ModernSblgnt else ErasmianPhemister
+                onChangePronunciation(
+                    if (isChecked) Modern else Erasmian
                 )
             },
             colors = switchColors,
@@ -234,7 +234,7 @@ import kotlinx.coroutines.flow.StateFlow
                 .align(Alignment.CenterVertically)
         )
 
-        NarratorToggleLabel(
+        PronunciationToggleLabel(
             text = "Modern",
             isActive = isChecked,
             onClick = { isChecked = true }
@@ -242,7 +242,7 @@ import kotlinx.coroutines.flow.StateFlow
     }
 }
 
-@Composable private fun NarratorToggleLabel(
+@Composable private fun PronunciationToggleLabel(
     text: String,
     isActive: Boolean,
     onClick: () -> Unit

@@ -25,22 +25,23 @@ class AudioSettings @Inject constructor(
         }
     }
 
-    val narrator: Flow<AudioNarrator> = dataStore.data.map { prefs ->
-        prefs[Keys.Narrator]?.let { name ->
-            return@map AudioNarrator.valueOf(name)
+    val pronunciation: Flow<Pronunciation> = dataStore.data.map { prefs ->
+        prefs[Keys.Pronunciation]?.let { name ->
+            return@map Pronunciation.valueOf(name)
         }
-        AudioNarrator.ErasmianPhemister
+        Pronunciation.Modern
     }
 
-    suspend fun setNarrator(narrator: AudioNarrator) {
+    suspend fun setPronunciation(pronunciation: Pronunciation) {
         dataStore.edit { prefs ->
-            prefs[Keys.Narrator] = narrator.name
+            prefs[Keys.Pronunciation] = pronunciation.name
         }
     }
 
     private object Keys {
         val PlaybackSpeed = floatPreferencesKey("playback_speed")
         val Narrator = stringPreferencesKey("narrator")
+        val Pronunciation = stringPreferencesKey("pronunciation")
     }
 }
 

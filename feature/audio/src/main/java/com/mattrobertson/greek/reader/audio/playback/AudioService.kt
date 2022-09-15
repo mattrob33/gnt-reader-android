@@ -17,14 +17,16 @@ import androidx.media3.session.SessionResult.RESULT_SUCCESS
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.mattrobertson.greek.reader.audio.R
-import com.mattrobertson.greek.reader.audio.data.AudioNarrator
 import com.mattrobertson.greek.reader.audio.data.AudioSettings
 import com.mattrobertson.greek.reader.audio.data.AudioUrlProvider
+import com.mattrobertson.greek.reader.audio.data.Pronunciation
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import com.mattrobertson.greek.reader.verseref.getBookTitleLocalized
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -38,7 +40,7 @@ class AudioService: MediaSessionService() {
     lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaSession
 
-    private var narrator: AudioNarrator = AudioNarrator.ErasmianPhemister
+    private var pronunciation = Pronunciation.Modern
 
     private var currentRef: VerseRef? = null
 
@@ -68,9 +70,9 @@ class AudioService: MediaSessionService() {
             .build()
 
         serviceScope.launch {
-            audioSettings.narrator.collect {
-                if (narrator != it) {
-                    narrator = it
+            audioSettings.pronunciation.collect {
+                if (pronunciation != it) {
+                    pronunciation = it
                     if (player.isPlaying) {
                         currentRef?.let { currentRef ->
                             player.play(currentRef)
@@ -100,7 +102,7 @@ class AudioService: MediaSessionService() {
 
         val humanReadableRef = "${getBookTitleLocalized(ref.book)} ${ref.chapter}"
 
-        val url = urlProvider.getUrl(narrator, ref)
+        val url = urlProvider.getDefaultUrl(pronunciation, ref)
 
         val mediaItem = MediaItem.Builder()
             .setUri(url)

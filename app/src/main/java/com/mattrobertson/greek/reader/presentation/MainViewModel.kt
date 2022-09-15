@@ -3,15 +3,15 @@ package com.mattrobertson.greek.reader.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mattrobertson.greek.reader.audio.PlaybackState.*
-import com.mattrobertson.greek.reader.audio.data.AudioNarrator
 import com.mattrobertson.greek.reader.audio.data.AudioSettings
+import com.mattrobertson.greek.reader.audio.data.Pronunciation
 import com.mattrobertson.greek.reader.audio.playback.AudioServiceConnection
 import com.mattrobertson.greek.reader.db.api.repo.ConcordanceRepo
 import com.mattrobertson.greek.reader.db.api.repo.GlossesRepo
 import com.mattrobertson.greek.reader.db.api.repo.VerseRepo
 import com.mattrobertson.greek.reader.db.api.repo.VocabRepo
-import com.mattrobertson.greek.reader.settings.SettingsStore
 import com.mattrobertson.greek.reader.settings.Settings
+import com.mattrobertson.greek.reader.settings.SettingsStore
 import com.mattrobertson.greek.reader.verseref.Book
 import com.mattrobertson.greek.reader.verseref.VerseRef
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,11 +48,11 @@ class MainViewModel @Inject constructor(
             1.0f
         )
 
-    val audioNarrator = audioSettings.narrator
+    val audioPronunciation = audioSettings.pronunciation
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            AudioNarrator.ErasmianPhemister
+            Pronunciation.Modern
         )
 
     fun onChangeVerseRef(ref: VerseRef) {
@@ -85,9 +85,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setNarrator(narrator: AudioNarrator) {
+    fun setPronunciation(pronunciation: Pronunciation) {
         viewModelScope.launch {
-            audioSettings.setNarrator(narrator)
+            audioSettings.setPronunciation(pronunciation)
         }
     }
 }
