@@ -1,9 +1,43 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
 }
+
+data class Version(
+    val code: Int?,
+    val name: String?
+)
+
+// Load optional CLI params
+val cliProps = Version(
+    code = (project.findProperty("versionCode") as? String)?.toInt(),
+    name = project.findProperty("versionName") as? String
+)
+
+// Read from local.properties
+val localProps = Version(
+    code = gradleLocalProperties(rootDir).getProperty("versionCode")?.toInt(),
+    name = gradleLocalProperties(rootDir).getProperty("versionName")
+)
+
+/*
+ * These properties are set via command line properties by our CI and so must be set by
+ * local.properties when running local builds.
+ */
+
+val appVersionCode: Int =
+    cliProps.code ?:
+    localProps.code ?:
+    throw InvalidUserDataException("No versionCode provided. You must provide a version code via CLI properties or local.properties.")
+
+val appVersionName: String =
+    cliProps.name ?:
+    localProps.name ?:
+    throw InvalidUserDataException("No versionName provided. You must provide a version name via CLI properties or local.properties.")
 
 android {
     compileSdk = AppConfig.compileSdk
@@ -15,8 +49,8 @@ android {
         minSdk = AppConfig.minSdk
         targetSdk = AppConfig.targetSdk
 
-        versionCode = AppConfig.appVersionCode
-        versionName = AppConfig.appVersionName
+        versionCode = appVersionCode
+        versionName = appVersionName
     }
 
     buildTypes {
