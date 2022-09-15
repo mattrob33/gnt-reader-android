@@ -102,14 +102,7 @@ fun MainScreen(
                         bottomBar = {
                             MaxWidthColumn {
 
-                                Divider(
-                                    thickness = 1.5.dp,
-                                    color = MaterialTheme.colors.onBackground.copy(
-                                        red = MaterialTheme.colors.onBackground.red * 0.5f,
-                                        blue = MaterialTheme.colors.onBackground.blue * 0.5f,
-                                        green = MaterialTheme.colors.onBackground.green * 0.5f
-                                    )
-                                )
+                                Divider()
 
                                 BottomNavigation(
                                     backgroundColor = MaterialTheme.colors.background,
@@ -123,7 +116,7 @@ fun MainScreen(
                                                 Icon(
                                                     bottomNavItem.icon,
                                                     contentDescription = null,
-                                                    tint = MaterialTheme.colors.onBackground
+                                                    tint = MaterialTheme.colors.onBackground.copy(alpha = 0.88f)
                                                 )
                                             },
                                             selected = currentDestination?.hierarchy?.any { it.route == bottomNavItem.route } == true,

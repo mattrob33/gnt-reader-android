@@ -72,6 +72,7 @@ class AudioService: MediaSessionService() {
         serviceScope.launch {
             audioSettings.pronunciation.collect {
                 if (pronunciation != it) {
+                    player.stop()
                     pronunciation = it
                     if (player.isPlaying) {
                         currentRef?.let { currentRef ->
