@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseTheme_night" parent="BaseTheme">
+        <item name="android:colorBackground">@color/content_background</item>
+        <item name="colorSurface">@color/content_background</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme_night" />
+</resources>

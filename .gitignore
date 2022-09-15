@@ -1,3 +1,12 @@
 /build
 /local.properties
 /sblgnt.keystore
+/app/build/
+/app/release/
+/sblgnt-upload.keystore
+/upload_certificate.pem
+/.gradle/
+/.idea/
+/buildSrc/.gradle/
+/buildSrc/build/
+/play-store-api-key.json

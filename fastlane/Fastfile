@@ -1,0 +1,217 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Deploy to Firebase App Distribution"
+  lane :firebaseAppDistribution do
+
+      buildSignedRelease(
+          versionName: ENV["VERSION_NAME"]
+      )
+
+      firebase_app_distribution(
+          app: ENV["FIREBASE_APP_ID"],
+          firebase_cli_token: ENV["FIREBASE_TOKEN"],
+          groups: "alpha-testers",
+          release_notes: ENV["RELEASE_NOTES"],
+          android_artifact_type: "AAB"
+      )
+  end
+
+  desc "Deploy to the Google Play Store (internal testing track)"
+  lane :deployInternal do
+      deployToPlayStore(
+          track: "internal"
+      )
+  end
+
+  desc "Deploy to the Google Play Store as an Open Beta (5%)"
+  lane :deployOpenBeta do
+      rolloutPercentage = ENV["ROLLOUT"]
+
+      # Strip a % sign if it exists
+      rolloutPercentage.sub! "%", ""
+      rollout = rolloutPercentage.to_f
+
+      # If rollout was entered as a percentage ("80" or "80%") convert it to a fraction
+      if rollout >= 1
+        rollout = rollout / 100.0
+      end
+
+      deployToPlayStore(
+          track: "beta",
+          rollout: rollout
+      )
+  end
+
+  desc "Deploy to the Google Play Store (production)"
+  lane :deployProduction do
+
+      # Strip a % sign if it exists
+      rolloutPercentage = ENV["ROLLOUT"].sub "%", ""
+      rollout = rolloutPercentage.to_f
+
+      # If rollout was entered as a percentage ("80" or "80%") convert it to a fraction
+      if rollout >= 1
+        rollout = rollout / 100.0
+      end
+
+      deployToPlayStore(
+          track: "production",
+          rollout: rollout
+      )
+  end
+
+  # This is intended for internal use by other lanes, which specify a track
+  # and an optional rollout percentage (as a fraction, e.g., 0.05).
+  desc "Build and deploy to Google Play Store"
+  lane :deployToPlayStore do |options|
+
+      track = options[:track]
+      rollout = options[:rollout]
+
+      versionName = ENV["VERSION_NAME"]
+
+      buildSignedRelease(
+          versionName: versionName
+      )
+
+      upload_to_play_store(
+        track: track,
+        rollout: rollout,
+        aab: Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+        skip_upload_apk: true,
+        skip_upload_metadata: true,
+        skip_upload_changelogs: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"]
+      )
+
+      createGithubRelease(
+        releaseName: versionName,
+        description: ""
+      )
+    end
+
+  # Build a signed AAB, querying the Play Store to determine the correct version code.
+  # The signed AAB can be located at Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH].
+  desc "Build a signed release AAB"
+  lane :buildSignedRelease do |options|
+
+    versionName = options[:versionName]
+    versionCode = getNextVersionCode()
+
+    keystoreFile = File.join(ENV["UPLOAD_KEY_DIR"], ENV["UPLOAD_KEY_FILENAME"])
+
+    gradle(
+      task: "app:bundleRelease",
+      print_command: false,
+      properties: {
+          "android.injected.version.code" => versionCode,
+          "android.injected.version.name" => versionName,
+          "android.injected.signing.store.file" => keystoreFile,
+          "android.injected.signing.store.password" => ENV["SIGNING_STORE_PASSWORD"],
+          "android.injected.signing.key.alias" => ENV["SIGNING_KEY_ALIAS"],
+          "android.injected.signing.key.password" => ENV["SIGNING_KEY_PASSWORD"]
+      }
+    )
+  end
+
+  desc "Query the Play Store to determine the next version code"
+  lane :getNextVersionCode do
+
+    playStoreKeyJson = ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"]
+
+    releaseCode = -1
+    betaCode = -1
+    alphaCode = -1
+    internalCode = -1
+
+    releaseCodes = google_play_track_version_codes(
+        json_key_data: playStoreKeyJson
+    )
+    releaseCode = releaseCodes[0].to_i
+
+    begin
+        betaCodes = google_play_track_version_codes(
+            json_key_data: playStoreKeyJson,
+            track: 'beta'
+        )
+        betaCode = betaCodes[0].to_i
+    rescue
+    end
+
+    begin
+        alphaCodes = google_play_track_version_codes(
+            json_key_data: playStoreKeyJson,
+            track: 'alpha'
+        )
+        alphaCode = alphaCodes[0].to_i
+    rescue
+    end
+
+    begin
+        internalCodes = google_play_track_version_codes(
+            json_key_data: playStoreKeyJson,
+            track: 'internal'
+        )
+        internalCode = internalCodes[0].to_i
+    rescue
+    end
+
+    maxCode = [releaseCode, betaCode, alphaCode, internalCode].max
+    nextVersionCode = maxCode + 1
+
+    puts "-----------------"
+    puts "  Version Codes"
+    puts "-----------------"
+    puts "Release: " + releaseCode.to_s
+    if betaCode > 0
+        puts "Beta: " + betaCode.to_s
+    end
+    if alphaCode > 0
+        puts "Alpha: " + alphaCode.to_s
+    end
+    if internalCode > 0
+        puts "Internal: " + internalCode.to_s
+    end
+    puts "Next version: " + nextVersionCode.to_s
+
+    nextVersionCode
+  end
+
+  # Create a Github release from master
+  desc "Create Github release"
+  lane :createGithubRelease do |options|
+
+    aabPath = Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+
+    tagName = "v" + options[:releaseName]
+
+    set_github_release(
+      repository_name: "mattrob33/sblgnt-reader",
+      api_token: ENV["GITHUB_RELEASES_TOKEN"],
+      name: tagName,
+      tag_name: tagName,
+      description: options[:description],
+      commitish: "main",
+      upload_assets: [aabPath]
+    )
+  end
+end
