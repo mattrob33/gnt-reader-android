@@ -7,7 +7,7 @@ object AppConfig {
     const val targetSdk = compileSdk
     const val buildTools = "30.0.3"
 
-    const val jvmTarget = "1.8"
-    val javaCompatibility = JavaVersion.VERSION_1_8
+    const val jvmTarget = "17"
+    val javaCompatibility = JavaVersion.VERSION_17
 
 }

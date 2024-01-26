@@ -1,7 +1,7 @@
 [versions]
 
-agp = "7.2.2"
-kotlin = "1.7.0"
+agp = "8.2.2"
+kotlin = "1.9.20"
 
 activity = "1.5.1"
 androidCoreKtx = "1.6.0"

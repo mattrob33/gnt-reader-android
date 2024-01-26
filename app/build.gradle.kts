@@ -40,6 +40,8 @@ val appVersionName: String = "8.0.0"
 //    throw InvalidUserDataException("No versionName provided. You must provide a version name via CLI properties or local.properties.")
 
 android {
+    namespace="com.mattrobertson.greek.reader"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 

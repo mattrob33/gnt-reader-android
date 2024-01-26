@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace="com.mattrobertson.greek.reader.vocab"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 

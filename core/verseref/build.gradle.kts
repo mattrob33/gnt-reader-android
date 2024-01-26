@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = "com.mattrobertson.greek.reader.verseref"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 

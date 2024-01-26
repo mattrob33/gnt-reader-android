@@ -4,10 +4,12 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.google.protobuf") version "0.8.12"
+    id("com.google.protobuf") version "0.9.1"
 }
 
 android {
+    namespace="com.mattrobertson.greek.reader.ui"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 

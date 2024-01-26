@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace="com.mattrobertson.greek.reader.db.internal"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 
