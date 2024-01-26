@@ -1,31 +1,32 @@
 [versions]
 
-agp = "7.2.2"
-kotlin = "1.7.0"
+agp = "8.2.2"
+kotlin = "1.9.20"
+protobufPlugin = "0.9.1"
 
-activity = "1.5.1"
-androidCoreKtx = "1.6.0"
-androidPreference = "1.1.1"
-appcompat = "1.5.0"
-coil = "2.2.1"
-compose = "1.2.0"
-composeCompiler = "1.2.0"
-composeViewmodels = "2.5.1"
+activity = "1.8.2"
+androidCoreKtx = "1.12.0"
+androidPreference = "1.2.1"
+appcompat = "1.6.1"
+coil = "2.5.0"
+compose = "1.6.0"
+composeCompiler = "1.5.4"
+composeViewmodels = "2.7.0"
 composeConstraintLayout = "1.0.1"
 datastore = "1.0.0"
-firebase-analytics = "19.0.0"
-firebase-crashlytics = "18.2.1"
-gson = "2.8.6"
-hilt = "2.43.2"
-hiltViewmodels = "1.0.0-alpha03"
-jUnit5 = "5.7.0"
-lifecycleRuntime = "2.5.1"
-material = "1.4.0"
-media3 = "1.0.0-beta02"
-navigation = "2.4.0-alpha06"
-pager = "0.23.1"
-protobuf = "3.10.0"
-room = "2.4.3"
+firebase-analytics = "21.5.0"
+firebase-crashlytics = "18.6.1"
+hilt = "2.48.1"
+hiltViewmodels = "1.1.0"
+jUnit5 = "5.8.2"
+lifecycleRuntime = "2.7.0"
+material = "1.11.0"
+media3 = "1.2.1"
+navigation = "2.7.6"
+pager = "0.32.0"
+protobuf = "3.19.4"
+protoc = "21.0-rc-1"
+room = "2.6.1"
 
 
 [libraries]
@@ -71,10 +72,11 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-metadataExtractor = { module = "androidx.media3:media3-extractor", version.ref = "media3" }
 media3-datasource = { module = "androidx.media3:media3-datasource", version.ref = "media3" }
 
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 androidPreferenceKtx = { module = "androidx.preference:preference-ktx", version.ref = "androidPreference" }
 
-protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
+protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protoc" }
+
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastorePreferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
@@ -100,9 +102,9 @@ media3 = [ "media3-exoPlayer", "media3-okHttp", "media3-ui", "media3-session", "
 coil = [ "coil", "coil-compose", "coil-gif" ]
 
 [plugins]
-agp = { id = "com.android.tools.build:gradle", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-hilt = { id = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }

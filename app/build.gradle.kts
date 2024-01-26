@@ -1,10 +1,10 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 data class Version(
@@ -29,17 +29,19 @@ val localProps = Version(
  * local.properties when running local builds.
  */
 
-val appVersionCode: Int = 31
+val appVersionCode: Int = 32
 //    cliProps.code ?:
 //    localProps.code ?:
 //    throw InvalidUserDataException("No versionCode provided. You must provide a version code via CLI properties or local.properties.")
 
-val appVersionName: String = "8.0.0"
+val appVersionName: String = "8.0.1"
 //    cliProps.name ?:
 //    localProps.name ?:
 //    throw InvalidUserDataException("No versionName provided. You must provide a version name via CLI properties or local.properties.")
 
 android {
+    namespace="com.mattrobertson.greek.reader"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 

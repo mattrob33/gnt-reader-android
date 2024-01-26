@@ -1,13 +1,15 @@
 import com.google.protobuf.gradle.*
 
 plugins {
-    id("com.android.library")
-    kotlin("android")
-    kotlin("kapt")
-    id("com.google.protobuf") version "0.8.12"
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.protobuf)
 }
 
 android {
+    namespace="com.mattrobertson.greek.reader.ui"
+
     compileSdk = AppConfig.compileSdk
     buildToolsVersion = AppConfig.buildTools
 
@@ -63,12 +65,13 @@ dependencies {
 
 protobuf {
     protoc {
-        // latest version number: https://mvnrepository.com/artifact/com.google.protobuf/protoc
-        artifact = "com.google.protobuf:protoc:3.10.0"
+        // find latest version number here:
+        // https://mvnrepository.com/artifact/com.google.protobuf/protoc
+        artifact = libs.protobuf.protoc.get().toString()
     }
     generateProtoTasks {
         all().forEach { task ->
-            task.plugins{
+            task.builtins {
                 create("java") {
                     option("lite")
                 }
