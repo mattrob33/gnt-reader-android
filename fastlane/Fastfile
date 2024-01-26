@@ -205,7 +205,7 @@ platform :android do
     tagName = "v" + options[:releaseName]
 
     set_github_release(
-      repository_name: "mattrob33/sblgnt-reader",
+      repository_name: "mattrob33/gnt-reader-android",
       api_token: ENV["GITHUB_RELEASES_TOKEN"],
       name: tagName,
       tag_name: tagName,
