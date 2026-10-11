@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mattrobertson.greek.reader.ui.lib.*
 import com.mattrobertson.greek.reader.ui.settings.FontFamily
 import com.mattrobertson.greek.reader.ui.theme.AppTheme
+import com.mattrobertson.greek.reader.plans.ui.ReadingPlanSettingsSection
 import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMaterialFont
 
 @Preview(showBackground = true)
@@ -33,7 +36,9 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
 
 @Composable fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel(),
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    paginatedReader: Boolean = false,
+    onPaginatedReaderChange: (Boolean) -> Unit = {}
 ) {
     val settings by viewModel.settings.collectAsState()
 
@@ -49,10 +54,18 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
             )
             VSpacer(40.dp)
 
-            MaxWidthColumn {
+            MaxWidthColumn(
+                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Top
+            ) {
                 ReaderPreview(settings)
 
                 VSpacer(30.dp)
+
+                ReaderViewModeRow(
+                    paginatedReader = paginatedReader,
+                    onChange = onPaginatedReaderChange
+                )
 
                 FontSizeRow(
                     fontSize = settings.fontSize,
@@ -86,6 +99,8 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
                     isEnabled = settings.versesOnNewLines,
                     onChange = viewModel::setVersesOnNewLines
                 )
+
+                ReadingPlanSettingsSection()
             }
         }
 
@@ -102,6 +117,32 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
                 onDismiss = { fontChooserVisible = false }
             )
         }
+    }
+}
+
+@Composable private fun ReaderViewModeRow(
+    paginatedReader: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+    SettingsColumnRow {
+        SettingsLabel(text = "Reading view", modifier = Modifier.align(Alignment.Start))
+        Row(Modifier.fillMaxWidth()) {
+            listOf(false to "Scrolling", true to "Paginated").forEach { (paginated, label) ->
+                Row(
+                    modifier = Modifier.weight(1f).clickable { onChange(paginated) },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = paginatedReader == paginated, onClick = null)
+                    Text(label, color = MaterialTheme.colors.onBackground)
+                }
+            }
+        }
+        Text(
+            text = "Swipe horizontally to turn pages; use the chapter arrows to move between chapters.",
+            style = MaterialTheme.typography.caption,
+            color = MaterialTheme.colors.onBackground
+        )
+        Spacer(Modifier.height(16.dp))
     }
 }
 
@@ -262,4 +303,3 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
         modifier = modifier
     )
 }
-

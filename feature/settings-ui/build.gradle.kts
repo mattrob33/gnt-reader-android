@@ -43,6 +43,7 @@ android {
 
 dependencies {
 
+    implementation(projects.feature.plans)
     implementation(projects.core.settings)
     implementation(projects.core.ui)
 

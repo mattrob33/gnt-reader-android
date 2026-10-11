@@ -41,6 +41,9 @@ data class VerseRef (
 		}
 	}
 
+	fun absoluteChapterNum(): Int =
+		verses.take(book.num).sumOf { it.size } + chapter - 1
+
 	/**
 	 * Validates inputs. Note that Book is self-validating and is thus not validated here.
  	 */

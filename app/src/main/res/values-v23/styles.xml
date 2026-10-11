@@ -2,5 +2,6 @@
 <resources>
     <style name="AppTheme" parent="BaseTheme">
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/appbar_color</item>
     </style>
 </resources>

@@ -29,12 +29,12 @@ val localProps = Version(
  * local.properties when running local builds.
  */
 
-val appVersionCode: Int = 32
+val appVersionCode: Int = 38
 //    cliProps.code ?:
 //    localProps.code ?:
 //    throw InvalidUserDataException("No versionCode provided. You must provide a version code via CLI properties or local.properties.")
 
-val appVersionName: String = "8.0.1"
+val appVersionName: String = "8.1.5"
 //    cliProps.name ?:
 //    localProps.name ?:
 //    throw InvalidUserDataException("No versionName provided. You must provide a version name via CLI properties or local.properties.")
@@ -61,7 +61,12 @@ android {
         }
 
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -94,6 +99,7 @@ dependencies {
     implementation(projects.feature.audio)
     implementation(projects.feature.concordance)
     implementation(projects.feature.gloss)
+    implementation(projects.feature.plans)
     implementation(projects.feature.reading)
     implementation(projects.feature.settingsUi)
     implementation(projects.feature.tutorial)

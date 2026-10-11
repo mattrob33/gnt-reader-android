@@ -9,6 +9,7 @@ import com.mattrobertson.greek.reader.SblGntApplication
 
 sealed class BottomNavItem(val route: String, val icon: ImageVector) {
     object Contents : BottomNavItem("contents", Icons.Rounded.FormatListBulleted)
+    object Plans : BottomNavItem("plans", Icons.Rounded.EventNote)
     object Vocab : BottomNavItem("vocab", ImageVector.vectorResource(null, SblGntApplication.context.resources, R.drawable.ic_vocab))
     object Audio : BottomNavItem("audio", Icons.Rounded.VolumeUp)
     object Settings : BottomNavItem("settings", Icons.Rounded.Settings)
@@ -16,6 +17,7 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector) {
 
 val bottomNavItems = listOf(
     BottomNavItem.Contents,
+    BottomNavItem.Plans,
     BottomNavItem.Vocab,
     BottomNavItem.Audio,
     BottomNavItem.Settings

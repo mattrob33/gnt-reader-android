@@ -19,7 +19,7 @@ class ComposeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
-                MainScreen()
+                MainScreen(initialPlanIndex = intent.getIntExtra("open_reading_plan_index", -1).takeIf { it >= 0 })
             }
         }
     }
