@@ -288,7 +288,7 @@ private fun splitIntoPages(
     val pages = mutableListOf<ReaderPageSlice>()
     var firstLine = 0
     var startOffset = 0
-    while (firstLine < layout.lineCount) {
+    while (firstLine < layout.lineCount && startOffset < textLength) {
         val pageTop = layout.getLineTop(firstLine)
         var lastLine = firstLine
         while (lastLine + 1 < layout.lineCount &&
@@ -297,8 +297,10 @@ private fun splitIntoPages(
             lastLine++
         }
 
-        val endOffset = layout.getLineEnd(lastLine).coerceIn(startOffset + 1, textLength)
-        pages += ReaderPageSlice(startOffset, endOffset)
+        val endOffset = layout.getLineEnd(lastLine).coerceIn(startOffset, textLength)
+        if (endOffset > startOffset) {
+            pages += ReaderPageSlice(startOffset, endOffset)
+        }
         startOffset = endOffset
         firstLine = lastLine + 1
     }
