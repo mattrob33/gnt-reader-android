@@ -29,12 +29,12 @@ val localProps = Version(
  * local.properties when running local builds.
  */
 
-val appVersionCode: Int = 36
+val appVersionCode: Int = 37
 //    cliProps.code ?:
 //    localProps.code ?:
 //    throw InvalidUserDataException("No versionCode provided. You must provide a version code via CLI properties or local.properties.")
 
-val appVersionName: String = "8.1.3"
+val appVersionName: String = "8.1.4"
 //    cliProps.name ?:
 //    localProps.name ?:
 //    throw InvalidUserDataException("No versionName provided. You must provide a version name via CLI properties or local.properties.")

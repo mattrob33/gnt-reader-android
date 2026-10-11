@@ -37,6 +37,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mattrobertson.greek.reader.audio.ui.AudioPanel
 import com.mattrobertson.greek.reader.reading.ui.ComposeReader
+import com.mattrobertson.greek.reader.reading.ui.PaginatedPlanContent
+import com.mattrobertson.greek.reader.reading.ui.PlanReaderChapter
 import com.mattrobertson.greek.reader.reading.ui.BookTitle
 import com.mattrobertson.greek.reader.reading.ui.ChapterText
 import com.mattrobertson.greek.reader.reading.ui.TableOfContents
@@ -190,6 +192,7 @@ fun MainScreen(
                                 planIndex = planDay!!.first,
                                 dayIndex = planDay!!.second,
                                 settings = settings,
+                                paginated = paginatedReader,
                                 verseRepo = viewModel.verseRepo,
                                 onWordSelected = {
                                     word = it
@@ -315,6 +318,7 @@ private fun PlanDayReader(
     planIndex: Int,
     dayIndex: Int,
     settings: com.mattrobertson.greek.reader.settings.Settings,
+    paginated: Boolean,
     verseRepo: com.mattrobertson.greek.reader.db.api.repo.VerseRepo,
     onWordSelected: (Word) -> Unit,
     onDismiss: () -> Unit,
@@ -342,26 +346,49 @@ private fun PlanDayReader(
             }
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            item {
-                Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-                    Text("Today's reading", style = MaterialTheme.typography.h6, fontWeight = FontWeight.Bold)
-                    Text(passages.joinToString { "${it.book.abbrv} ${it.chapter}" }, style = MaterialTheme.typography.body2)
+        if (paginated) {
+            val chapters by produceState(
+                initialValue = emptyList<PlanReaderChapter>(),
+                key1 = passages
+            ) {
+                value = passages.map { ref ->
+                    PlanReaderChapter(ref, verseRepo.getVersesForChapter(ref))
                 }
             }
-            items(passages.size) { index ->
-                val ref = passages[index]
-                var verses by remember(ref) { mutableStateOf(emptyList<Verse>()) }
-                LaunchedEffect(ref) { verses = verseRepo.getVersesForChapter(ref) }
-                Column {
-                    if (ref.chapter == 1 || index == 0 || passages[index - 1].book != ref.book) {
-                        BookTitle(getBookTitle(ref.book), settings)
+            if (chapters.size == passages.size) {
+                PaginatedPlanContent(
+                    settings = settings,
+                    chapters = chapters,
+                    onWordSelected = onWordSelected,
+                    modifier = Modifier.fillMaxSize().padding(padding)
+                )
+            } else {
+                Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                item {
+                    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+                        Text("Today's reading", style = MaterialTheme.typography.h6, fontWeight = FontWeight.Bold)
+                        Text(passages.joinToString { "${it.book.abbrv} ${it.chapter}" }, style = MaterialTheme.typography.body2)
                     }
-                    ChapterText(settings, ref, verses, onWordSelected = onWordSelected)
-                    Spacer(Modifier.height(24.dp))
+                }
+                items(passages.size) { index ->
+                    val ref = passages[index]
+                    var verses by remember(ref) { mutableStateOf(emptyList<Verse>()) }
+                    LaunchedEffect(ref) { verses = verseRepo.getVersesForChapter(ref) }
+                    Column {
+                        if (ref.chapter == 1 || index == 0 || passages[index - 1].book != ref.book) {
+                            BookTitle(getBookTitle(ref.book), settings)
+                        }
+                        ChapterText(settings, ref, verses, onWordSelected = onWordSelected)
+                        Spacer(Modifier.height(24.dp))
+                    }
                 }
             }
         }

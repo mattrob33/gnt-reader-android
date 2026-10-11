@@ -9,7 +9,7 @@ A digital reader's edition of the Greek New Testament for Android.
  - Audio
  - Reading plans with daily reminders
 
-## Reading plans (v8.1.3)
+## Reading plans (v8.1.4)
 
 The six reading plans from v7 are available again. Start a plan, then open Settings for its daily reminder toggle, notification time, and reset action. Android may ask for notification permission (Android 13+) and exact alarm access (Android 12+). If exact alarms are not allowed, Android may deliver the reminder a little later than the selected time.
 
@@ -17,13 +17,13 @@ Version 8.1.1 also fixes a launch crash in optimized builds by preserving the fi
 
 Use **Read today's plan** to read all chapters assigned for the current day in one reader view. **Mark day complete** advances the plan from that view. Tapping an individual chapter in the schedule still opens that chapter in the regular reader. Words tapped in a plan reading now open the concordance sheet, just as they do in the regular reader.
 
-The annual plan reviews only the previous day's reading. Settings lets you switch between continuous scrolling and paginated reading; paginated mode omits the page counter. The reading screen also uses a system-aware status bar so Android's status icons remain visible with current themes.
+The annual plan reviews only the previous day's reading. The single Reading view setting controls both the main reader and the daily-plan reader, switching each between continuous scrolling and paginated reading; paginated mode omits the page counter. The reading screen also uses a system-aware status bar so Android's status icons remain visible with current themes.
 
 ## Download
 
 [Download the latest APK from GitHub Releases](https://github.com/claviger-pc/gnt-reader-android/releases/latest).
 
-The v8.1.3 APK is a minified release build with unused resources removed. It is signed with a local development certificate because this fork does not have a release keystore configured; it installs as a fresh app, but cannot update an installation signed by Google Play or another key.
+The v8.1.4 APK is a minified release build with unused resources removed. It is signed with a local development certificate because this fork does not have a release keystore configured; it installs as a fresh app, but cannot update an installation signed by Google Play or another key.
 
 ## App size
 
