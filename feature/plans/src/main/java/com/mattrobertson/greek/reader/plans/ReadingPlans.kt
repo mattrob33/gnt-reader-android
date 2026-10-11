@@ -26,9 +26,9 @@ object ReadingPlans {
         ReadingPlan(
             id = "nt_year_wallace",
             title = "NT in 1 Year (by Dan Wallace)",
-            description = "Read through the NT in a year (taking weekends off) by reading 3 chapters a day with the ‘revolving door’ principle. Each day adds one new chapter and reviews two of the previous day's chapters. Organized by difficulty and genre. Developed by Greek professor Dan Wallace.",
+            description = "Read through the NT in a year (taking weekends off) with the ‘revolving door’ principle. Each day adds one new chapter and reviews the previous day's chapter. Organized by difficulty and genre. Developed by Greek professor Dan Wallace.",
             days = wallaceChapters.indices.map { day ->
-                wallaceChapters.subList(maxOf(0, day - 2), day + 1)
+                wallaceChapters.subList(maxOf(0, day - 1), day + 1)
             }
         ),
         ReadingPlan(

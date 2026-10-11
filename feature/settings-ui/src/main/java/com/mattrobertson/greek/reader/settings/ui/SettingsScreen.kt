@@ -36,7 +36,9 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
 
 @Composable fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel(),
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    paginatedReader: Boolean = false,
+    onPaginatedReaderChange: (Boolean) -> Unit = {}
 ) {
     val settings by viewModel.settings.collectAsState()
 
@@ -59,6 +61,11 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
                 ReaderPreview(settings)
 
                 VSpacer(30.dp)
+
+                ReaderViewModeRow(
+                    paginatedReader = paginatedReader,
+                    onChange = onPaginatedReaderChange
+                )
 
                 FontSizeRow(
                     fontSize = settings.fontSize,
@@ -110,6 +117,32 @@ import androidx.compose.ui.text.font.FontFamily.Companion.Default as DefaultMate
                 onDismiss = { fontChooserVisible = false }
             )
         }
+    }
+}
+
+@Composable private fun ReaderViewModeRow(
+    paginatedReader: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+    SettingsColumnRow {
+        SettingsLabel(text = "Reading view", modifier = Modifier.align(Alignment.Start))
+        Row(Modifier.fillMaxWidth()) {
+            listOf(false to "Scrolling", true to "Paginated").forEach { (paginated, label) ->
+                Row(
+                    modifier = Modifier.weight(1f).clickable { onChange(paginated) },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = paginatedReader == paginated, onClick = null)
+                    Text(label, color = MaterialTheme.colors.onBackground)
+                }
+            }
+        }
+        Text(
+            text = "Swipe horizontally to turn pages; use the chapter arrows to move between chapters.",
+            style = MaterialTheme.typography.caption,
+            color = MaterialTheme.colors.onBackground
+        )
+        Spacer(Modifier.height(16.dp))
     }
 }
 

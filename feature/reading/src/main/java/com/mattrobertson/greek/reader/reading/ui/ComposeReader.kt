@@ -3,17 +3,28 @@ package com.mattrobertson.greek.reader.reading.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -32,6 +43,36 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun ComposeReader(
+    settings: Settings,
+    verseRepo: VerseRepo,
+    listState: LazyListState,
+    paginated: Boolean = false,
+    onWordSelected: (word: Word) -> Unit
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    if (paginated) {
+        PaginatedReader(
+            settings = settings,
+            verseRepo = verseRepo,
+            initialChapter = listState.firstVisibleItemIndex,
+            onChapterChanged = { chapter ->
+                coroutineScope.launch {
+                    listState.scrollToItem(chapter)
+                    context.scrollLocationDataStore.updateData { scrollLocation ->
+                        scrollLocation.toBuilder().setPosition(chapter).setOffset(0).build()
+                    }
+                }
+            },
+            onWordSelected = onWordSelected
+        )
+    } else {
+        ScrollingReader(settings, verseRepo, listState, onWordSelected)
+    }
+}
+
+@Composable
+private fun ScrollingReader(
     settings: Settings,
     verseRepo: VerseRepo,
     listState: LazyListState,
@@ -91,6 +132,178 @@ fun ComposeReader(
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun PaginatedReader(
+    settings: Settings,
+    verseRepo: VerseRepo,
+    initialChapter: Int,
+    onChapterChanged: (Int) -> Unit,
+    onWordSelected: (word: Word) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var chapterIndex by rememberSaveable { mutableIntStateOf(initialChapter.coerceIn(0, 259)) }
+    fun moveToChapter(chapter: Int) {
+        chapterIndex = chapter.coerceIn(0, 259)
+        onChapterChanged(chapterIndex)
+    }
+    var clickedOffset by remember(chapterIndex) { mutableIntStateOf(-1) }
+    var verses by remember(chapterIndex) { mutableStateOf(emptyList<Verse>()) }
+    val chapterRef = remember(chapterIndex) { VerseRef.fromAbsoluteChapterNum(chapterIndex) }
+
+    LaunchedEffect(chapterRef) {
+        verses = verseRepo.getVersesForChapter(chapterRef)
+    }
+
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        if (verses.isEmpty()) {
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
+            return@BoxWithConstraints
+        }
+
+        val wordMap = remember(chapterRef, verses) { mutableMapOf<Int, Word>() }
+        val chapterText = buildChapterText(settings, chapterRef, verses, wordMap, clickedOffset)
+        val textStyle = TextStyle(
+            color = MaterialTheme.colors.onSurface,
+            fontFamily = settings.font.getComposeFontFamily(),
+            fontSize = settings.fontSize,
+            lineHeight = settings.fontSize * settings.lineSpacing
+        )
+        val margins = sideMargins()
+        val density = LocalDensity.current
+        val contentWidthPx = with(density) {
+            (maxWidth - margins * 2).roundToPx().coerceAtLeast(1)
+        }
+        // Leave room for the chapter controls and page indicator when measuring the page body.
+        val pageBodyHeightPx = with(density) {
+            (maxHeight - 112.dp).coerceAtLeast(120.dp).roundToPx()
+        }
+        val textMeasurer = rememberTextMeasurer()
+        val fullLayout = remember(chapterText, textStyle, contentWidthPx, textMeasurer) {
+            textMeasurer.measure(
+                text = chapterText,
+                style = textStyle,
+                constraints = Constraints(maxWidth = contentWidthPx)
+            )
+        }
+        val pageSlices = remember(fullLayout, chapterText.length, pageBodyHeightPx) {
+            splitIntoPages(fullLayout, chapterText.length, pageBodyHeightPx)
+        }
+        Column(Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = { if (chapterIndex > 0) moveToChapter(chapterIndex - 1) },
+                    enabled = chapterIndex > 0
+                ) {
+                    Icon(Icons.Rounded.ArrowBack, contentDescription = "Previous chapter")
+                }
+                Text(
+                    text = "${getBookTitle(chapterRef.book)} ${chapterRef.chapter}",
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h6,
+                    maxLines = 1
+                )
+                IconButton(
+                    onClick = { if (chapterIndex < 259) moveToChapter(chapterIndex + 1) },
+                    enabled = chapterIndex < 259
+                ) {
+                    Icon(Icons.Rounded.ArrowForward, contentDescription = "Next chapter")
+                }
+            }
+
+            key(chapterIndex) {
+                val chapterPagerState = rememberPagerState(pageCount = { pageSlices.size })
+                HorizontalPager(
+                    state = chapterPagerState,
+                    modifier = Modifier.weight(1f).fillMaxWidth()
+                ) { pageIndex ->
+                    val slice = pageSlices[pageIndex]
+                    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+                        ClickableText(
+                            text = chapterText.subSequence(slice.start, slice.endExclusive),
+                            style = textStyle,
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .padding(horizontal = margins),
+                            onClick = { localOffset ->
+                                val globalOffset = slice.start + localOffset
+                                val tappedWord = wordMap.entries.firstOrNull { (wordOffset, word) ->
+                                    globalOffset >= wordOffset && globalOffset < wordOffset + word.text.length
+                                }?.value
+                                if (tappedWord != null) {
+                                    clickedOffset = globalOffset
+                                    onWordSelected(tappedWord)
+                                }
+                            }
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth().height(44.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    if (pageIndex > 0) {
+                                        coroutineScope.launch { chapterPagerState.animateScrollToPage(pageIndex - 1) }
+                                    } else if (chapterIndex > 0) {
+                                        moveToChapter(chapterIndex - 1)
+                                    }
+                                },
+                                enabled = pageIndex > 0 || chapterIndex > 0
+                            ) { Text("Previous") }
+                            TextButton(
+                                onClick = {
+                                    if (pageIndex < pageSlices.lastIndex) {
+                                        coroutineScope.launch { chapterPagerState.animateScrollToPage(pageIndex + 1) }
+                                    } else if (chapterIndex < 259) {
+                                        moveToChapter(chapterIndex + 1)
+                                    }
+                                },
+                                enabled = pageIndex < pageSlices.lastIndex || chapterIndex < 259
+                            ) { Text("Next") }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private data class ReaderPageSlice(val start: Int, val endExclusive: Int)
+
+private fun splitIntoPages(
+    layout: TextLayoutResult,
+    textLength: Int,
+    pageHeightPx: Int
+): List<ReaderPageSlice> {
+    if (textLength == 0) return listOf(ReaderPageSlice(0, 0))
+
+    val pages = mutableListOf<ReaderPageSlice>()
+    var firstLine = 0
+    var startOffset = 0
+    while (firstLine < layout.lineCount) {
+        val pageTop = layout.getLineTop(firstLine)
+        var lastLine = firstLine
+        while (lastLine + 1 < layout.lineCount &&
+            layout.getLineBottom(lastLine + 1) - pageTop <= pageHeightPx
+        ) {
+            lastLine++
+        }
+
+        val endOffset = layout.getLineEnd(lastLine).coerceIn(startOffset + 1, textLength)
+        pages += ReaderPageSlice(startOffset, endOffset)
+        startOffset = endOffset
+        firstLine = lastLine + 1
+    }
+    if (startOffset < textLength) pages += ReaderPageSlice(startOffset, textLength)
+    return pages.ifEmpty { listOf(ReaderPageSlice(0, textLength)) }
 }
 
 @Composable

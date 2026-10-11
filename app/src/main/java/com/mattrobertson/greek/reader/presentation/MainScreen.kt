@@ -69,6 +69,12 @@ fun MainScreen(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val context = LocalContext.current
+    val appPreferences = remember(context) {
+        context.getSharedPreferences("${context.packageName}_preferences", Context.MODE_PRIVATE)
+    }
+    var paginatedReader by remember(appPreferences) {
+        mutableStateOf(appPreferences.getBoolean("reader_paginated", false))
+    }
 
     val scrollLocation = runBlocking { context.scrollLocationDataStore.data.first() }
 
@@ -173,6 +179,7 @@ fun MainScreen(
                                 settings = settings,
                                 verseRepo = viewModel.verseRepo,
                                 listState = listState,
+                                paginated = paginatedReader,
                                 onWordSelected = {
                                     word = it
                                     coroutineScope.launch {
@@ -283,6 +290,11 @@ fun MainScreen(
                     exit = slideOutVertically(targetOffsetY = { height -> height })
                 ) {
                     SettingsScreen(
+                        paginatedReader = paginatedReader,
+                        onPaginatedReaderChange = { enabled ->
+                            paginatedReader = enabled
+                            appPreferences.edit().putBoolean("reader_paginated", enabled).apply()
+                        },
                         onBack = {
                             screen = Screen.Reader
                         }
